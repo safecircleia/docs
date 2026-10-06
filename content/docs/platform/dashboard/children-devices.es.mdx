@@ -1,0 +1,87 @@
+---
+title: Hijos y dispositivos
+icon: Users
+description: Añade, edita y elimina perfiles de menores, vincula y gestiona dispositivos, y entiende sus estados.
+---
+
+Abre **Hijos** en la barra lateral. A la izquierda está la lista de perfiles; selecciona uno para gestionarlo a él y a sus dispositivos.
+
+## Añadir un hijo
+
+<Steps>
+  <Step>
+    ### Haz clic en **+ Añadir hijo**
+    Escribe el nombre del menor y haz clic en **Añadir hijo**.
+  </Step>
+  <Step>
+    ### Vincula un dispositivo
+    Se genera un código de vinculación automáticamente. En la app del menor, escanea el código QR o escribe el código de 6 dígitos. Cuando el dispositivo se conecte, el panel mostrará **Dispositivo conectado**.
+  </Step>
+  <Step>
+    ### Ponle nombre al dispositivo (opcional)
+    Dale un nombre, como *Móvil de Alex*, y haz clic en **Guardar nombre**, o haz clic en **Omitir**.
+  </Step>
+</Steps>
+
+<Callout type="warn">
+  Los códigos de vinculación son válidos durante **5 minutos** y se pueden usar una sola vez. Haz clic en **Nuevo código de vinculación** para generar uno nuevo.
+</Callout>
+
+## Editar un hijo
+
+Selecciona un hijo y haz clic en **Editar**.
+
+- **Nombre** — cambia el nombre y haz clic en **Guardar**.
+- **Foto** — se muestra en listas, alertas y en el carrusel del Resumen.
+- **Banner** — se muestra en la parte superior de la página del hijo.
+
+Las imágenes se redimensionan y se guardan como JPEG antes de subirlas, lo que además elimina los datos de ubicación de las fotos. Se almacenan en tu cuenta, así que te acompañan en cada dispositivo desde el que inicies sesión.
+
+## Eliminar un hijo
+
+Selecciona un hijo y haz clic en **Eliminar perfil**. El panel te pide la contraseña para confirmar: introdúcela y haz clic en **Eliminar permanentemente**.
+
+<Callout type="warn">
+  Esto elimina de forma permanente el perfil del hijo, sus alertas, su historial y sus dispositivos vinculados. No se puede deshacer.
+</Callout>
+
+## Dispositivos
+
+Los dispositivos de cada hijo aparecen como tarjetas. El estado de un dispositivo se basa en cuándo se conectó por última vez:
+
+| Estado | Significado |
+|---|---|
+| **En línea** | Visto en los últimos 2 minutos |
+| **En espera** | Visto en los últimos 10 minutos |
+| **Sin conexión** | Sin verse desde hace más de 10 minutos |
+
+La página del hijo también muestra los contadores **Dispositivos**, **En línea** y **Alertas sin leer**.
+
+<Callout type="info">
+  Los estados son una estimación. Dependen de la hora de la última conexión del dispositivo, que puede ir con retraso respecto a lo que hace realmente el teléfono, así que un dispositivo puede aparecer **En espera** o **Sin conexión** mientras la app del menor sigue protegiéndolo, y al revés. La mejor comprobación es la pantalla de estado de la propia app del menor, que muestra **MONITORING ACTIVE** cuando la protección funciona. Consulta [Limitaciones conocidas](/es/docs/support/known-limitations).
+</Callout>
+
+Cada tarjeta de dispositivo te permite:
+
+- **Renombrar** el dispositivo.
+- **Revocarlo**. El dispositivo pierde el acceso de inmediato y las alertas que creó se eliminan con él. No se puede deshacer — para volver a usar el teléfono, vincúlalo con un código nuevo.
+- Abrir su **página de dispositivo** para ver los detalles.
+
+<Callout type="info">
+  Un dispositivo que aparece **Sin conexión** durante mucho tiempo puede haber sido detenido por el ahorro de batería, o simplemente no haberse conectado. Consulta [la lista de solución de problemas](/es/docs/platform/dashboard/notifications#no-recibo-alertas).
+</Callout>
+
+### Dispositivos inactivos
+
+Un dispositivo que no se ha conectado en **30 días** se marca como **Inactivo**. Aparece un aviso en la página del hijo y **Quitar inactivos** los revoca todos de una vez.
+
+### La página del dispositivo
+
+Haz clic en un dispositivo para abrir su página. Muestra los detalles (hijo, tipo, visto por última vez, fecha de vinculación e ID del dispositivo), su estado, los contadores de **Alertas**, **Alto riesgo** y **Sin leer**, y un **Historial de alertas** limitado a ese dispositivo. **Renombrar** y **Revocar dispositivo** están en el menú lateral, y **Volver a hijos** regresa a la lista.
+
+## Relacionado
+
+<Cards>
+  <Card title="Configurar la app del menor" href="/es/docs/platform/android/setup" description="Instala y vincula la app en el teléfono del menor." />
+  <Card title="Preguntas frecuentes" href="/es/docs/support/faq" description="¿Falló la vinculación? ¿Dispositivo sin conexión?" />
+</Cards>

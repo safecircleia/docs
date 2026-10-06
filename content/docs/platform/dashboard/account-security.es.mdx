@@ -1,0 +1,81 @@
+---
+title: Cuenta y seguridad
+icon: UserCog
+description: Gestiona tu perfil, contraseña, verificación en dos pasos, llaves de acceso, sesiones, privacidad y la eliminación de tu cuenta.
+---
+
+Las opciones de cuenta están en **Ajustes**. Ábrelos desde la barra lateral o desde el menú de la cuenta. Las opciones de perfil están en **Ajustes › Perfil** y las de seguridad en **Ajustes › Seguridad**. También puedes buscar cualquier ajuste con el cuadro de búsqueda de la parte superior.
+
+## Perfil
+
+En **Ajustes › Perfil**:
+
+- **Nombre** — tu nombre visible. Edítalo y pulsa Intro para guardar.
+- **Correo electrónico** — la dirección con la que inicias sesión. También indica si está **Verificado**.
+- **Foto de perfil** y **Banner** — haz clic en **Subir**, **Cambiar** o **Quitar**. Se guardan en tu cuenta y te acompañan en todos tus dispositivos.
+- **Conexiones** — conecta o desvincula el inicio de sesión con Google, Discord o Twitter / X.
+- **Alertas por Telegram** — vincula el bot de Telegram, que muestra tus hijos y las alertas recientes cuando se lo pides. Consulta [Notificaciones](/es/docs/platform/dashboard/notifications#alertas-por-telegram).
+
+## Contraseña
+
+En **Ajustes › Seguridad**, haz clic en **Cambiar** junto a **Cambiar contraseña**. Escribe tu contraseña actual y una nueva de al menos 8 caracteres, y confírmala. Al cambiarla se cierran todas tus demás sesiones.
+
+Si has olvidado tu contraseña, usa **¿Olvidaste tu contraseña?** en la pantalla de inicio de sesión, o **Enviar correo de restablecimiento**. El enlace llega desde `no-reply@auth.safecircle.tech`.
+
+## Verificación en dos pasos
+
+Añade un segundo paso al inicio de sesión con una app de autenticación (1Password, Authy, Google Authenticator o cualquier app TOTP).
+
+<Steps>
+  <Step>
+    ### Empieza la configuración
+    En **Ajustes › Seguridad**, busca **App de autenticación** y haz clic en **Activar**. Escribe tu contraseña y haz clic en **Continuar**.
+  </Step>
+  <Step>
+    ### Escanea y verifica
+    Escanea el código QR con tu app de autenticación. Si no puedes escanearlo, usa **Copiar clave** e introduce la clave a mano. Escribe el código de 6 dígitos y haz clic en **Verificar y activar**.
+  </Step>
+  <Step>
+    ### Guarda tus códigos de respaldo
+    Copia los códigos de respaldo con **Copiar todos los códigos** y guárdalos en un lugar seguro. Cada uno sirve **una sola vez** y es tu vía de acceso si pierdes la app.
+  </Step>
+</Steps>
+
+A partir de entonces, el inicio de sesión pide un código de 6 dígitos. Si no tienes acceso a tu app, haz clic en **¿No tienes acceso a la app? Usa un código de respaldo**.
+
+Para desactivarla, haz clic en **Desactivar** y escribe tu contraseña.
+
+## Llaves de acceso
+
+Una llave de acceso te permite iniciar sesión con biometría o una llave de seguridad en lugar de una contraseña.
+
+- Haz clic en **Añadir clave** y sigue las indicaciones de tu dispositivo.
+- En la pantalla de inicio de sesión, haz clic en **Iniciar sesión con una llave de acceso**.
+- Quita una llave de la lista con **Quitar**.
+
+## Sesiones
+
+**Sesiones activas** lista todos los dispositivos en los que has iniciado sesión, con el actual marcado como **Este dispositivo**. Haz clic en **Cerrar** en una sesión para cerrarla en ese dispositivo.
+
+<Callout type="info">
+  Al cerrar sesión se cierra en todas las apps de SafeCircle, no solo en el panel.
+</Callout>
+
+## Privacidad
+
+**Compartir analíticas de uso anónimas** está activado por defecto. Recoge eventos anónimos como visitas a páginas e interacciones con funciones. No se envía ni se guarda ningún ID de usuario, correo, dirección IP ni otro dato que te identifique. Desactívalo cuando quieras en **Ajustes › Seguridad › Privacidad**.
+
+## Eliminar tu cuenta
+
+<Callout type="warn">
+  Eliminar tu cuenta borra de forma permanente tu cuenta, tus hijos y tus dispositivos. No se puede deshacer.
+</Callout>
+
+En **Ajustes › Perfil**, ve a la **Zona de peligro**, haz clic en **Eliminar cuenta**, escribe tu contraseña y haz clic en **Eliminar cuenta definitivamente**.
+
+## Relacionado
+
+<Cards>
+  <Card title="Aspecto y ajustes" href="/es/docs/platform/dashboard/appearance" description="Temas, colores, tipografía y accesibilidad." />
+  <Card title="Preguntas frecuentes" href="/es/docs/support/faq" description="Restablecer contraseña y dudas sobre la cuenta." />
+</Cards>

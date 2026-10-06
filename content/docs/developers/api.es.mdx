@@ -1,0 +1,227 @@
+---
+title: Referencia de la API
+icon: Plug
+description: Las rutas REST y los procedimientos tRPC que llaman las propias apps de SafeCircle, con requisitos de autenticación, entradas, salidas y límites de uso.
+---
+
+<Callout type="warn" title="API de uso propio">
+  Esta es la API que usan las apps de SafeCircle. No tiene versiones, puede cambiar sin previo aviso y todavía no se ofrece acceso a terceros. Los procedimientos solo para administradores (invitaciones y aprobación de usuarios) existen, pero no se documentan aquí a propósito.
+</Callout>
+
+**URL base:** `https://api.safecircle.tech`
+
+## Convenciones de llamada
+
+Los datos viven bajo `/trpc`. La autenticación y algunas rutas de utilidad son REST normal.
+
+### Formato de tRPC en la red
+
+El backend ejecuta tRPC sin transformador de datos, así que las entradas y salidas son JSON plano. Las fechas se devuelven como cadenas ISO 8601. Puedes llamar a un procedimiento en forma simple o por lotes.
+
+<Tabs items={["Consulta (GET)", "Mutación (POST)", "Lote"]}>
+  <Tab value="Consulta (GET)">
+    Pon la entrada, como JSON codificado en URL, en el parámetro `input`. El resultado está en `result.data`.
+
+    ```bash
+    curl "https://api.safecircle.tech/trpc/alerts.list?input=%7B%22childId%22%3A%22CHILD_UUID%22%2C%22limit%22%3A20%7D" \
+      -H "Authorization: Bearer SESSION_TOKEN"
+    ```
+
+    ```json
+    { "result": { "data": [ { "id": "…", "riskLevel": "high" } ] } }
+    ```
+  </Tab>
+  <Tab value="Mutación (POST)">
+    Envía la entrada como cuerpo JSON.
+
+    ```bash
+    curl -X POST "https://api.safecircle.tech/trpc/alerts.markRead" \
+      -H "Authorization: Bearer SESSION_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{"alertId":"ALERT_UUID"}'
+    ```
+
+    ```json
+    { "result": { "data": { "ok": true } } }
+    ```
+  </Tab>
+  <Tab value="Lote">
+    Añade `?batch=1`. Las entradas se indexan por posición y la respuesta es un array en el mismo orden. Las apps de Android usan esta forma.
+
+    ```bash
+    curl -X POST "https://api.safecircle.tech/trpc/alerts.create?batch=1" \
+      -H "x-device-token: DEVICE_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{"0":{"riskLevel":"high","categories":["grooming"],"confidence":0.91,"reasoning":"…","appSource":"com.example.chat"}}'
+    ```
+
+    ```json
+    [ { "result": { "data": { "id": "…" } } } ]
+    ```
+  </Tab>
+</Tabs>
+
+El panel llama a las consultas con `GET` y el parámetro `input`, y a las mutaciones con un `POST` simple. Su ayudante también acepta un envoltorio `json` en las respuestas, que el backend no emite actualmente.
+
+### Errores
+
+Los errores de tRPC usan el sobre estándar con un estado HTTP y un mensaje.
+
+| Código | Estado | Causa habitual |
+|---|---|---|
+| `UNAUTHORIZED` | 401 | No hay una sesión o un token de dispositivo válidos |
+| `FORBIDDEN` | 403 | La cuenta aún no está aprobada, o el recurso pertenece a otra persona |
+| `NOT_FOUND` | 404 | ID desconocido, o un ID que no es tuyo |
+| `BAD_REQUEST` | 400 | Falló la validación, o el código de vinculación no es válido o ha caducado |
+| `TOO_MANY_REQUESTS` | 429 | Alcanzaste un límite de uso (lo devuelve el Worker, no tRPC) |
+
+### Niveles de autenticación
+
+| Nivel | Cómo te autenticas | Notas |
+|---|---|---|
+| **Público** | Nada | Solo `devices.pair` y `search.familyRules` |
+| **Sesión** | Sesión de Better Auth, como cookie o `Authorization: Bearer` | Cualquier usuario con sesión iniciada. Lo usa `users.approvalStatus` |
+| **Padre o madre** | Sesión, y la cuenta está **aprobada** | Casi todos los procedimientos de datos |
+| **Dispositivo** | Cabecera `x-device-token` obtenida al vincular | Solo la app del menor |
+
+Consulta [Autenticación](/es/docs/developers/authentication) para ver cómo se obtiene cada credencial.
+
+## Procedimientos tRPC
+
+Todos los procedimientos siguientes se llaman como `/trpc/<router>.<procedimiento>`. Los procedimientos de padre o madre solo devuelven datos de los hijos que pertenecen a quien tiene la sesión iniciada.
+
+### children
+
+| Procedimiento | Tipo | Autenticación | Entrada | Salida |
+|---|---|---|---|---|
+| `children.list` | consulta | Padre o madre | ninguna | Hijos, del más antiguo al más reciente, cada uno con `devices` (`id`, `deviceName`, `lastSeen`, `pairedAt`) y `alerts` (IDs de las alertas sin leer) |
+| `children.create` | mutación | Padre o madre | `name`: de 1 a 50 caracteres, letras, números, espacios, guiones y apóstrofos | El nuevo hijo |
+
+### devices
+
+| Procedimiento | Tipo | Autenticación | Entrada | Salida |
+|---|---|---|---|---|
+| `devices.createPairingToken` | mutación | Padre o madre | `childId` (UUID) | `token` (6 dígitos), `expiresAt` (5 minutos). Invalida los códigos sin usar anteriores de ese hijo |
+| `devices.pair` | mutación | Público | `pairingToken`, `deviceName` (de 1 a 100 caracteres) | `deviceToken`, `deviceId`, `childId`. El código es de un solo uso |
+| `devices.list` | consulta | Padre o madre | `childId` | Dispositivos de ese hijo |
+| `devices.revoke` | mutación | Padre o madre | `deviceId` | `{ ok: true }`. El token del dispositivo deja de funcionar de inmediato |
+| `devices.registerFcmToken` | mutación | Padre o madre | `token`, `platform` (`android` o `ios`, por defecto `android`) | `{ ok: true }`. Registrar de nuevo un token existente lo mueve a la cuenta actual |
+
+### alerts
+
+| Procedimiento | Tipo | Autenticación | Entrada | Salida |
+|---|---|---|---|---|
+| `alerts.create` | mutación | Dispositivo | `riskLevel` (`medium` o `high`), `categories` (al menos una cadena), `confidence` (0–1), `reasoning`, `appSource` | `{ id }`. Dispara el envío del push |
+| `alerts.list` | consulta | Padre o madre | `childId`, `limit` (1–100, por defecto 50) | Alertas, las más recientes primero |
+| `alerts.get` | consulta | Padre o madre | `alertId` | Una alerta |
+| `alerts.markRead` | mutación | Padre o madre | `alertId` | `{ ok: true }` |
+
+Una alerta tiene `id`, `deviceId`, `childId`, `riskLevel`, `categories`, `confidence`, `reasoning`, `appSource`, `readAt` (nulo mientras no se lee) y `createdAt`.
+
+### analytics
+
+Las tres aceptan un `childId` opcional. Sin él, agregan los datos de todos tus hijos.
+
+| Procedimiento | Entrada | Salida |
+|---|---|---|
+| `analytics.alertsByDay` | `days` (1–365, por defecto 30) | `[ { date, count } ]` |
+| `analytics.alertsByCategory` | ninguna | `[ { category, count } ]`, de mayor a menor |
+| `analytics.alertsByRiskLevel` | ninguna | `{ high, medium }` |
+
+### activity
+
+| Procedimiento | Entrada | Salida |
+|---|---|---|
+| `activity.list` | `cursor` (marca de tiempo ISO, opcional), `limit` (1–50, por defecto 20) | `{ items, nextCursor }`. Los elementos son alertas y vinculaciones de dispositivos, los más recientes primero. Pasa `nextCursor` como `cursor` para la página siguiente |
+
+Un elemento tiene `id`, `type` (`alert` o `device_paired`), `childId`, `childName`, `description`, `createdAt` y un pequeño objeto `meta`.
+
+### notifications
+
+| Procedimiento | Tipo | Entrada | Salida |
+|---|---|---|---|
+| `notifications.get` | consulta | ninguna | `highRisk`, `mediumRisk`, `quietStart`, `quietEnd`. Por defecto ambas activadas y sin horas de silencio |
+| `notifications.update` | mutación | `childId` (opcional, nulo para el ajuste global), `highRisk`, `mediumRisk`, `quietStart`, `quietEnd` (`HH:mm`) | Los valores guardados |
+
+<Callout type="info">
+  `notifications.update` guarda el registro completo. Un campo que omitas vuelve a su valor por defecto (`true` para los interruptores, vacío para las horas de silencio), así que envía siempre todos. Las horas de silencio usan el reloj UTC y solo afectan a las alertas medium.
+</Callout>
+
+### users
+
+| Procedimiento | Tipo | Autenticación | Salida |
+|---|---|---|---|
+| `users.approvalStatus` | consulta | Sesión | `{ approved }`. Permite a las apps mostrar una pantalla de «pendiente de aprobación» |
+
+### search [#search]
+
+| Procedimiento | Tipo | Autenticación | Entrada | Salida |
+|---|---|---|---|---|
+| `search.getSettings` | consulta | Padre o madre | ninguna | `{ prefs, siteRules }` |
+| `search.saveSettings` | mutación | Padre o madre | `prefs` y `siteRules` (hasta 500 reglas, cada una con un `domain` y una `action` de `block`, `lower` o `raise`) | `{ ok: true }` |
+| `search.familyLink` | mutación | Dispositivo | ninguna | `{ url }`, un enlace firmado que bloquea la búsqueda segura en el dispositivo del menor |
+| `search.familyRules` | consulta | Público | `token` | `{ siteRules }`, o `null` si el token no es válido o el dispositivo se desvinculó |
+
+Consulta [SafeCircle Search](/es/docs/developers/search) para saber qué hace el enlace familiar.
+
+## Rutas REST
+
+| Método y ruta | Autenticación | Propósito |
+|---|---|---|
+| `GET /` | Ninguna | Comprobación de vida, devuelve `OK` |
+| `GET /health` | Ninguna | `{ status, version, service }` |
+| `* /api/auth/*` | Varía | Better Auth: inicio de sesión, registro, sesiones, verificación en dos pasos, llaves de acceso. Consulta [Autenticación](/es/docs/developers/authentication) |
+| `POST /api/feedback` | Sesión o `x-device-token` | Enviar un informe de error o una petición de función |
+| `POST /api/model-feedback` | Ninguna | Valoración de un resultado del AI Playground |
+| `POST /api/telemetry/event` | Ninguna | Un evento de producto anónimo. Devuelve `204` |
+| `GET, PUT, DELETE /api/media/{users o children}/:id/{avatar o banner}` | Sesión | Foto de perfil y banner |
+| `POST /api/telegram/generate-link-code`, `GET /api/telegram/status`, `POST /api/telegram/unlink-self` | Sesión | Vinculación de Telegram desde el panel |
+
+Las demás rutas `/api/telegram/*` las llama el bot con una clave privada, y `GET /api/telemetry/metrics` está protegida con un secreto. Ninguna de las dos está disponible para terceros.
+
+### Comentarios
+
+`POST /api/feedback` con un cuerpo JSON:
+
+```json
+{
+  "type": "bug",
+  "title": "Resumen corto",
+  "description": "Qué ocurrió",
+  "context": { "source": "dashboard", "screen": "alerts", "version": "0.3.2", "os": "opcional" }
+}
+```
+
+`type` es `bug` o `feature`. `source` es `dashboard`, `parent-app`, `child-app` o `playground`. El título tiene de 2 a 200 caracteres y la descripción hasta 5000. Una app del menor puede autenticarse con su token de dispositivo, y el informe se registra en nombre del padre o madre vinculado. La respuesta es `201` con `{ "postUrl": "…" }`.
+
+### Imágenes de perfil
+
+- `GET` devuelve la imagen. Es privada para su propietario, y los administradores pueden leerla.
+- `PUT` recibe los bytes de la imagen en bruto con un `Content-Length`. El límite es de **1 MB**. El tipo se detecta a partir del contenido del archivo y solo se aceptan JPEG, PNG y WebP (`415` en caso contrario).
+- `DELETE` la elimina y devuelve `204`.
+- Las escrituras están limitadas a 20 por minuto por IP.
+
+### Evento de telemetría [#telemetry-event]
+
+`POST /api/telemetry/event` con `{ "name": "page_view", "route": "/alerts", "props": {} }`. `name` tiene de 1 a 64 caracteres. Se conservan como máximo 10 `props`, y se descarta cualquier propiedad cuya clave parezca un ID, correo, usuario, token, nombre, IP o teléfono. Consulta [Observabilidad](/es/docs/developers/observability).
+
+## Límites de uso [#rate-limits]
+
+Los límites son por IP del cliente, se cuentan por instancia del Worker y se aplican con `429 Too Many Requests` y una cabecera `Retry-After`.
+
+| Ámbito | Límite |
+|---|---|
+| Todas las rutas | 100 peticiones por minuto |
+| `/api/auth/*` (excepto `get-session`) | 30 peticiones por minuto |
+| `GET /api/auth/get-session` | Cuenta dentro de las 100 por minuto globales |
+| Subidas y eliminaciones de imágenes | 20 por minuto |
+| SafeCircle Search (servicio aparte) | 30 por minuto sin cuenta, 120 por minuto con sesión iniciada |
+
+Trátalos como protección contra abusos, no como una cuota con la que planificar. Guarda en caché las consultas de sesión y agrupa tus llamadas tRPC en lotes.
+
+## Relacionado
+
+<Cards>
+  <Card title="Autenticación" href="/es/docs/developers/authentication" description="Obtén y usa sesiones, tokens bearer y tokens de dispositivo." />
+  <Card title="Datos y privacidad" href="/es/docs/developers/data-and-privacy" description="Qué guarda cada llamada." />
+</Cards>

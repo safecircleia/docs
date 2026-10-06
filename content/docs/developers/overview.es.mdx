@@ -1,0 +1,64 @@
+---
+title: Visión general para desarrolladores
+icon: Blocks
+description: Cómo encaja la plataforma SafeCircle — apps, backend, bot, buscador e IA — y qué está abierto hoy a integradores.
+---
+
+SafeCircle es un conjunto de servicios pequeños que comparten un mismo backend. Esta sección explica cómo se conectan, qué partes de la API puedes consultar y cómo viajan los datos desde el teléfono de un menor hasta la pantalla de un padre o madre.
+
+<Callout type="warn" title="Aún no hay programa público para desarrolladores">
+  SafeCircle está en beta privada. La API que se describe aquí es la que usan las propias apps de SafeCircle. **No tiene versiones, no hay garantía de estabilidad y no existen claves de API públicas**. Los procedimientos y campos pueden cambiar entre versiones. Si quieres construir sobre ella, escribe antes a **support@safecircle.tech**.
+</Callout>
+
+## Mapa de la plataforma
+
+```text
+ Teléfono del menor                          Padre o madre
+ ┌───────────────────┐                       ┌───────────────────────┐
+ │ App del menor     │                       │ Panel (web)           │
+ │ (Android)         │                       │ App para padres       │
+ │ modelo de IA local│                       │ (Android)             │
+ └─────────┬─────────┘                       └──────────┬────────────┘
+           │ x-device-token                             │ cookie de sesión
+           │                                            │ o token bearer
+           ▼                                            ▼
+        ┌───────────────────────────────────────────────────────┐
+        │ Backend  (Hono + tRPC en Cloudflare Workers)          │
+        │ api.safecircle.tech                                   │
+        └───┬──────────────┬──────────────┬──────────────┬──────┘
+            │              │              │              │
+            ▼              ▼              ▼              ▼
+      PostgreSQL      D1 (métricas)  R2 (imágenes,   Push (FCM)
+      (Hyperdrive)                   comentarios)
+            ▲
+            │ clave del bot          enlace familiar firmado
+   ┌────────┴─────────┐              ┌───────────────────────┐
+   │ Bot de Telegram  │              │ Buscador              │
+   │ @safecirclehq_bot│              │ search.safecircle.tech│
+   └──────────────────┘              └───────────────────────┘
+```
+
+| Componente | Qué hace | Habla con |
+|---|---|---|
+| **App del menor** (Android) | Observa el texto visible con un Servicio de accesibilidad y lo clasifica **en el dispositivo**. Solo envía una alerta cuando detecta riesgo. | Backend, con un token de dispositivo |
+| **Panel para padres** (web) | Alertas, analíticas, hijos, dispositivos y ajustes. | Backend, con una cookie de sesión |
+| **App para padres** (Android) | Alertas móviles, notificaciones push y vinculación. | Backend, con un token bearer de sesión |
+| **Backend** | Autenticación, datos, alertas, push, imágenes y telemetría. | PostgreSQL, D1, R2, FCM |
+| **Bot de Telegram** | Vincula una cuenta de Telegram y muestra cuenta, hijos y alertas bajo demanda. | Backend, con una clave de bot |
+| **Buscador** | Metabuscador que prioriza la privacidad, con bloqueo opcional de búsqueda segura familiar. | Backend (ajustes y enlaces familiares) |
+| **Modelo de IA** | Clasifica las conversaciones en el dispositivo del menor. | Se ejecuta dentro de la app del menor |
+
+## Qué leer a continuación
+
+<Cards>
+  <Card title="Arquitectura del backend" href="/es/docs/developers/backend" description="Stack, forma del despliegue y el recorrido de una alerta de principio a fin." />
+  <Card title="Referencia de la API" href="/es/docs/developers/api" description="Rutas REST y procedimientos tRPC, con entradas y salidas." />
+  <Card title="Autenticación" href="/es/docs/developers/authentication" description="Sesiones, llaves de acceso, verificación en dos pasos, códigos de invitación, aprobación y tokens de dispositivo." />
+  <Card title="Datos y privacidad" href="/es/docs/developers/data-and-privacy" description="Qué se guarda, qué nunca sale del dispositivo y cómo funciona la eliminación." />
+  <Card title="Bot de Telegram" href="/es/docs/developers/telegram-bot" description="Flujo de vinculación y qué puede hacer el bot." />
+  <Card title="Observabilidad" href="/es/docs/developers/observability" description="Métricas, el stack de Grafana y cómo desactivar la analítica." />
+  <Card title="SafeCircle Search" href="/es/docs/developers/search" description="Reglas de privacidad, bloqueo familiar y cómo ejecutarlo tú mismo." />
+  <Card title="Repositorios" href="/es/docs/developers/repositories" description="Cada repositorio, su stack y su licencia." />
+</Cards>
+
+Para saber cómo toma sus decisiones el modelo de IA, consulta la [visión general de la IA](/es/docs/ai/overview). Para configurar las apps como padre o madre, empieza por [Configura el panel](/es/docs/platform/dashboard/setup).

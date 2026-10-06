@@ -1,0 +1,115 @@
+---
+title: Ejecución en el dispositivo
+icon: Smartphone
+description: Cómo la app infantil elige, descarga y ejecuta el modelo, qué apps vigila, con qué frecuencia analiza y qué sabemos sobre el rendimiento.
+---
+
+Esta página describe cómo se usa el modelo Horizon dentro de la app infantil de SafeCircle. Para los pasos de configuración consulta [Configurar la app infantil](/es/docs/platform/android/setup).
+
+## Flujo
+
+```text
+Servicio de accesibilidad   (texto en pantalla de las apps compatibles)
+        |
+Ventana de conversación     (últimos 10 fragmentos de texto por app, en memoria)
+        |
+Modelo en el dispositivo    (LiteRT-LM, o análisis por palabras clave en teléfonos modestos)
+        |
+Comprobación de alerta      (solo continúa medium o high)
+        |
+Espera + envío              (un análisis por app cada 5 minutos)
+```
+
+## Niveles de modelo
+
+Una instalación nueva empieza con el análisis por palabras clave, que no necesita descarga. En Ajustes → Avanzado → Nivel del modelo de IA (en pantalla: Settings → Advanced → AI Model tier), la app examina el teléfono y marca como recomendado el nivel más capaz que puede ejecutar; al elegir un nivel de modelo ahí, empieza su descarga.
+
+| Nivel | Modelo | Descarga | Requisitos |
+|---|---|---|---|
+| Completo | Horizon Mobile INT8 | Unos 1,2 GB | 6 GB de RAM o más, Android 12 o superior, unos 2 GB de almacenamiento libre |
+| Ligero | Horizon Mobile INT4 | Unos 0,7 GB | 3 GB de RAM o más, unos 0,8 GB de almacenamiento libre |
+| Análisis por palabras clave | Ninguno | Ninguna | Cualquier teléfono compatible |
+
+La propia app infantil requiere Android 11 o superior. Los teléfonos que no alcanzan los requisitos del nivel ligero usan el análisis por palabras clave.
+
+<Callout type="warn" title="El análisis por palabras clave es un recurso básico">
+  Solo busca palabras y frases, así que no detecta lo que se exprese de otra forma y puede marcar texto inofensivo. Aun así, se ejecuta por completo en el teléfono. Si el teléfono de tu hijo recibe este nivel, espera una precisión notablemente peor que con un modelo.
+</Callout>
+
+### Tiempo de ejecución y hardware
+
+- Los modelos son archivos `.litertlm` ejecutados por el motor LiteRT-LM de Google.
+- Los modelos se ejecutan en la **CPU** por defecto.
+- Los Pixel con chip Tensor G5 o G6 usan una compilación para la TPU de Tensor, solo en el nivel completo. Si esa compilación no está disponible, el teléfono usa la genérica.
+
+## Descarga del modelo
+
+Estos pasos se aplican cuando eliges un nivel de modelo. El análisis por palabras clave los omite.
+
+<Steps>
+  <Step>
+    Antes de la descarga, el menor acepta la Licencia de Investigación de SafeCircle (SRL-1.0) que cubre el modelo.
+  </Step>
+  <Step>
+    La descarga se realiza en segundo plano con una notificación de progreso, de modo que continúa si el menor sale de la pantalla. Necesita conexión de red y recomendamos Wi-Fi porque el archivo es grande (aproximadamente de 0,7 a 1,2 GB, no es una descarga pequeña).
+  </Step>
+  <Step>
+    Si se corta la conexión, la descarga se reanuda desde donde se quedó en lugar de empezar de nuevo.
+  </Step>
+  <Step>
+    El modelo se carga y la app infantil empieza a supervisar.
+  </Step>
+</Steps>
+
+Una vez al día, cuando el teléfono está conectado, la app comprueba si hay un modelo más reciente y pide actualizarlo. Las actualizaciones se descargan en una zona temporal y se verifican con una suma de comprobación SHA-256 del manifiesto del modelo antes de sustituir al modelo actual.
+
+## Qué se le pide al modelo
+
+En cada análisis, la app le pasa los fragmentos de texto recientes con la instrucción de devolver solo un resultado estructurado: nivel de riesgo, categorías y confianza. Usa como máximo los **últimos 10 fragmentos** de esa app. Después la app valida la respuesta:
+
+- Las categorías desconocidas se descartan.
+- Un nivel de riesgo fuera de los valores esperados se trata como `low`.
+- Si el modelo falla, devuelve algo que no se puede interpretar o aún no está cargado, el resultado se trata como sin riesgo y no se envía nada. La app **falla en silencio**: un fallo nunca crea una alerta.
+
+## Apps compatibles
+
+El Servicio de accesibilidad está limitado a estas apps:
+
+- WhatsApp
+- Instagram
+- Telegram
+- Snapchat
+- TikTok
+
+No se lee el texto de otras apps.
+
+## Límite de frecuencia
+
+SafeCircle analiza cada app **como máximo una vez cada 5 minutos**. La ventana de 5 minutos empieza cuando comienza un análisis, produzca o no una alerta. Esto protege la batería y evita alertas repetidas de la misma conversación, y además significa que la conversación se muestrea en lugar de leerse de forma continua.
+
+Solo se ejecuta un análisis a la vez.
+
+## Rendimiento
+
+Tenemos dos tipos de evidencia.
+
+**Pruebas en dispositivos.** El repositorio incluye una prueba de rendimiento de las compilaciones móviles de Horizon en 60 teléfonos y tabletas Android. Medianas por nivel de dispositivo, con el prompt propio de la prueba:
+
+| Nivel de dispositivo (dispositivos) | Compilación | Tiempo hasta el primer token | Velocidad de generación | Memoria máxima |
+|---|---|---|---|---|
+| Alto (31) | INT4 | unos 3,5 s | unos 40 tokens/s | unos 1,2 GB |
+| Alto (31) | INT8 | unos 2,8 s | unos 24 tokens/s | unos 1,9 GB |
+| Medio (22) | INT4 | unos 8 s | unos 19 tokens/s | unos 1,1 GB |
+| Medio (22) | INT8 | unos 7,6 s | unos 12 tokens/s | unos 1,8 GB |
+| Bajo (7) | INT4 | unos 19 s | unos 11 tokens/s | unos 1,5 GB |
+| Bajo (7) | INT8 | unos 19 s | unos 7 tokens/s | unos 1,8 GB |
+
+Cuenta con que un análisis tarde segundos, y más en teléfonos de gama baja. Es la razón principal por la que la app muestrea las conversaciones en lugar de analizar cada actualización de pantalla.
+
+**Lo que no hemos medido.** El repositorio contiene estimaciones de batería, pero proceden de una CPU de servidor y no de un teléfono, así que no las publicamos. No encontramos ningún control de la batería ni de la temperatura en la app infantil. Tampoco se ha medido la precisión en teléfonos reales. Consulta [Limitaciones](/es/docs/ai/limitations).
+
+<Cards>
+  <Card title="Privacidad" href="/es/docs/ai/privacy" description="Qué se lee, qué se envía y qué se almacena." />
+  <Card title="Modelos Horizon" href="/es/docs/ai/horizon" description="Cómo se entrenan y evalúan los modelos." />
+  <Card title="Configurar la app infantil" href="/es/docs/platform/android/setup" description="Instalar, emparejar, conceder permisos y elegir un nivel de detección." />
+</Cards>

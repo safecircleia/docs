@@ -1,0 +1,90 @@
+{
+  "cancel": "Cancel",
+  "search": {
+    "placeholder": "Search for settings",
+    "label": "Search settings",
+    "found_one": "Found {{count}} result",
+    "found_other": "Found {{count}} results",
+    "empty": "No settings match “{{query}}”",
+    "empty_hint": "Try a different word, like “theme” or “password”."
+  },
+  "tiles": {
+    "surface_2": "Surface 2",
+    "surface_3": "Surface 3",
+    "surface_4": "Surface 4",
+    "surface_5": "Surface 5",
+    "accent_text": "Accent text",
+    "accent_deep": "Accent deep",
+    "accent_fill": "Accent fill",
+    "accent_glow": "Accent glow"
+  },
+  "theme": {
+    "picker_label": "Theme",
+    "schedule_title": "Change schedule",
+    "schedule_body": "Pick the theme to use when your system is in light or dark mode."
+  },
+  "colour": {
+    "presets_label": "Accent presets",
+    "convert_title": "Convert colour",
+    "convert_body": "Paste a hex colour to turn it into your accent",
+    "convert_button": "Convert",
+    "hex_label": "Hex colour",
+    "hex_invalid": "Enter a valid hex colour, like #6bc6f1"
+  },
+  "font": {
+    "sample": "The quick brown fox jumps over the lazy dog",
+    "previewing": "Previewing: {{name}}",
+    "name_font_2026": "Hanken Grotesk",
+    "name_font_2025": "Funnel Sans",
+    "name_hyperlegible": "Atkinson Hyperlegible Next",
+    "name_custom": "Your font",
+    "name_serif": "Instrument Serif"
+  },
+  "keybind": {
+    "recording": "Press a key…",
+    "edit": "Change key"
+  },
+  "actions": {
+    "import": "Import",
+    "export": "Export",
+    "reset": "Reset"
+  },
+  "export": {
+    "title": "Share your settings",
+    "body": "Copy this text to restore your preferences on another device or browser.",
+    "field_label": "Settings text",
+    "share": "Share via device",
+    "copy": "Copy text",
+    "copied": "Settings copied",
+    "copy_failed": "Couldn't copy the text",
+    "share_title": "SafeCircle settings"
+  },
+  "import": {
+    "title": "Import settings",
+    "warning": "This is a permanent action, beware of where you are copying from",
+    "field_label": "Exported settings",
+    "placeholder": "Paste the text you exported",
+    "confirm": "Import",
+    "done": "Imported {{count}} settings",
+    "error_empty": "Paste the exported settings first.",
+    "error_invalid_json": "That text isn't valid, so nothing was changed.",
+    "error_invalid_shape": "That doesn't look like exported settings, so nothing was changed.",
+    "error_no_valid_settings": "None of those settings are recognised, so nothing was changed."
+  },
+  "reset": {
+    "title": "Reset settings to default",
+    "warning": "Your settings will be permanently reset, are you sure?",
+    "backup": "Make a backup",
+    "confirm": "Reset",
+    "done": "Settings reset to default"
+  },
+  "play_beta": {
+    "title": "Join the beta testers",
+    "body": "Beta builds on Google Play are open to members of the SafeCircle Testers Google group (safecircle-testing@googlegroups.com). Join it with the Google account you use on Play, then update the app from its Play Store page.",
+    "join": "Join the group"
+  },
+  "version": {
+    "app": "SafeCircle {{version}} ‘{{codename}}’",
+    "build": "Build {{id}}"
+  }
+}

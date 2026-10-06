@@ -1,0 +1,91 @@
+---
+title: Setting up the child app (Android)
+icon: Smartphone
+description: How to install, pair and grant permissions to the SafeCircle Android app on your child's device.
+---
+
+The SafeCircle child app runs in the background on the child's Android phone. It doesn't show alerts to the child — everything goes to the parent dashboard. Setup takes a few minutes and has five screens, labelled **SETUP 1 OF 5** to **SETUP 5 OF 5**.
+
+<Callout type="info">
+  The step counter in the app skips **SETUP 3 OF 5**: you go from step 2 straight to step 4. This is expected.
+</Callout>
+
+## Requirements
+
+- Android 11 or later
+- An internet connection
+- A pairing code (6 digits) or QR code from the dashboard — see [parent dashboard setup](/en/docs/platform/dashboard/setup)
+- Access to the Google Play internal testing track — see [Join the beta](/en/docs/platform/private-beta/join)
+
+<Steps>
+  <Step>
+    ### Install the app
+    On the child's phone, open the SafeCircle listing in Google Play and tap **Install**. On the phone the app is named **SafeCircle Child**.
+
+    <Callout>
+      During the beta the app is only visible to accounts in the **SafeCircle Testers** Google group that have opted in to the testing track. If you can't find it, see [Join the beta](/en/docs/platform/private-beta/join#join-the-google-play-beta).
+    </Callout>
+
+    The first time you open it, a **Closed Beta** screen asks you to confirm **I'm a beta tester and won't share this app** and **I understand distribution is prohibited and may result in legal action**. Tick both and tap **Continue**.
+  </Step>
+  <Step>
+    ### Read the privacy note
+    On **SETUP 1 OF 5** (**You're in good hands.**), read the note: only a safety summary is sent, and the actual messages never leave the device. Tick **I understand and agree**, then tap **Continue**.
+  </Step>
+  <Step>
+    ### Pair with the parent dashboard
+    On **SETUP 2 OF 5** (**Connect with your parent.**), choose how to pair:
+
+    - **Scan QR code** — scan the QR code shown in the dashboard.
+    - **Enter 6-digit code** — type the code manually in **6-digit code**, then tap **Confirm**.
+
+    When pairing succeeds the app moves on, and the dashboard shows **Device connected**.
+
+    <Callout type="warn">
+      Pairing codes are valid for **5 minutes** and work once. If one expires, generate a new one in the dashboard.
+    </Callout>
+
+    <Callout type="info">
+      The screen also shows a **Hold phones together** (NFC) option. It isn't active yet — use the QR code or the 6-digit code.
+    </Callout>
+  </Step>
+  <Step>
+    ### Grant the permissions
+    On **SETUP 4 OF 5** (**Two quick permissions.**):
+
+    1. On Android 13 and later, tap **Allow** next to **Notifications**. The app uses notifications for download progress and its own status messages.
+    2. Tap **Open Settings** to open Android's Accessibility settings, find **SafeCircle Protection** (the app calls it SafeCircle), tap it and enable the toggle.
+    3. Come back to the app. It continues automatically as soon as it detects that the Accessibility Service is on.
+
+    <Callout type="warn">
+      Without the Accessibility Service the app can't see conversations and no alerts are sent. Android may turn the permission off after a reinstall — if the app asks again, enable it again. See [Permissions](/en/docs/platform/android/permissions).
+    </Callout>
+  </Step>
+  <Step>
+    ### Finish
+    On **SETUP 5 OF 5** (**Downloading your shield.**) the app prepares its detection engine. When it's done it shows **All set.** and opens the status screen, which shows **MONITORING ACTIVE** and **Protected.**
+
+    The first time, the app starts in **Basic** mode, which scans for keywords and needs no download. To use the more accurate on-device AI model, see [Basic mode and the AI model](/en/docs/platform/android/how-it-works#basic-mode-and-the-ai-model).
+  </Step>
+</Steps>
+
+## What the child sees
+
+- The **Home** screen with the protection status, and a **Settings** screen. There is no alert list and no message history.
+- A short notification while a model downloads, and — when a newer AI model is available — a **SafeCircle update available** notification.
+- An entry named **SafeCircle Protection** in Android's Accessibility settings, which Android describes as monitoring conversations to detect safety risks and notify the parent.
+
+Everything the app detects goes to the parent. Talk with your child about what is monitored and why before you set it up.
+
+## After setup
+
+The app runs in the background; there is nothing to open day to day. Open it to check the status: **MONITORING ACTIVE** means protection is running. **Settings** lets you change the theme, see which detection mode is active and report a bug.
+
+To stop monitoring, uninstall the app on the child's phone and revoke the device in the dashboard — see [Children and devices](/en/docs/platform/dashboard/children-devices). A reinstalled app has to be paired again with a new code.
+
+<Cards>
+  <Card title="How it works" href="/en/docs/platform/android/how-it-works" description="What the app reads, what it sends and how often." />
+  <Card title="Supported apps" href="/en/docs/platform/android/supported-apps" description="The messaging apps the child app monitors." />
+  <Card title="Permissions" href="/en/docs/platform/android/permissions" description="What each permission is for." />
+  <Card title="Troubleshooting" href="/en/docs/platform/android/troubleshooting" description="Pairing failed, status shows a problem, device offline." />
+</Cards>

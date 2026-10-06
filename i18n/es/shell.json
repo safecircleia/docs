@@ -1,0 +1,74 @@
+{
+  "masthead": "Principal",
+  "alpha": "Alfa",
+  "search": {
+    "label": "Buscar",
+    "placeholder": "Buscar",
+    "empty": "Sin resultados para “{{query}}”",
+    "group_pages": "Páginas",
+    "group_children": "Hijos",
+    "group_devices": "Dispositivos",
+    "group_alerts": "Alertas",
+    "devices_one": "{{count}} dispositivo",
+    "devices_other": "{{count}} dispositivos"
+  },
+  "more": {
+    "label": "Más",
+    "report_bug": "Informar de un error",
+    "report_bug_desc": "¿Algo no funciona?",
+    "request_feature": "Pedir una función",
+    "request_feature_desc": "¿Tienes una idea?",
+    "whats_new": "Novedades",
+    "check_updates": "Buscar actualizaciones",
+    "version": "SafeCircle {{version}}"
+  },
+  "alerts": {
+    "label": "Alertas",
+    "unread_tip": "{{count}} sin leer",
+    "high_tip": "{{count}} de riesgo alto",
+    "tab_unread": "Sin leer",
+    "tab_all": "Todas",
+    "mark_all_read": "Marcar todo como leído",
+    "view_all": "Ver todas las alertas",
+    "empty_unread": "Estás al día",
+    "empty_all": "Aún no hay alertas",
+    "marking": "Marcando alertas como leídas…",
+    "marked_one": "{{count}} alerta marcada como leída",
+    "marked_other": "{{count}} alertas marcadas como leídas"
+  },
+  "account": {
+    "settings": "Ajustes",
+    "theme": "Tema",
+    "themes": "Temas",
+    "back": "Atrás",
+    "admin": "Administración",
+    "whats_new": "Novedades",
+    "sign_out": "Cerrar sesión",
+    "menu": "Menú de la cuenta"
+  },
+  "hero": {
+    "greeting_night": "Buenas noches",
+    "greeting_morning": "Buenos días",
+    "greeting_afternoon": "Buenas tardes",
+    "greeting_evening": "Buenas tardes",
+    "avatar": "Abrir ajustes del perfil"
+  },
+  "tabs": {
+    "nav": "Secciones"
+  },
+  "footer": {
+    "made_with": "Hecho con",
+    "for_families": "para las familias",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "report_issue": "Informar de un problema",
+    "alpha": "alfa",
+    "heart": "Cariño"
+  },
+  "mobile": {
+    "nav": "Principal",
+    "me_menu": "Tu cuenta",
+    "search_label": "Buscar en SafeCircle"
+  },
+  "loader": "Cargando"
+}

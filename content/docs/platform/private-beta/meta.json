@@ -1,0 +1,10 @@
+{
+  "title": "Private Beta",
+  "description": "How to join and what to expect during the private beta.",
+  "icon": "FlaskConical",
+  "defaultOpen": true,
+  "pages": [
+    "join",
+    "sign-up"
+  ]
+}

@@ -1,0 +1,81 @@
+---
+title: Account and security
+icon: UserCog
+description: Manage your profile, password, 2-step verification, passkeys, sessions, privacy and account deletion.
+---
+
+Account options live in **Settings**. Open it from the sidebar or the account menu. Profile options are in **Settings › Profile**, and security options in **Settings › Security**. You can also search every setting from the search box at the top of Settings.
+
+## Profile
+
+In **Settings › Profile**:
+
+- **Name** — your display name. Edit it and press Enter to save.
+- **Email** — the address you sign in with. It also shows whether it is **Verified**.
+- **Profile photo** and **Banner** — click **Upload**, **Replace** or **Remove**. They are stored on your account and follow you to every device.
+- **Connected accounts** — connect or unlink Google, Discord or Twitter / X sign-in.
+- **Telegram alerts** — link the Telegram bot, which shows your children and recent alerts on request. See [Notifications](/en/docs/platform/dashboard/notifications#alerts-on-telegram).
+
+## Password
+
+In **Settings › Security**, click **Change** next to **Change password**. Enter your current password and a new one of at least 8 characters, then confirm it. Changing it signs out all your other sessions.
+
+If you forgot your password, use **Forgot password?** on the sign-in screen, or **Send reset email**. The reset link arrives from `no-reply@auth.safecircle.tech`.
+
+## 2-step verification
+
+Add a second step to sign-in with an authenticator app (1Password, Authy, Google Authenticator or any TOTP app).
+
+<Steps>
+  <Step>
+    ### Start setup
+    In **Settings › Security**, find **Authenticator app** and click **Enable**. Enter your password and click **Continue**.
+  </Step>
+  <Step>
+    ### Scan and verify
+    Scan the QR code with your authenticator app. If you can't scan it, use **Copy secret** and enter the key by hand. Type the 6-digit code and click **Verify & activate**.
+  </Step>
+  <Step>
+    ### Save your backup codes
+    Copy the backup codes with **Copy all codes** and keep them somewhere safe. Each one works **once** and is how you get in if you lose your authenticator.
+  </Step>
+</Steps>
+
+From then on, sign-in asks for a 6-digit code. If you can't reach your app, click **Can't access your app? Use a backup code**.
+
+To turn it off, click **Disable** and enter your password.
+
+## Passkeys
+
+A passkey lets you sign in with biometrics or a hardware key instead of a password.
+
+- Click **Add passkey** and follow your device's prompt.
+- On the sign-in screen, click **Sign in with a passkey**.
+- Remove a passkey from the list with **Remove**.
+
+## Sessions
+
+**Active sessions** lists every device you're signed in on, with the current one marked **This device**. Click **Revoke** on a session to sign that device out.
+
+<Callout type="info">
+  Signing out signs you out of every SafeCircle app, not just the dashboard.
+</Callout>
+
+## Privacy
+
+**Share anonymous usage analytics** is on by default. It collects anonymous events such as page views and feature interactions. No user IDs, emails, IP addresses or other personally identifiable information are sent or stored. Switch it off in **Settings › Security › Privacy** at any time.
+
+## Delete your account
+
+<Callout type="warn">
+  Deleting your account permanently removes your account, your children and your devices. It can't be undone.
+</Callout>
+
+In **Settings › Profile**, go to the **Danger zone**, click **Delete account**, enter your password and click **Permanently delete account**.
+
+## Related
+
+<Cards>
+  <Card title="Appearance and settings" href="/en/docs/platform/dashboard/appearance" description="Themes, colours, fonts and accessibility." />
+  <Card title="FAQ and troubleshooting" href="/en/docs/support/faq" description="Password resets and account questions." />
+</Cards>

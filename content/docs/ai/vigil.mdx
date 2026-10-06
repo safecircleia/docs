@@ -1,0 +1,54 @@
+---
+title: Vigil (research)
+icon: Telescope
+description: Vigil, a compact encoder classifier SafeCircle is evaluating alongside Horizon - how it differs, how it compares, and where it stands.
+---
+
+**Vigil** is a research classifier for the same seven risks as Horizon. It is available to try in the [Android AI Playground](/en/docs/ai/ai-playground), but it is **not used by the child app** and does not produce alerts for parents today.
+
+## How it differs from Horizon
+
+| | Horizon Mobile | Vigil |
+|---|---|---|
+| Base model | Gemma 3 1B, a text-generating LLM | Laya-multilingual, a 322M-parameter encoder (mmBERT-base) |
+| How it answers | Generates a JSON answer token by token | Reads the conversation in a fixed number of passes and outputs scores |
+| Adaptation | QLoRA fine-tune | Full fine-tune plus a calibration step |
+| Thresholds | None, fixed by training | One per category, chosen on validation data |
+| Status | Shipped on-device export | Research, with an Android export in the playground |
+
+Because Vigil outputs numbers rather than text, it cannot return malformed output, and it does not write an explanation. The playground build runs on the CPU and is about 1.3 GB.
+
+## How it compares
+
+The comparison below is from the Vigil repository's head-to-head report (2026-10-01). Both systems were scored by the same code, on the same chats, on one server CPU. The test chats are written by AI models, and Horizon's own sample is the only one it trained on. Vigil figures are summed over three training seeds.
+
+| Test set | Vigil catches risky chats | Vigil flags benign chats | Horizon (INT8) catches | Horizon flags benign |
+|---|---|---|---|---|
+| Horizon's own sample | 98.3% | 0.9% | 93.9% | 0.4% |
+| Written by Llama 3.1 8B | 89.4% | 11.6% | 67.7% | 21.1% |
+| Written by Qwen3 8B | 93.0% | 17.1% | 62.6% | 20.0% |
+
+"Catches" means at least one correct category was flagged on a risky chat. Speed on the same server CPU: median 207 ms per chat for Vigil against 747 ms for Horizon. Vigil is larger on disk (about 1.2 GB against about 1.0 GB for Horizon INT8).
+
+## What the evidence does not show
+
+- **Neither model reaches the false-alarm goal on unseen text.** Both flag roughly 12 to 21% of harmless chats from the generators they did not train on, against a target of 2%.
+- **Thresholds do not transfer.** Settings tuned on one set of generators produced more false alarms on others. A validation budget is a floor, not a promise.
+- **Friendly teasing is a weak spot.** About half of the "friends joking" test scene is flagged, whatever data was added.
+- **Precision drops on unseen text.** For example, bullying precision was 47% against 80% for Horizon on the Llama-written set.
+- **Short context.** The Android export keeps the most recent 512 tokens of a conversation.
+- **Severity is weak** and multi-label behaviour is untested, because the training data has at most one category per chat.
+- **No phone measurement existed** when the export report was written: the model had been run only through the Python interpreter, so device latency, memory and operator support were untested.
+- **All test text is AI-written.** Nothing here measures performance on real conversations.
+
+The report's own conclusion is that Vigil is the stronger and faster detector on this evidence, while Horizon is smaller and the only one with a proven on-device path, and that the next evidence needed is a human-written test set and an on-device measurement.
+
+<Callout type="info" title="Why the child app still uses Horizon">
+  Horizon Mobile has a proven LiteRT-LM path on phones and is what ships in the child app. Vigil is evaluated in the playground first.
+</Callout>
+
+<Cards>
+  <Card title="Horizon models" href="/en/docs/ai/horizon" description="The model family used in the child app." />
+  <Card title="AI Playground" href="/en/docs/ai/ai-playground" description="Try Horizon and Vigil on your own phone." />
+  <Card title="Limitations" href="/en/docs/ai/limitations" description="Accuracy caveats and known gaps." />
+</Cards>

@@ -1,0 +1,10 @@
+{
+  "title": "Support",
+  "description": "FAQ, troubleshooting, and known limitations.",
+  "icon": "LifeBuoy",
+  "root": true,
+  "pages": [
+    "faq",
+    "known-limitations"
+  ]
+}

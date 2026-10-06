@@ -1,0 +1,87 @@
+---
+title: Children and devices
+icon: Users
+description: Add, edit and delete child profiles, pair and manage devices, and understand device statuses.
+---
+
+Open **Children** in the sidebar. On the left is the list of child profiles; select one to manage them and their devices.
+
+## Add a child
+
+<Steps>
+  <Step>
+    ### Click **+ Add child**
+    Enter the child's name and click **Add child**.
+  </Step>
+  <Step>
+    ### Pair a device
+    A pairing code is generated automatically. In the child app, scan the QR code or type the 6-digit code. When the device connects, the dashboard shows **Device connected**.
+  </Step>
+  <Step>
+    ### Name the device (optional)
+    Give the device a name such as *Alex's phone* and click **Save name**, or click **Skip**.
+  </Step>
+</Steps>
+
+<Callout type="warn">
+  Pairing codes are valid for **5 minutes** and work once. Click **New pairing code** to generate a fresh one.
+</Callout>
+
+## Edit a child
+
+Select a child and click **Edit**.
+
+- **Name** — change the child's name and click **Save**.
+- **Photo** — shown in lists, alerts and the Overview carousel.
+- **Banner** — shown at the top of the child's page.
+
+Images are resized and re-saved as JPEG before upload, which also removes location data from photos. They are stored on your account, so they follow you to every device you sign in on.
+
+## Delete a child
+
+Select a child and click **Delete child**. The dashboard asks for your password to confirm: enter it and click **Delete permanently**.
+
+<Callout type="warn">
+  This permanently deletes the child's profile, alerts, timeline data and paired devices. It can't be undone.
+</Callout>
+
+## Devices
+
+Each child's devices appear as cards. A device's status is based on when it last checked in:
+
+| Status | Meaning |
+|---|---|
+| **Online** | Seen in the last 2 minutes |
+| **Idle** | Seen in the last 10 minutes |
+| **Offline** | Not seen for more than 10 minutes |
+
+The child page also shows **Devices**, **Online** and **Unread alerts** counts for that child.
+
+<Callout type="info">
+  Statuses are an estimate. They depend on the device's last check-in time, which may lag behind what the phone is actually doing, so a device can show **Idle** or **Offline** while the child app is still protecting it, and the other way round. The best check is the child app's own status screen, which shows **MONITORING ACTIVE** when protection is running. See [Known limitations](/en/docs/support/known-limitations).
+</Callout>
+
+Each device card lets you:
+
+- **Rename** the device.
+- **Revoke** it. The device loses access immediately and the alerts it created are removed with it. This can't be undone — to use the phone again, pair it with a new code.
+- Open its **device page** for details.
+
+<Callout type="info">
+  A device that shows **Offline** for a long time may have been stopped by battery saver, or may simply not have checked in. See [the troubleshooting list](/en/docs/platform/dashboard/notifications#not-receiving-alerts).
+</Callout>
+
+### Inactive devices
+
+A device that hasn't checked in for **30 days** is marked **Inactive**. A notice appears on the child's page and **Remove inactive** revokes all of them in one go.
+
+### The device page
+
+Click a device to open its page. It shows the device's details (child, type, last seen, paired date and device ID), its status, counts of **Alerts**, **High risk** and **Unread**, and an **Alert history** limited to that device. **Rename** and **Revoke device** are in the side menu, and **Back to children** returns to the list.
+
+## Related
+
+<Cards>
+  <Card title="Set up the child app" href="/en/docs/platform/android/setup" description="Install and pair the app on the child's phone." />
+  <Card title="FAQ and troubleshooting" href="/en/docs/support/faq" description="Pairing failed? Device offline?" />
+</Cards>

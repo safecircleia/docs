@@ -1,0 +1,115 @@
+---
+title: On-device runtime
+icon: Smartphone
+description: How the child app picks, downloads and runs the model, which apps it watches, how often it analyses, and what we know about performance.
+---
+
+This page describes how the Horizon model is used inside the SafeCircle child app. For setup steps see [Set up the child app](/en/docs/platform/android/setup).
+
+## Pipeline
+
+```text
+Accessibility Service   (screen text in supported apps)
+        |
+Conversation window     (last 10 text snippets per app, in memory)
+        |
+On-device model         (LiteRT-LM, or keyword scan on small phones)
+        |
+Alert check             (only medium or high continues)
+        |
+Cooldown + upload       (one analysis per app every 5 minutes)
+```
+
+## Model tiers
+
+A fresh install starts on the keyword scan, which needs no download. In Settings → Advanced → AI Model tier the app checks the phone and marks the most capable tier it can run as recommended; picking a model tier there starts its download.
+
+| Tier | Model | Download | Needs |
+|---|---|---|---|
+| Full | Horizon Mobile INT8 | About 1.2 GB | 6 GB RAM or more, Android 12 or newer, about 2 GB free storage |
+| Lite | Horizon Mobile INT4 | About 0.7 GB | 3 GB RAM or more, about 0.8 GB free storage |
+| Keyword scan | None | None | Any supported phone |
+
+The child app itself requires Android 11 or newer. Phones that fall below the Lite requirements use the keyword scan.
+
+<Callout type="warn" title="The keyword scan is a basic fallback">
+  It matches words and phrases only, so it misses anything phrased differently and can flag harmless text. It still runs entirely on the phone. If your child's phone gets this tier, expect noticeably worse accuracy than with a model.
+</Callout>
+
+### Runtime and hardware
+
+- The models are `.litertlm` files run by Google's LiteRT-LM runtime.
+- Models run on the **CPU** by default.
+- Pixel phones with a Tensor G5 or G6 chip use a build compiled for the Tensor TPU, for the Full tier only. If that build is not available, the phone uses the generic one.
+
+## Model download
+
+These steps apply once you pick a model tier. The keyword scan skips them.
+
+<Steps>
+  <Step>
+    Before the download, the child accepts the SafeCircle Research License (SRL-1.0) that covers the model.
+  </Step>
+  <Step>
+    The download runs in the background with a progress notification, so it continues if the child leaves the screen. It needs a network connection, and we recommend Wi-Fi because the file is large (roughly 0.7 to 1.2 GB, not a small download).
+  </Step>
+  <Step>
+    If the connection drops, the download resumes from where it stopped instead of starting over.
+  </Step>
+  <Step>
+    The model loads and the child app begins monitoring.
+  </Step>
+</Steps>
+
+Once a day, when the phone is online, the app checks whether a newer model is available and prompts for the update. Updates are downloaded to a staging area and verified against a SHA-256 checksum from the model manifest before they replace the current model.
+
+## What the model is asked
+
+For each analysis the app passes the recent text snippets with an instruction to return only a structured result: risk level, categories and confidence. It uses at most the **last 10 snippets** for that app. The app then validates the answer:
+
+- Unknown categories are dropped.
+- A risk level outside the expected values is treated as `low`.
+- If the model errors, returns something unparseable, or is not loaded yet, the result is treated as no risk and nothing is sent. The app **fails quiet**: a failure never creates an alert.
+
+## Supported apps
+
+The Accessibility Service is limited to these apps:
+
+- WhatsApp
+- Instagram
+- Telegram
+- Snapchat
+- TikTok
+
+Text from other apps is not read.
+
+## Rate limiting
+
+SafeCircle analyses each app **at most once every 5 minutes**. The 5-minute window starts when a check begins, whether or not it produces an alert. This protects the battery and prevents repeated alerts for the same conversation, and it also means a conversation is sampled rather than read continuously.
+
+Only one analysis runs at a time.
+
+## Performance
+
+We have two kinds of evidence.
+
+**Device benchmarks.** The repository includes a benchmark run of the Horizon mobile builds on 60 Android phones and tablets. Medians by device tier, on the benchmark's own prompt:
+
+| Device tier (devices) | Build | Time to first token | Generation speed | Peak memory |
+|---|---|---|---|---|
+| High (31) | INT4 | about 3.5 s | about 40 tokens/s | about 1.2 GB |
+| High (31) | INT8 | about 2.8 s | about 24 tokens/s | about 1.9 GB |
+| Mid (22) | INT4 | about 8 s | about 19 tokens/s | about 1.1 GB |
+| Mid (22) | INT8 | about 7.6 s | about 12 tokens/s | about 1.8 GB |
+| Low (7) | INT4 | about 19 s | about 11 tokens/s | about 1.5 GB |
+| Low (7) | INT8 | about 19 s | about 7 tokens/s | about 1.8 GB |
+
+Plan for an analysis to take seconds, and longer on low-end phones. This is the main reason the app samples conversations instead of analysing every screen update.
+
+**What we have not measured.** The repository contains battery estimates, but they come from a server CPU and not from a phone, so we do not publish them. We found no battery- or heat-based throttling in the child app. Real-phone accuracy has not been measured either. See [Limitations](/en/docs/ai/limitations).
+
+<Cards>
+  <Card title="Privacy" href="/en/docs/ai/privacy" description="What is read, what is sent, what is stored." />
+  <Card title="Horizon models" href="/en/docs/ai/horizon" description="How the models are trained and evaluated." />
+  <Card title="Set up the child app" href="/en/docs/platform/android/setup" description="Install, pair, grant permissions and choose a detection tier." />
+</Cards>

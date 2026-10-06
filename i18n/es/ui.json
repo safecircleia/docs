@@ -1,0 +1,23 @@
+{
+  "close": "Cerrar",
+  "loading": "Cargando",
+  "reset": "Restablecer",
+  "incompatible": "Incompatible",
+  "view": "Ver",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "dismiss": "Descartar",
+  "select": "Seleccionar",
+  "risk_high": "Alto",
+  "risk_medium": "Medio",
+  "alert_high_title": "Riesgo alto · {{child}}",
+  "alert_medium_title": "Riesgo medio · {{child}}",
+  "alerts_count": "{{count}} alertas nuevas",
+  "alerts_more": "{{child}}: {{categories}} y {{count}} más",
+  "error_title": "Algo salió mal",
+  "error_default": "Ocurrió un error inesperado.",
+  "refresh_page": "Recargar página",
+  "report_bug": "Informar de este error →",
+  "empty_face": "(ᵕ—ᴗ—)",
+  "load_failed": "No se pudo cargar"
+}

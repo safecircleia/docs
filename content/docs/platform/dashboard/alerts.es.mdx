@@ -1,0 +1,73 @@
+---
+title: Entender las alertas
+icon: ShieldAlert
+description: Niveles de riesgo, qué muestra una alerta, cómo filtrarlas y marcarlas como leídas, y qué hacer después.
+---
+
+Se crea una alerta cuando la app del menor detecta una señal de riesgo por encima de su umbral. Solo los niveles de riesgo `medium` y `high` generan una alerta — las señales más débiles se descartan en el dispositivo del menor. SafeCircle nunca envía el texto de los mensajes.
+
+## Niveles de riesgo
+
+<Tabs items={["Alto", "Medio"]}>
+  <Tab value="Alto">
+    Una señal de riesgo fuerte. Se muestra con una insignia **roja**. Merece una conversación el mismo día.
+  </Tab>
+  <Tab value="Medio">
+    Una señal de riesgo moderada. Se muestra con una insignia **naranja**. Merece una revisión — según el contexto, puede ser un falso positivo.
+  </Tab>
+</Tabs>
+
+## Qué muestra una alerta
+
+Abre una alerta de la lista para ver sus detalles.
+
+| Campo | Descripción |
+|---|---|
+| **Nivel de riesgo** | Alto o medio, más una insignia **Leída** / **No leída** |
+| **Hijo** | De qué hijo es el dispositivo de origen |
+| **Aplicación de origen** | La app donde se detectó la señal |
+| **Confianza** | Cuán seguro está el modelo, de 0 a 100 % |
+| **Detectado** | Cuándo se detectó |
+| **Categorías** | Una o varias etiquetas de riesgo del modelo |
+| **Razonamiento IA** | Una breve nota sobre por qué se marcó. Por ahora es un simple resumen de las categorías detectadas (por ejemplo, *Detected: grooming*). Nunca cita la conversación |
+
+## Encontrar alertas
+
+La página **Alertas** tiene cuatro pestañas:
+
+- **Todas** — todas las alertas, la más reciente primero.
+- **No leídas** — solo las que aún no has abierto, con un contador.
+- **Alto** y **Medio** — filtran por nivel de riesgo.
+
+Si tienes más de un hijo, aparece un menú **Filtrar por hijo**. Elige **Todos los hijos** para volver a verlos a todos.
+
+Un panel de resumen muestra **Alertas en total**, **No leídas**, **Riesgo alto**, **Riesgo medio** y **App principal** para la selección actual.
+
+También puedes abrir una alerta desde la campana de la barra superior, que lista las cinco últimas.
+
+## Marcar alertas como leídas
+
+Al abrir una alerta se marca como leída. También puedes:
+
+- Hacer clic en **Marcar como leída** en el detalle de la alerta.
+- Hacer clic en **Marcar todo como leído** sobre la lista para limpiar todo lo no leído de la vista actual.
+- Usar **Marcar todo como leído** en el menú de la campana.
+
+Las alertas leídas siguen en la pestaña **Todas** y en el [Historial](/es/docs/platform/dashboard/analytics-timeline#historial). No se borra nada.
+
+## Qué hacer después
+
+La página Alertas incluye una breve guía, **Qué hacer después**:
+
+- Empieza con curiosidad, no con castigos. Pregunta qué pasó antes de hablar de la aplicación.
+- Las alertas de riesgo alto merecen una conversación el mismo día.
+- La confianza es un indicador aproximado, no una probabilidad. Incluso una puntuación baja puede merecer una mirada.
+
+## Relacionado
+
+<Cards>
+  <Card title="Categorías de riesgo" href="/es/docs/ai/risk-categories" description="Qué significan cada categoría, los niveles de riesgo y la nota de razonamiento." />
+  <Card title="Notificaciones" href="/es/docs/platform/dashboard/notifications" description="Recibe las alertas al momento, en el panel o en la app para padres." />
+  <Card title="Estadísticas e Historial" href="/es/docs/platform/dashboard/analytics-timeline" description="Detecta patrones por días, categorías y apps." />
+  <Card title="Preguntas frecuentes" href="/es/docs/support/faq" description="¿No recibes alertas? Revisa la lista de comprobación." />
+</Cards>

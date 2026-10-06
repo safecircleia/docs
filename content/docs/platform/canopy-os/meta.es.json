@@ -1,0 +1,10 @@
+{
+  "title": "Canopy OS",
+  "description": "Distribución Linux experimental con SafeCircle integrado.",
+  "icon": "Monitor",
+  "defaultOpen": true,
+  "pages": [
+    "overview",
+    "editions"
+  ]
+}

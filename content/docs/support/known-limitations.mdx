@@ -1,0 +1,98 @@
+---
+title: Known Limitations
+icon: TriangleAlert
+description: Beta caveats, supported platforms, detection limits, alert delivery and data retention during the private beta.
+---
+
+SafeCircle is in **private beta**. The product works end-to-end but several areas are still being developed. This page lists what you should know before relying on it. It links to the detailed pages instead of repeating them.
+
+<Callout type="warn" title="Not a substitute for talking to your child">
+  Detection can miss serious conversations and can flag harmless ones. Do not rely on SafeCircle as the only safeguard.
+</Callout>
+
+## Platform support
+
+<Tabs items={["Android", "iOS", "Other"]}>
+  <Tab value="Android">
+    | Item | Status |
+    |---|---|
+    | Child app on Android 11+ | Supported |
+    | Child app on Android 10 and below | Not supported |
+    | Parent app (Android 11+) | Early version, companion to the dashboard |
+    | Dashboard | Any modern browser |
+  </Tab>
+  <Tab value="iOS">
+    <Callout type="warn">
+      There is **no iOS app**, for children or for parents. An iPhone or iPad can't be paired or monitored. You can still open the dashboard in a browser on an iPhone. See [iOS](/en/docs/platform/ios/overview).
+    </Callout>
+  </Tab>
+  <Tab value="Other">
+    Other platforms, including computers, are not covered. [Canopy OS](/en/docs/platform/canopy-os/overview) is an experimental Linux distribution whose protection components are not installed yet, so it doesn't monitor anyone.
+  </Tab>
+</Tabs>
+
+## What the child app monitors
+
+The child app reads the **text visible on screen** through Android's Accessibility Service in these apps only:
+
+- WhatsApp (`com.whatsapp`)
+- Instagram (`com.instagram.android`)
+- Telegram (`org.telegram.messenger`)
+- Snapchat (`com.snapchat.android`)
+- TikTok (`com.zhiliaoapp.musically`)
+
+Other apps, websites, games, notifications, images, voice messages and video are not read. The list can't be changed from the dashboard. iMessage / Apple Messages are not supported. See [Supported apps](/en/docs/platform/android/supported-apps).
+
+## Known limitations
+
+<Accordions>
+  <Accordion title="Basic mode is the default">
+    A new child app installation starts in **Basic** mode, which scans for keywords and needs no download. It misses rephrased text and can flag harmless text. More accurate on-device AI models (about 600 MB or about 1.2 GB) are optional and chosen in **Settings › Advanced › AI Model tier** in the child app. See [Basic mode and the AI model](/en/docs/platform/android/how-it-works#basic-mode-and-the-ai-model).
+  </Accordion>
+  <Accordion title="Accuracy and false positives">
+    Accuracy on real children's conversations has not been measured, so expect both false alarms and misses. Confidence is a rough indicator and is not calibrated. See [AI limitations](/en/docs/ai/limitations).
+  </Accordion>
+  <Accordion title="Languages">
+    The AI targets English and Spanish. Other languages should be assumed unsupported. The child app's screens are in English for now. See [AI limitations](/en/docs/ai/limitations#languages).
+  </Accordion>
+  <Accordion title="Alert note is a summary">
+    The **AI Reasoning** note on an alert is currently a short summary of the detected categories, for example *Detected: grooming*. It doesn't explain the conversation and never quotes it. See [Risk categories](/en/docs/ai/risk-categories#the-reasoning-note).
+  </Accordion>
+  <Accordion title="Rate limiting and sampling">
+    Analysis is rate-limited to once every 5 minutes per monitored app, per device, and works from the text visible at that moment. A short risky exchange between checks can be missed.
+  </Accordion>
+  <Accordion title="Alerts are not queued">
+    If the child's phone has no connection when an alert would be sent, that alert isn't resent later.
+  </Accordion>
+  <Accordion title="Alert delivery">
+    Alerts appear live in the dashboard while it's open, and as push notifications in the [parent app](/en/docs/platform/parent-app/notifications). There are no browser push notifications. The Telegram bot only shows your children and recent alerts when you ask; it does not send alerts. See [Notifications](/en/docs/platform/dashboard/notifications).
+  </Accordion>
+  <Accordion title="Device status can lag">
+    **Online**, **Idle** and **Offline** in the dashboard are based on each device's last check-in time. The backend doesn't reliably update that time when the child app is active, so the status can lag or be wrong. Use the child app's own status screen (**MONITORING ACTIVE**) to confirm protection is running. See [Children and devices](/en/docs/platform/dashboard/children-devices#devices).
+  </Accordion>
+  <Accordion title="Permissions can switch off">
+    Android can turn off the Accessibility Service after a reinstall, and aggressive battery savers on some phones can stop the app. Protection is off while the status shows **PERMISSION MISSING**. See [Permissions](/en/docs/platform/android/permissions).
+  </Accordion>
+  <Accordion title="Pairing">
+    Pair with the **QR code** or the **6-digit code**. The **Hold phones together** (NFC) option in the child app isn't active yet. Codes last 5 minutes and work once. A reinstalled app must be paired again.
+  </Accordion>
+  <Accordion title="Alert threshold customisation">
+    Risk level thresholds are fixed: only `medium` and `high` create alerts. Per-category configuration is not yet available.
+  </Accordion>
+  <Accordion title="SafeCircle Search is separate">
+    SafeCircle Search is an early alpha on its own site. It isn't built into the dashboard or the apps, searches made there don't appear in alerts, and the family lock can't be turned on from SafeCircle yet. See [SafeCircle Search](/en/docs/platform/search/overview).
+  </Accordion>
+</Accordions>
+
+## Data retention
+
+<Callout type="warn">
+  There is no automated data deletion currently in place. Alert and account data is retained until you delete it: revoking a device removes the alerts it created, deleting a child removes the child's profile, alerts and devices, and deleting your account removes everything it owns.
+</Callout>
+
+A formal data retention policy will be published before general release. For what is stored today, see [Data and privacy](/en/docs/developers/data-and-privacy). For privacy questions in the meantime, contact **support@safecircle.tech**.
+
+<Cards>
+  <Card title="FAQ and troubleshooting" href="/en/docs/support/faq" description="Step-by-step fixes for common problems." />
+  <Card title="AI limitations" href="/en/docs/ai/limitations" description="Accuracy, coverage and language caveats in detail." />
+</Cards>

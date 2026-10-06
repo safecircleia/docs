@@ -1,0 +1,57 @@
+---
+title: Notifications
+icon: Bell
+description: How push alerts work in the SafeCircle Parent app — channels, quiet hours and troubleshooting.
+---
+
+The parent app sends a **push notification** to your phone when your child's device raises a medium or high risk alert. You don't need to have the app open.
+
+## What a notification looks like
+
+- **Title** — the risk colour and the child's name, for example *SafeCircle alert — Alex*.
+- **Text** — the detected categories, for example *Risk detected: grooming*. It never includes the child's messages.
+- **Actions** — **View** opens the alert, and **Mark read** marks it as read without opening the app.
+- **Lock screen** — content is hidden until the phone is unlocked.
+
+Several notifications from the same channel are bundled into one summary so they don't flood the notification shade.
+
+<Callout type="info">
+  Push notifications are delivered through Google's Firebase Cloud Messaging. The phone needs Google Play services and an internet connection.
+</Callout>
+
+## Notification channels
+
+In **Settings › Notifications** you can switch each channel on or off:
+
+| Channel | What it's for | How it behaves |
+|---|---|---|
+| **High priority alerts** | Serious alerts | Heads-up notification with sound and vibration |
+| **Medium priority alerts** | Routine alerts | Standard notification |
+| **Device status** | Updates about a child's device | Silent |
+| **System** | Account and app updates | Standard notification |
+
+Sound, vibration and lights are controlled by Android, not by the app. Tap the tune icon next to a channel to open Android's own settings for it, or the bell icon to send a **test notification**.
+
+## Quiet hours
+
+Set **Quiet hours** with a start and end time (**Start (HH:mm)**, **End (HH:mm)**). During that window the phone holds back medium priority, device status and system notifications. **High-priority alerts always come through.**
+
+Quiet hours use the phone's local time. Alerts you miss during quiet hours are still in the **Alerts** tab.
+
+## Troubleshooting
+
+<Accordions>
+  <Accordion title="I don't get notifications">
+    1. In **Settings › Notifications**, check that no channel is off. If you see **Notifications are off** or **Blocked in system settings**, tap it to open Android's settings and allow them.
+    2. On Android 13 and later, make sure you allowed the notification permission when the app asked.
+    3. Send a **test notification** from the same screen. If it arrives, push is working on the phone.
+    4. Check that **Quiet hours** isn't active.
+    5. Battery savers on some phones restrict background apps. Allow SafeCircle Parent to run unrestricted in Android's battery settings.
+  </Accordion>
+  <Accordion title="I get alerts in the app but not as notifications">
+    The Alerts tab is always up to date when you open it. If notifications are missing, follow the steps above, then sign out and sign in again so the phone re-registers for push.
+  </Accordion>
+  <Accordion title="I want alerts somewhere else too">
+    The dashboard can also message you on Telegram. See [Dashboard notifications](/en/docs/platform/dashboard/notifications).
+  </Accordion>
+</Accordions>

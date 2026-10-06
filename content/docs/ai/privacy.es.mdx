@@ -1,0 +1,69 @@
+---
+title: Privacidad
+icon: Lock
+description: Qué analiza la IA, qué nunca sale del dispositivo de tu hijo y qué reciben y almacenan los servidores de SafeCircle.
+---
+
+El análisis se ejecuta en el teléfono de tu hijo. Esta página enumera exactamente qué se lee, qué se envía y qué se almacena, según cómo están construidas las apps y el backend.
+
+## Qué se analiza
+
+- **El texto visible en pantalla** en un conjunto reducido de apps de mensajería, leído mediante el Servicio de accesibilidad de Android: WhatsApp, Instagram, Telegram, Snapchat y TikTok.
+- Los fragmentos más recientes de cada app (los diez últimos), guardados **en memoria** como un búfer rotativo. Cada actualización de pantalla sustituye el búfer.
+- Solo texto. No se leen imágenes, mensajes de voz, vídeo ni otras apps.
+
+A la app infantil hay que concederle el permiso de accesibilidad durante la configuración. Consulta [Configurar la app infantil](/es/docs/platform/android/setup).
+
+## Qué nunca sale del dispositivo
+
+- El texto de los mensajes y el búfer de mensajes recientes.
+- La entrada del modelo y su salida sin procesar.
+- El archivo del modelo. Se descarga una vez y se usa en local.
+
+La inferencia no necesita conexión a internet. Si el teléfono pierde conectividad, el análisis continúa, pero las alertas no se pueden entregar hasta que vuelva a haber conexión.
+
+## Qué se envía a SafeCircle
+
+Cuando un resultado es `medium` o `high`, la app infantil envía una alerta con:
+
+| Campo | Ejemplo | Notas |
+|---|---|---|
+| Nivel de riesgo | `high` | El servidor solo acepta `medium` y `high` |
+| Categorías | `grooming` | Una o más de las siete categorías |
+| Confianza | `0.9` | Un número de 0 a 1 |
+| Razonamiento | `Detected: grooming` | Un resumen breve de las categorías, no texto de mensajes |
+| App de origen | El nombre de paquete de una app | De qué app procede la señal |
+
+La alerta se almacena asociada al dispositivo y al menor emparejados, con una marca de tiempo y un estado de leída/no leída. La notificación push que recibes como padre o madre contiene el nombre de tu hijo, el nivel de riesgo y los nombres de las categorías, pero ningún contenido de mensajes.
+
+Otras cosas que la app infantil envía u obtiene:
+
+- **Emparejamiento**: un token de un solo uso y el nombre del dispositivo cuando emparejas el teléfono.
+- **Archivos del modelo**: descargas desde el servidor de modelos de SafeCircle y una comprobación diaria de si hay una versión más reciente.
+- **Informes de errores**: solo si tu hijo (o tú) envía uno. Contiene el título y la descripción escritos, además del nombre de la pantalla, la versión de la app y la versión de Android.
+
+## Qué no recibe el servidor
+
+- Texto de mensajes, en ninguna forma.
+- Capturas ni grabaciones de pantalla.
+- El búfer de conversación ni el texto libre generado por el modelo.
+
+## Datos de entrenamiento
+
+Los modelos Horizon se entrenan con conversaciones sintéticas generadas por IA. Según la documentación del conjunto de datos, no se usaron mensajes de menores reales en ninguna etapa. Consulta [Modelos Horizon](/es/docs/ai/horizon).
+
+El modelo solo mejora mediante una nueva versión que se descarga en el teléfono. Como el texto de los mensajes nunca se sube, no está disponible para el entrenamiento.
+
+## Entornos de pruebas (playgrounds)
+
+Los playgrounds de Android y web también ejecutan los modelos en local. Una excepción es la función opcional de valoración del playground web, que envía el texto que probaste junto con el resultado. Consulta [AI Playground](/es/docs/ai/ai-playground).
+
+<Callout type="warn" title="Sé transparente con tu hijo">
+  Leer el texto en pantalla es una capacidad poderosa. Habla con tu hijo sobre lo que supervisa SafeCircle antes de activarlo.
+</Callout>
+
+<Cards>
+  <Card title="Ejecución en el dispositivo" href="/es/docs/ai/on-device" description="Cómo se descarga, carga y ejecuta el modelo." />
+  <Card title="Entender las alertas" href="/es/docs/platform/dashboard/alerts" description="Lo que ves como padre o madre." />
+  <Card title="Preguntas frecuentes" href="/es/docs/support/faq" description="Preguntas comunes y solución de problemas." />
+</Cards>

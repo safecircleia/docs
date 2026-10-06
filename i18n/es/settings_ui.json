@@ -1,0 +1,90 @@
+{
+  "cancel": "Cancelar",
+  "search": {
+    "placeholder": "Buscar ajustes",
+    "label": "Buscar ajustes",
+    "found_one": "{{count}} resultado",
+    "found_other": "{{count}} resultados",
+    "empty": "Ningún ajuste coincide con “{{query}}”",
+    "empty_hint": "Prueba con otra palabra, como “tema” o “contraseña”."
+  },
+  "tiles": {
+    "surface_2": "Superficie 2",
+    "surface_3": "Superficie 3",
+    "surface_4": "Superficie 4",
+    "surface_5": "Superficie 5",
+    "accent_text": "Texto de acento",
+    "accent_deep": "Acento profundo",
+    "accent_fill": "Relleno de acento",
+    "accent_glow": "Brillo de acento"
+  },
+  "theme": {
+    "picker_label": "Tema",
+    "schedule_title": "Cambiar horario",
+    "schedule_body": "Elige el tema que se usará cuando tu sistema esté en modo claro u oscuro."
+  },
+  "colour": {
+    "presets_label": "Colores predefinidos",
+    "convert_title": "Convertir color",
+    "convert_body": "Pega un color hexadecimal para usarlo como acento",
+    "convert_button": "Convertir",
+    "hex_label": "Color hexadecimal",
+    "hex_invalid": "Introduce un color hexadecimal válido, como #6bc6f1"
+  },
+  "font": {
+    "sample": "El veloz murciélago hindú comía feliz cardillo y kiwi",
+    "previewing": "Vista previa: {{name}}",
+    "name_font_2026": "Hanken Grotesk",
+    "name_font_2025": "Funnel Sans",
+    "name_hyperlegible": "Atkinson Hyperlegible Next",
+    "name_custom": "Tu fuente",
+    "name_serif": "Instrument Serif"
+  },
+  "keybind": {
+    "recording": "Pulsa una tecla…",
+    "edit": "Cambiar tecla"
+  },
+  "actions": {
+    "import": "Importar",
+    "export": "Exportar",
+    "reset": "Restablecer"
+  },
+  "export": {
+    "title": "Comparte tus ajustes",
+    "body": "Copia este texto para restaurar tus preferencias en otro dispositivo o navegador.",
+    "field_label": "Texto de los ajustes",
+    "share": "Compartir desde el dispositivo",
+    "copy": "Copiar texto",
+    "copied": "Ajustes copiados",
+    "copy_failed": "No se pudo copiar el texto",
+    "share_title": "Ajustes de SafeCircle"
+  },
+  "import": {
+    "title": "Importar ajustes",
+    "warning": "Esta acción es permanente, ten cuidado con el origen de lo que copias",
+    "field_label": "Ajustes exportados",
+    "placeholder": "Pega el texto que exportaste",
+    "confirm": "Importar",
+    "done": "Se importaron {{count}} ajustes",
+    "error_empty": "Primero pega los ajustes exportados.",
+    "error_invalid_json": "Ese texto no es válido, así que no se cambió nada.",
+    "error_invalid_shape": "Eso no parece un export de ajustes, así que no se cambió nada.",
+    "error_no_valid_settings": "No se reconoce ninguno de esos ajustes, así que no se cambió nada."
+  },
+  "reset": {
+    "title": "Restablecer ajustes",
+    "warning": "Tus ajustes se restablecerán de forma permanente, ¿seguro?",
+    "backup": "Hacer una copia de seguridad",
+    "confirm": "Restablecer",
+    "done": "Ajustes restablecidos"
+  },
+  "play_beta": {
+    "title": "Únete a los probadores beta",
+    "body": "Las versiones beta de Google Play están abiertas a los miembros del grupo de Google SafeCircle Testers (safecircle-testing@googlegroups.com). Únete con la cuenta de Google que usas en Play y luego actualiza la app desde su página de Play Store.",
+    "join": "Unirse al grupo"
+  },
+  "version": {
+    "app": "SafeCircle {{version}} ‘{{codename}}’",
+    "build": "Compilación {{id}}"
+  }
+}

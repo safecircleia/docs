@@ -1,0 +1,86 @@
+---
+title: Telegram bot
+icon: Send
+description: What @safecirclehq_bot does, how account linking works under the hood, and what it stores.
+---
+
+**@safecirclehq_bot** lets you link your SafeCircle account to Telegram, check your children's status and recent alerts from a chat, and verify $SC token holdings.
+
+<Callout type="info" title="The bot shows data on request">
+  The bot does not push alerts on its own. It shows your children and recent alerts when you open its menu. Real-time alerts reach you through the dashboard and the parent app's push notifications. For the parent-facing steps, see [Notifications](/en/docs/platform/dashboard/notifications#alerts-on-telegram).
+</Callout>
+
+## What it does
+
+| Command | Purpose |
+|---|---|
+| `/start` | Start the bot. Also accepts a deep link, `/start link_CODE`, that links your account directly |
+| `/menu` | Open the main menu |
+| `/link` | Link your SafeCircle account. `/link CODE` links directly |
+| `/dashboard` | Your children, their device counts, unread alerts and when each device was last seen |
+| `/status` | Your account summary: name, email, approval state, number of children and wallet details |
+| `/wallet` | Verify or refresh your $SC token holdings |
+| `/tiers` | Show the token tiers |
+| `/help` | Getting-started help, with links to the Terms and Privacy Policy |
+| `/cancel` | Cancel a pending prompt |
+
+The bot asks you to accept the Terms of Service and Privacy Policy before anything else. Children and alerts are shown only for approved accounts. The alerts screen lists up to 20 recent alerts.
+
+## How linking works
+
+<Steps>
+  <Step>
+    ### Generate a code in the dashboard
+    The dashboard calls `POST /api/telegram/generate-link-code` with your session. The backend creates an 8-character code that is valid for **10 minutes** and replaces any earlier pending code for your account.
+  </Step>
+  <Step>
+    ### Send it to the bot
+    You send `/link CODE` (or open the `/start link_CODE` deep link). The bot, after you have accepted the Terms, passes your Telegram ID and the code to the backend.
+  </Step>
+  <Step>
+    ### The backend verifies it
+    The backend finds the unexpired code, deletes it so it works once, clears any other account linked to the same Telegram ID, and stores your Telegram ID on your account. The bot then remembers which SafeCircle account the chat belongs to.
+  </Step>
+  <Step>
+    ### Unlinking
+    Unlink from the bot's menu, or from the dashboard (`POST /api/telegram/unlink-self`). `GET /api/telegram/status` tells the dashboard whether Telegram is linked.
+  </Step>
+</Steps>
+
+The bot-facing routes under `/api/telegram` (`link`, `unlink`, `user-access`, `user-profile`, `children`, `alerts` and `sync-tier`) require a private bot key and are not available to other clients. The dashboard-facing routes use your normal session.
+
+## $SC token tiers
+
+`/wallet` takes a wallet address in the usual `0x…` format and reads its $SC balance from a public blockchain RPC endpoint. The bot never asks for a private key, seed phrase or signature. The resulting tier is saved in the bot and synced to your SafeCircle account.
+
+| Tier | Minimum balance |
+|---|---|
+| Tier 1 | 500,000 $SC |
+| Tier 2 | 1,000,000 $SC |
+| Tier 3 | 2,000,000 $SC |
+
+Open `/tiers` in the bot to see the benefits of each tier.
+
+## What it stores
+
+The bot keeps one row per Telegram user in its own Cloudflare D1 database:
+
+| Field | Purpose |
+|---|---|
+| Telegram ID | Identifies the chat |
+| SafeCircle user ID | Set after linking |
+| Terms acceptance | Whether and when you accepted |
+| Wallet address, balance, tier and timestamps | Set after `/wallet` |
+
+On the backend, linking sets `telegram_id` on your user and the tier sets `token_tier`. Unlinking clears the Telegram ID.
+
+## Deployment
+
+The bot is a Bun and grammY application that uses long polling, packaged as a container image. It reads from the backend with a server-side key and writes to D1 through the Cloudflare API. It is operated by SafeCircle and has no public self-hosting guide.
+
+## Related
+
+<Cards>
+  <Card title="Notifications" href="/en/docs/platform/dashboard/notifications" description="Alerts in the dashboard and Telegram, from a parent's point of view." />
+  <Card title="Authentication" href="/en/docs/developers/authentication" description="Link codes and other credentials." />
+</Cards>

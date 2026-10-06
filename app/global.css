@@ -1,12 +1,98 @@
-@import 'tailwindcss';
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
+@import "tailwindcss";
+@import "fumadocs-ui/css/lib/default-colors.css";
+@import "fumadocs-ui/css/lib/base.css";
+@import "fumadocs-ui/css/lib/shiki.css";
+@import "fumadocs-ui/css/generated/shared.css";
+@plugin "../node_modules/fumadocs-ui/dist/tailwind/typography.js";
+@import "../styles/tokens.css";
+@import "../styles/themes.css";
+@import "../styles/base.css";
+@import "../styles/motion.css";
+@import "../styles/seasonal.css";
+@import "../components/ui/ui.css";
+@import "../components/shell/card/card.css";
+@import "../components/shell/shell.css";
+@import "../components/settings/settings.css";
+@import "../components/seasonal/seasonal.css";
+@import "../components/settings/page/settings-account.css";
+@import "../styles/docs.css";
 
-html {
-  scrollbar-gutter: stable;
+/* Tailwind names for the tokens in src/styles/. Colours are full colours (oklch triplets are wrapped
+   here); shadows map one token each (shadow-1 = card border + card shadow). */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-raised: var(--surface-raised);
+  --color-raised: var(--surface-raised);
+  --color-b2: oklch(var(--b2));
+  --color-b3: oklch(var(--b3));
+  --color-b4: oklch(var(--b4));
+  --color-b5: oklch(var(--b5));
+  --color-b6: oklch(var(--b6));
+  --color-b8: oklch(var(--b8));
+  --color-c1: oklch(var(--c1));
+  --color-c2: oklch(var(--c2));
+  --color-c3: oklch(var(--c3));
+  --color-heading: var(--text-heading);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-glow: var(--accent-glow);
+  --color-fill: var(--accent-fill);
+  --color-glow: var(--glow);
+  --color-k4: oklch(var(--k4));
+  --color-f4: oklch(var(--f4));
+  --color-on-accent: var(--on-accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-menu-border: var(--menu-border);
+
+  --radius-xs: 4px;
+  --radius-ctl: var(--button-radius);
+  --radius-item: var(--item-med-radius);
+  --radius-card: var(--item-big-radius);
+  --radius-page: var(--radius-page);
+  --radius-menu: var(--menu-radius);
+  --radius-xl: 20px;
+
+  --shadow-1: var(--card-border), var(--card-shadow);
+  --shadow-2: var(--overlay-shadow);
+  --shadow-card: var(--card-shadow);
+  --shadow-menu: var(--menu-shadow);
+  --shadow-overlay: var(--overlay-shadow);
+  --shadow-interact: var(--interact-shadow);
+  --shadow-primary: var(--primary-shadow), 0 3px 12px oklch(var(--h4) / 32%), var(--interact-shadow);
+  --shadow-group: var(--group-shadow);
+  --shadow-input: var(--input-shadow);
+  --shadow-input-focus: var(--focused-input-shadow);
+  --shadow-avatar-inset: var(--avatar-inset);
+  --shadow-inset: var(--item-inset);
+  --shadow-glow: var(--glow-shadow);
+
+  --font-sans: var(--font);
+  --font-head: var(--font-head);
+  --font-mono: var(--font-code);
+  --font-weight-normal: var(--fw-regular);
+  --font-weight-medium: var(--fw-medium);
+  --font-weight-semibold: var(--fw-bold);
+  --font-weight-bold: var(--fw-bold);
+
+  --ease-out-soft: var(--trans-function-ani);
+  --ease-ani: var(--trans-function-ani);
+  --ease-bleh: var(--trans-function);
+  --ease-spring: var(--spring);
 }
 
-html > body[data-scroll-locked] {
-  margin-right: 0px !important;
-  --removed-body-scroll-bar-size: 0px !important;
-}
+/* bleh's s (7px) and l (13px) radii. Tailwind already owns `rounded-s` / `rounded-l` as logical-side
+   utilities, so a theme value would emit both and the side-only rule wins. These unlayered rules beat
+   them; the cost is that variants (md:rounded-s) and mixing with other radius utilities don't work,
+   use rounded-[var(--radius-s)] there. */
+.rounded-s { border-radius: var(--radius-s); }
+.rounded-l { border-radius: var(--radius-l); }

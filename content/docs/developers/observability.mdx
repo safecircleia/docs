@@ -1,0 +1,91 @@
+---
+title: Observability
+icon: Activity
+description: How SafeCircle measures the health of its services, which metrics exist, and how analytics collection works and can be turned off.
+---
+
+SafeCircle measures two things: how healthy the backend is, and, anonymously, how the dashboard is used. Neither involves user IDs, emails or IP addresses.
+
+```text
+ Dashboard ──(anonymous events)──┐
+                                 ▼
+ Every API request ───────►  Cloudflare D1  ◄── GET /api/telemetry/metrics
+ (method, route, status,      (requests,            (Prometheus text,
+  duration)                    events)               secret-protected)
+                                                         │ scrape, every 60 s
+                                                         ▼
+                                              Prometheus ──► Grafana
+```
+
+## What is collected
+
+| Source | Stored in | Contents |
+|---|---|---|
+| Request metrics | D1 table `requests` | Time, HTTP method, route path, status code, duration in milliseconds |
+| Product events | D1 table `events` | Event name, page route, up to 10 filtered properties, time |
+
+Telemetry requests (`/api/telemetry/event` and `/api/model-feedback`) are not counted in request metrics.
+
+### Events
+
+The dashboard sends a small set of events:
+
+| Event | When |
+|---|---|
+| `page_view` | A page is opened |
+| `filter_applied` | A filter is used on a list |
+| `alert_read` | An alert is opened, with its category, risk level and source app |
+| `mark_all_read` | All alerts are marked read |
+
+The metrics endpoint also aggregates funnel and playground events (for example `inference_run`, `sign_up`, `child_added`, `device_paired`). Other SafeCircle clients, such as the AI Playground, can send these.
+
+The backend removes any property whose key matches an identifier-like word (id, email, user, token, name, ip, phone) and keeps at most 10 properties per event. Events are batched in the browser and sent about every 10 seconds, and when the tab is hidden.
+
+## Opt out
+
+In the dashboard, open **Settings › Security › Privacy** and switch off **Share anonymous usage analytics**. The choice is saved in your browser's local storage under `sc_analytics_optout`. When it is set, the dashboard sends no events and drops any that were queued.
+
+If you build a client, call `POST /api/telemetry/event` only when the user has not opted out. See the [API reference](/en/docs/developers/api#telemetry-event).
+
+## The metrics endpoint
+
+`GET /api/telemetry/metrics` returns the aggregated data in Prometheus text format. It requires `Authorization: Bearer <secret>`, which only SafeCircle operators hold. All metrics are gauges whose names start with `sc_`.
+
+| Group | Examples |
+|---|---|
+| Worker health | `sc_requests_total_24h`, `sc_error_rate_24h`, `sc_latency_p95_24h_ms`, `sc_requests_by_route`, `sc_requests_by_status` |
+| Product analytics | `sc_pageviews_total_24h`, `sc_feature_usage_24h`, `sc_funnel_signup_7d`, `sc_onboard_complete_7d` |
+| Playground analytics | `sc_playground_inferences_24h`, `sc_playground_inferences_by_model`, `sc_playground_ratings` |
+| Message analytics | `sc_alert_reads_24h`, `sc_alert_reads_by_category_24h`, `sc_alert_reads_by_risk_24h` |
+
+Windows are 1 hour, 6 hours, 24 hours or 7 days. Alert metrics count alert-read events from the dashboard, not rows in the alerts table.
+
+## The Grafana stack
+
+The `observability` repository is a Docker Compose stack:
+
+| Service | Role |
+|---|---|
+| Prometheus | Scrapes the metrics endpoint every 60 seconds and keeps 30 days of history |
+| Grafana | Dashboards, provisioned automatically from files |
+
+Four dashboards are provisioned: **Worker Health**, **Product Analytics**, **Message Analytics** and **Playground Analytics**. Grafana sign-up is disabled.
+
+To run it against your own deployment, put your metrics secret in the Prometheus scrape config, set the Grafana admin password through the `GRAFANA_PASSWORD` environment variable, and run:
+
+```bash
+docker compose up -d
+```
+
+Grafana is then on port 3000 and Prometheus on port 9090.
+
+## Logs
+
+The backend Worker has Cloudflare's built-in observability enabled for logs and errors. Unhandled errors are logged on the server and never returned to clients. SafeCircle Search turns observability off entirely so that queries cannot reach logs.
+
+## Related
+
+<Cards>
+  <Card title="Data and privacy" href="/en/docs/developers/data-and-privacy" description="Everything the platform stores." />
+  <Card title="Account and security" href="/en/docs/platform/dashboard/account-security#privacy" description="The analytics switch from a parent's point of view." />
+</Cards>

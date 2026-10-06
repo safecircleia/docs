@@ -1,0 +1,98 @@
+---
+title: Cómo funciona la app del menor
+icon: Workflow
+description: Qué lee la app de Android, cómo decide que algo es un riesgo, qué te envía y con qué frecuencia.
+---
+
+La app del menor vigila señales de riesgo en unas pocas apps de mensajería, las analiza **en el teléfono del menor** y te envía un resumen breve solo cuando algo parece arriesgado.
+
+## De la pantalla a la alerta
+
+<Steps>
+  <Step>
+    ### Leer
+    La app usa el **Servicio de accesibilidad** de Android para leer el texto visible en pantalla en las [apps compatibles](/es/docs/platform/android/supported-apps), y solo en ellas. Para cada app guarda en memoria las líneas de texto visibles más recientes (hasta 10).
+  </Step>
+  <Step>
+    ### Analizar en el dispositivo
+    De vez en cuando analiza ese texto de forma local. No se envía nada a un servidor para analizarlo. Busca estas categorías: grooming, acoso (bullying), contenido sexual, aislamiento, información personal, traslado de la conversación a otra plataforma y amenazas.
+  </Step>
+  <Step>
+    ### Decidir
+    El resultado es un nivel de riesgo: **bajo**, **medio** o **alto**. Los resultados bajos se descartan en el teléfono. Solo el nivel **medio** y el **alto** crean una alerta.
+  </Step>
+  <Step>
+    ### Enviar un resumen
+    La app envía la alerta al backend de SafeCircle y aparece en tu [panel de control](/es/docs/platform/dashboard/alerts).
+  </Step>
+</Steps>
+
+## Qué se envía
+
+Una alerta contiene:
+
+- El nivel de riesgo (medio o alto)
+- Las categorías detectadas
+- Una puntuación de confianza
+- Un motivo breve, como las categorías detectadas
+- El nombre de la app donde se detectó (por ejemplo `com.whatsapp`)
+
+**No** contiene el texto de los mensajes, nombres de contactos ni capturas de pantalla, y la app no guarda la conversación.
+
+## Con qué frecuencia
+
+Para no saturarte, la app analiza cada app supervisada como máximo **una vez cada 5 minutos**. Las alertas se crean a partir de lo que hay en pantalla en ese momento.
+
+<Callout type="info">
+  La app no pone las alertas en cola. Si el teléfono no tiene conexión cuando se iba a enviar una alerta, esa alerta no se reenvía más tarde.
+</Callout>
+
+## Modo básico y modelo de IA
+
+La app tiene dos formas de detectar riesgos.
+
+| Modo | Cómo funciona | Descarga | Precisión |
+|---|---|---|---|
+| **Básico** (búsqueda de palabras clave) | Busca frases relacionadas con riesgos en el texto visible | Ninguna | Menor: pueden pasar riesgos por alto y haber falsas alarmas |
+| **Horizon Mobile INT4** | Modelo de IA en el dispositivo, 4 bits | Unos 600 MB (se recomiendan 3 GB+ de RAM) | Mayor |
+| **Horizon Mobile INT8** | Modelo de IA en el dispositivo, 8 bits | Unos 1,2 GB (se recomiendan 6 GB+ de RAM) | La mayor |
+
+Una instalación nueva empieza en modo **Básico** y la pantalla de estado muestra **Basic protection mode** («Modo de protección básico») con el texto *AI model not installed — using keyword scanning* («modelo de IA no instalado: se usa búsqueda de palabras clave»). Los modelos de IA son opcionales y se ejecutan por completo en el dispositivo.
+
+### Cambiar a un modelo de IA
+
+<Steps>
+  <Step>
+    ### Abre el ajuste de nivel
+    En la app del menor, abre **Ajustes** (*Settings*) y toca **AI Model tier** en **Advanced**.
+  </Step>
+  <Step>
+    ### Elige un modelo
+    En **Change AI Model**, elige un nivel. El que mejor encaja con la memoria y el almacenamiento del teléfono aparece marcado como **Recommended**. Toca **Apply**.
+  </Step>
+  <Step>
+    ### Acepta la licencia del modelo
+    Antes de la descarga, una hoja **Model License Agreement** muestra la licencia SafeCircle Research License (SRL-1.0). Marca la casilla y toca **Accept & Continue**. Si tocas **Decline**, la app se queda en modo Básico.
+  </Step>
+  <Step>
+    ### Espera la descarga
+    Mantén el teléfono con buena conexión. La descarga continúa en segundo plano y puedes salir de la pantalla. Al terminar, **Ajustes › AI Model** muestra **Active**.
+  </Step>
+</Steps>
+
+Al elegir un nivel se borra el archivo de modelo que hay en el teléfono y se descarga el nuevo. Para volver, elige **Basic (keyword scan)** y confirma **Switch to Basic**. La app avisa de que la precisión de detección se reduce de forma significativa.
+
+Consulta [Actualizaciones](/es/docs/platform/android/updates) para saber cómo llegan las actualizaciones del modelo y [Cómo funciona la IA](/es/docs/ai/overview) para más sobre la tecnología.
+
+<Callout type="info">
+  Estas pantallas de ajustes aparecen en inglés en la versión actual de la app, por eso se indican con su texto en inglés.
+</Callout>
+
+## Límites
+
+- Solo se supervisan las [apps compatibles](/es/docs/platform/android/supported-apps).
+- La detección no es perfecta. Usa las alertas como punto de partida para hablar con tu hijo o hija, no como prueba.
+- La protección se detiene mientras el Servicio de accesibilidad está desactivado. El estado muestra **PERMISSION MISSING** («Falta el permiso») hasta que se vuelva a activar.
+- Se necesita Android 11 o posterior.
+
+Más en [Limitaciones conocidas](/es/docs/support/known-limitations).

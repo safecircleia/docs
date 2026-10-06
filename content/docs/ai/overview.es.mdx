@@ -1,0 +1,72 @@
+---
+title: Cómo funciona la IA
+icon: Brain
+description: Cómo detecta SafeCircle el riesgo en los chats de tu hijo de principio a fin, en lenguaje sencillo, y qué se queda en el teléfono.
+---
+
+SafeCircle usa un modelo de IA pequeño que se ejecuta **en el teléfono Android de tu hijo**. Lee el texto de los mensajes recientes en algunas apps compatibles, decide si muestran uno de siete tipos de riesgo en línea y, solo si el resultado es lo bastante serio, te envía una alerta. El texto de los mensajes nunca se envía a SafeCircle.
+
+<Callout type="info" title="Un asistente, no un veredicto">
+  El modelo puede equivocarse en ambos sentidos: puede marcar chats inofensivos y puede pasar por alto otros reales. Considera una alerta como una invitación a conversar, no como una prueba. Consulta [Limitaciones](/es/docs/ai/limitations).
+</Callout>
+
+## Qué ocurre, paso a paso
+
+<Steps>
+  <Step>
+    ### La app del menor detecta texto nuevo
+    La app infantil de SafeCircle usa el Servicio de accesibilidad de Android para leer el texto visible en pantalla en las apps de mensajería compatibles. Guarda los fragmentos más recientes de cada app solo en memoria.
+  </Step>
+  <Step>
+    ### El modelo en el dispositivo lee la conversación
+    Los fragmentos se pasan al modelo almacenado en el teléfono. El modelo responde con un nivel de riesgo, las categorías que ve y un valor de confianza. Este paso no necesita conexión a internet.
+  </Step>
+  <Step>
+    ### Solo los resultados serios se convierten en alertas
+    Si el resultado es `medium` o `high`, la app crea una alerta. Todo lo más débil se descarta en el teléfono. La app también espera entre análisis de la misma app, para que no recibas una avalancha de alertas.
+  </Step>
+  <Step>
+    ### Recibes una notificación
+    La alerta (nivel de riesgo, categorías, confianza, una nota breve y la app de origen) se envía a SafeCircle y aparece en tu panel, con una notificación push. Consulta [Entender las alertas](/es/docs/platform/dashboard/alerts).
+  </Step>
+</Steps>
+
+## Qué se queda en el dispositivo
+
+| Se queda en el teléfono | Se envía a SafeCircle |
+|---|---|
+| El texto de los mensajes | Nivel de riesgo (`medium` o `high`) |
+| El trabajo interno del modelo, incluido el búfer de mensajes recientes | Categorías de riesgo |
+| El propio archivo del modelo, una vez descargado | Valor de confianza |
+| | Una nota breve y el nombre de la app |
+
+Lee [Privacidad](/es/docs/ai/privacy) para ver el panorama completo, incluido lo que almacena el servidor.
+
+## Dos formas en que el teléfono puede analizar
+
+No todos los teléfonos pueden ejecutar el modelo completo, así que la app infantil tiene tres niveles. Una instalación nueva empieza con el **análisis por palabras clave**, que no necesita descarga. Puedes cambiar a un modelo de IA en la app infantil, en Ajustes → Avanzado → Nivel del modelo de IA (en pantalla: Settings → Advanced → AI Model tier), donde se marca el nivel recomendado para ese teléfono según su memoria, el almacenamiento libre y la versión de Android:
+
+| Nivel | Qué hace |
+|---|---|
+| Modelo completo | El modelo más grande en el dispositivo (descarga de unos 1,2 GB) |
+| Modelo ligero | Una versión más pequeña y cuantizada (muy por debajo de 1 GB) para teléfonos modestos |
+| Análisis por palabras clave | Un recurso básico de coincidencia de palabras para teléfonos que no pueden ejecutar ninguno de los modelos. No requiere descargar un modelo y es mucho menos preciso |
+
+Los detalles están en [Ejecución en el dispositivo](/es/docs/ai/on-device).
+
+## Qué busca la IA
+
+Siete categorías: captación (grooming), acoso (bullying), contenido sexual, aislamiento, información personal, migración de plataforma y amenazas. Consulta [Categorías de riesgo](/es/docs/ai/risk-categories) para saber qué significa cada una.
+
+## De dónde viene el modelo
+
+La familia de modelos se llama **Horizon**. Se entrena con conversaciones sintéticas (generadas por IA), no con mensajes de menores reales. Consulta [Modelos Horizon](/es/docs/ai/horizon) para ver cómo se entrena y se evalúa.
+
+<Cards>
+  <Card title="Categorías de riesgo" href="/es/docs/ai/risk-categories" description="Las siete categorías, los niveles de riesgo, la confianza y la nota de razonamiento." />
+  <Card title="Privacidad" href="/es/docs/ai/privacy" description="Qué se analiza, qué nunca sale del dispositivo y qué ve el servidor." />
+  <Card title="Ejecución en el dispositivo" href="/es/docs/ai/on-device" description="Niveles de modelo, descarga, apps compatibles, espera entre análisis y rendimiento." />
+  <Card title="Limitaciones" href="/es/docs/ai/limitations" description="Advertencias de precisión y carencias conocidas, según la evidencia disponible." />
+  <Card title="Configurar la app infantil" href="/es/docs/platform/android/setup" description="Instala la app infantil y elige un nivel de detección." />
+  <Card title="Desarrolladores" href="/es/docs/developers/overview" description="Arquitectura y APIs." />
+</Cards>

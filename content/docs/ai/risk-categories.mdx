@@ -1,0 +1,66 @@
+---
+title: Risk categories
+icon: Tags
+description: The seven risk categories SafeCircle detects, how risk levels, confidence and the reasoning note work, and how to read false positives.
+---
+
+Each time the model analyses a conversation it returns a structured result with four parts: a **risk level**, one or more **categories**, a **confidence** value and a short **reasoning** note.
+
+## The seven categories
+
+| Category | Label in the dashboard | What it covers |
+|---|---|---|
+| `grooming` | Grooming | Trust building, boundary testing, requests to keep things secret |
+| `bullying` | Bullying | Harassment, threats and cyberbullying |
+| `sexual_content` | Sexual Content | Explicit messages and inappropriate requests |
+| `isolation` | Isolation | Controlling behaviour and attempts to cut the child off from their network |
+| `personal_info` | Personal Info | Requests for identifying information such as address or school |
+| `platform_migration` | Platform Migration | Pushing the conversation to a less monitored app |
+| `threats` | Threats | Violent threats and dangerous challenges |
+
+A single conversation can match more than one category. Grooming often appears together with personal information requests or a push to another platform, for example.
+
+Categories describe the **pattern in the conversation**, not who wrote it. The model does not identify people.
+
+<Callout type="info" title="Potential Risk">
+  If an alert has a risk level but no named category, the dashboard shows it as **Potential Risk**.
+</Callout>
+
+## Risk levels
+
+During training the model learns five severity levels: `none`, `low`, `medium`, `high` and `critical`. The child app asks the model for `low`, `medium` or `high`, and only two of them create an alert.
+
+| Level | What it means | Becomes an alert? |
+|---|---|---|
+| `low` | No significant risk found | No, discarded on the phone |
+| `medium` | A probable risk. Worth a look, and it may be a false positive | Yes (orange) |
+| `high` | A clear, explicit risk. Worth a conversation the same day | Yes (red) |
+
+See [Understanding alerts](/en/docs/platform/dashboard/alerts) for how levels appear in the dashboard.
+
+## Confidence
+
+Confidence is a number from 0 to 1 that the dashboard shows as a percentage. Treat it as a rough indicator, not a probability:
+
+- It is a value the model writes as part of its answer. In the training data, confidence targets were derived from the severity label, not measured against how often the model is actually right.
+- It is **not calibrated**. A result of 90% does not mean it is right nine times out of ten.
+- A lower score on a `medium` alert can still be worth a look.
+
+## The reasoning note
+
+Each alert carries a short note. In the current child app the note is a plain summary of the categories found (for example "Detected: grooming, personal_info"). The note does **not** quote the conversation, and the model's own free-text explanation is not sent. You will not see message excerpts in an alert.
+
+When the phone uses the keyword-scan fallback instead of the model, the note says a keyword matched and confidence is shown as low.
+
+## Reading false positives
+
+A medium alert is a prompt, not a conclusion. Things to keep in mind:
+
+- The model reads a short window of recent text without knowing who the people are or their history. Jokes between friends, role-play and game talk can look like risk.
+- On conversations written by AI generators the model had not seen during training, our evaluation found that around one in five harmless chats was flagged. Real-world rates have not been measured. See [Limitations](/en/docs/ai/limitations).
+- Start with curiosity: ask your child what happened before you open the alert details with them.
+
+<Cards>
+  <Card title="Understanding alerts" href="/en/docs/platform/dashboard/alerts" description="What an alert shows in the dashboard and what to do next." />
+  <Card title="Limitations" href="/en/docs/ai/limitations" description="Accuracy caveats and known gaps." />
+</Cards>

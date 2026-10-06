@@ -1,0 +1,117 @@
+---
+title: Autenticación
+icon: KeyRound
+description: Cómo inician sesión los padres, cómo se vinculan los dispositivos de los menores y qué credencial espera cada parte de la API.
+---
+
+SafeCircle tiene dos tipos de clientes, y cada uno tiene su propia credencial.
+
+| Cliente | Credencial | Se obtiene | Se envía como |
+|---|---|---|---|
+| Padre o madre en un navegador | Cookie de sesión | Iniciando sesión en el panel | Cookie, automáticamente con `credentials: "include"` |
+| Padre o madre en una app nativa | Token de sesión | Iniciando sesión a través de la API | `Authorization: Bearer <token>` |
+| Dispositivo del menor | Token de dispositivo | Vinculando con un código de 6 dígitos | `x-device-token: <token>` |
+
+La autenticación de los padres la gestiona [Better Auth](https://www.better-auth.com/docs) en `/api/auth/*`. La API de datos lee después la misma sesión.
+
+## Cuentas de padres
+
+### Registro
+
+El registro está restringido mientras SafeCircle está en beta privada. Hay tres cosas entre una cuenta nueva y la API de datos:
+
+<Steps>
+  <Step>
+    ### Un código de invitación
+    Todo registro por cuenta propia necesita un código válido, enviado como `inviteCode` en el cuerpo de la petición de registro. Esto se aplica al registro con correo y al registro mediante un proveedor social. Sin un código válido la petición falla con `400` y el mensaje `A valid invite code is required to sign up`. Un código puede ser de un solo uso o de varios, y puede caducar o revocarse. Reclamar un código es atómico, así que dos personas no pueden quedarse con el último uso.
+  </Step>
+  <Step>
+    ### Verificación del correo
+    El registro con correo y contraseña requiere una dirección verificada. El enlace de verificación caduca a las **24 horas**, y la persona inicia sesión automáticamente al verificar.
+  </Step>
+  <Step>
+    ### Aprobación
+    Las cuentas nuevas empiezan sin aprobar. Hasta que un administrador las apruebe, todos los procedimientos de padre o madre devuelven `FORBIDDEN` con `Account pending approval`. `users.approvalStatus` informa del estado actual para que una app pueda mostrar una pantalla de espera. Consulta [Únete a la beta privada](/es/docs/platform/private-beta/join).
+  </Step>
+</Steps>
+
+### Métodos de inicio de sesión
+
+| Método | Notas |
+|---|---|
+| Correo y contraseña | En producción se comprueba que la contraseña no aparezca en filtraciones conocidas. Los enlaces de restablecimiento caducan a **1 hora** |
+| Inicio de sesión social | Google, Apple, Discord y X (Twitter), cada uno activado solo si está configurado |
+| Llaves de acceso | WebAuthn, con el nombre de la parte confiable `SafeCircle` |
+| App de autenticación (verificación en dos pasos) | TOTP con códigos de respaldo. Emisor `SafeCircle` |
+
+Se recuerda el último método usado por cada usuario, y un usuario puede tener la sesión iniciada en varios dispositivos a la vez.
+
+### Protección contra bots
+
+Cuando Cloudflare Turnstile está configurado, las peticiones protegidas (como el inicio de sesión y el registro) deben incluir el resultado del desafío en una cabecera `x-captcha-response`. Las apps oficiales de Android cumplen esta comprobación mediante otro mecanismo que no está disponible para terceros.
+
+### Sesiones
+
+En la web, la sesión es una cookie. Su nombre empieza por `safecircle`, se comparte entre `*.safecircle.tech` y se marca `Secure` con `SameSite=None` para que `fetch` con credenciales funcione desde otros subdominios de SafeCircle. Tus llamadas deben incluir credenciales, y tu origen debe estar en la lista de CORS.
+
+Las apps nativas usan en su lugar el plugin bearer. La respuesta de inicio de sesión contiene un `token`, que envías como `Authorization: Bearer <token>`.
+
+Rutas útiles de Better Auth:
+
+| Ruta | Propósito |
+|---|---|
+| `POST /api/auth/sign-in/email` | Iniciar sesión. Devuelve `{ token, user }` |
+| `POST /api/auth/sign-up/email` | Crear una cuenta. Requiere `email`, `password`, `name` e `inviteCode` |
+| `GET /api/auth/get-session` | Sesión y usuario actuales, o `null` |
+| `POST /api/auth/sign-out` | Cerrar la sesión |
+| `GET /api/auth/list-sessions`, `POST /api/auth/revoke-session` | Ver y cerrar tus sesiones |
+| `POST /api/auth/request-password-reset`, `POST /api/auth/reset-password` | Restablecer la contraseña |
+| `POST /api/auth/two-factor/enable`, `.../verify-totp`, `.../disable` | Verificación en dos pasos |
+| `GET /api/auth/passkey/list-user-passkeys`, `DELETE /api/auth/passkey/delete-passkey` | Gestión de llaves de acceso |
+
+Better Auth documenta la superficie completa, incluidas las redirecciones del inicio de sesión social y el registro de llaves de acceso.
+
+<Callout type="info">
+  `get-session` se llama en cada carga de página, así que usa el cubo de límite general. Las demás rutas `/api/auth/*` están limitadas a 30 peticiones por minuto por IP.
+</Callout>
+
+## Dispositivos de menores
+
+El teléfono de un menor nunca tiene una cuenta de padre o madre. Se vincula una vez y conserva un token de dispositivo.
+
+<Steps>
+  <Step>
+    ### El padre o madre crea un código
+    Un padre o madre con la sesión iniciada llama a `devices.createPairingToken` para un hijo. La respuesta es un **código de 6 dígitos** válido durante **5 minutos**. Crear un código nuevo invalida cualquier código anterior sin usar de ese hijo.
+  </Step>
+  <Step>
+    ### La app del menor lo canjea
+    La app del menor llama a `devices.pair` con el código y un nombre de dispositivo. Este procedimiento es público. El código se reclama de forma atómica, así que funciona **una sola vez**.
+  </Step>
+  <Step>
+    ### El dispositivo guarda un token
+    La respuesta contiene un `deviceToken` aleatorio de 256 bits, un `deviceId` y el `childId`. La app los guarda y envía el token en `x-device-token` en todas las llamadas posteriores.
+  </Step>
+  <Step>
+    ### Revocar
+    Un padre o madre llama a `devices.revoke`. El registro del dispositivo se elimina, así que el token deja de funcionar de inmediato.
+  </Step>
+</Steps>
+
+Un token de dispositivo puede crear alertas (`alerts.create`), pedir un enlace familiar de búsqueda segura (`search.familyLink`) y enviar comentarios (`POST /api/feedback`). No puede leer ningún dato. No caduca por sí solo; revocarlo es la única forma de terminarlo.
+
+## Otras credenciales
+
+| Credencial | La usa | Notas |
+|---|---|---|
+| Código de vinculación de Telegram | Panel y bot de Telegram | 8 caracteres, válido 10 minutos, se elimina al usarse. Consulta [Bot de Telegram](/es/docs/developers/telegram-bot) |
+| Token familiar | App del menor y SafeCircle Search | Firmado con HMAC, ligado a un dispositivo, válido 365 días. Una vez desvinculado el dispositivo, las reglas de sitios del padre o madre dejan de aplicarse. Consulta [SafeCircle Search](/es/docs/developers/search) |
+| Clave del bot | Del bot de Telegram al backend | Solo de servidor a servidor |
+| Rol de administrador | Personal de SafeCircle | Da acceso a los procedimientos de invitaciones y aprobación, que no se documentan aquí |
+
+## Relacionado
+
+<Cards>
+  <Card title="Referencia de la API" href="/es/docs/developers/api" description="Qué procedimientos necesitan qué credencial." />
+  <Card title="Cuenta y seguridad" href="/es/docs/platform/dashboard/account-security" description="Las mismas funciones desde el punto de vista de un padre o madre." />
+</Cards>

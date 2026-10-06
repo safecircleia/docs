@@ -1,0 +1,84 @@
+---
+title: AI Playground
+icon: FlaskConical
+description: The SafeCircle AI Playground for Android and the web playground - what they are, which models and runtimes they support, how to get them, and how they handle your data.
+---
+
+SafeCircle publishes two playgrounds where you can try its risk-detection models yourself. Neither one monitors anything, and neither is part of the parental-control product.
+
+<Callout type="warn" title="Experimental tools">
+  Both playgrounds are for exploring and testing models. Results can be wrong. Do not use them as the only safeguard for a child.
+</Callout>
+
+<Tabs items={["Android app", "Web playground"]}>
+<Tab value="Android app">
+### SafeCircle AI Playground for Android
+
+An Android app for running AI models directly on your phone: chat with them, test them and benchmark them. It is based on Google's AI Edge Gallery and is released under the Apache 2.0 license.
+
+**What you can do**
+
+| Feature | What it does |
+|---|---|
+| AI Chat | Multi-turn conversations with an on-device language model |
+| Prompt Lab | Single prompts with templates and settings |
+| Ask Image / Ask Audio | Image and audio questions with models that support them |
+| Safety Detection | Paste a conversation and see how the Horizon models classify it |
+| Vigil | Score a whole conversation with the [Vigil](/en/docs/ai/vigil) research model |
+| Agent Chat | Let a model use built-in skills and MCP servers |
+| Benchmark | Measure latency and throughput on your hardware |
+| Model Manager | Browse, download and delete models, or import your own from storage or a URL |
+
+**Models**
+
+| Model | Notes |
+|---|---|
+| Horizon Mobile INT4 | Fastest safety model (Gemma 3 1B, 4-bit) |
+| Horizon Mobile INT8 | Higher accuracy for the same task (Gemma 3 1B, 8-bit) |
+| Horizon Edge | General-purpose agent model based on Gemma 4 E2B, for phones with 8 GB RAM or more |
+| Vigil | Compact multilingual encoder, about 1.3 GB, runs on the CPU |
+
+Models run on Google AI Edge runtimes (LiteRT and LiteRT-LM). You can choose CPU, GPU or NPU where the phone and model support it, with an automatic fall back to CPU. Some gated models need a Hugging Face sign-in to download.
+
+**Requirements and how to get it**
+
+- Android 11 or newer. 4 GB of RAM or more is recommended for larger models.
+- Models are large, so use Wi-Fi and keep free storage.
+- The source code and releases are on GitHub in the `safecircleia/ai-playground-android` repository.
+
+**Privacy**
+
+Once a model is downloaded, the text you test is processed on your phone and is not sent to SafeCircle. The network is used to download models and by features you choose to use, such as gated Hugging Face downloads, Wikipedia lookups or MCP servers. No analytics or crash-reporting SDK is wired into the app build.
+</Tab>
+<Tab value="Web playground">
+### Web playground
+
+A browser-based version that runs the model inside your browser tab with WebGPU. It is aimed at testing and demonstration.
+
+- **Model.** It loads a roughly 2 GB, 2-billion-parameter model labelled "Horizon Web" and outputs the five risk levels (`none` to `critical`), categories, confidence and a one-line reasoning.
+- **Requirements.** A browser and GPU with WebGPU, and about 4 GB of video memory.
+- **Caching.** The model is saved in your browser's local storage after the first download, and the download resumes if interrupted.
+- **Access.** Signing in is required and access is approved by SafeCircle during the private beta. See [Join the private beta](/en/docs/platform/private-beta/join).
+- **On first use** you see a notice that the playground is experimental and that results should not be treated as definitive.
+
+**Privacy**
+
+Classification runs in a worker inside your browser. The text you paste is not uploaded for classification. The page does send basic usage events to SafeCircle, such as page views, which model you picked, load time, and for each run the length of the text (not the text itself) and the resulting risk level.
+
+The **rating buttons** are the exception. If you rate a result and submit it, SafeCircle receives your rating, your optional comment, the text you tested, the model's risk level, categories and confidence. Do not rate results for text you do not want to share.
+</Tab>
+</Tabs>
+
+## Which one should I use
+
+| I want to | Use |
+|---|---|
+| Try the models on my own phone, including Vigil | Android app |
+| Compare behaviour quickly without installing anything | Web playground (private beta access) |
+| Protect and monitor a child's device | The SafeCircle child app, not a playground. See [Set up the child app](/en/docs/platform/android/setup) |
+
+<Cards>
+  <Card title="Horizon models" href="/en/docs/ai/horizon" description="How the models are trained and evaluated." />
+  <Card title="Vigil" href="/en/docs/ai/vigil" description="The research classifier available in the Android app." />
+  <Card title="Join the private beta" href="/en/docs/platform/private-beta/join" description="Request access to SafeCircle's beta features." />
+</Cards>

@@ -1,0 +1,14 @@
+{
+  "title": "Android (app del menor)",
+  "description": "Instala, vincula y entiende la app SafeCircle del menor en Android.",
+  "icon": "Smartphone",
+  "defaultOpen": true,
+  "pages": [
+    "setup",
+    "how-it-works",
+    "supported-apps",
+    "permissions",
+    "updates",
+    "troubleshooting"
+  ]
+}

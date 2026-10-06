@@ -1,0 +1,93 @@
+---
+title: Datos y privacidad
+icon: ShieldCheck
+description: Qué guardan los servicios de SafeCircle, qué nunca sale del dispositivo del menor y cómo se eliminan los datos.
+---
+
+Esta página describe lo que el código guarda hoy. Para la vista orientada a padres, consulta [Cuenta y seguridad](/es/docs/platform/dashboard/account-security).
+
+## Qué envía la app del menor
+
+El modelo de IA se ejecuta **en el dispositivo del menor**. La app del menor lee el texto visible de forma local y mantiene un búfer continuo en memoria para clasificarlo. El backend no tiene ningún campo para el texto de los mensajes.
+
+Cuando se detecta riesgo, la app envía una alerta:
+
+| Campo | Significado |
+|---|---|
+| `riskLevel` | `medium` o `high` |
+| `categories` | Una o más etiquetas de categoría |
+| `confidence` | Un número de 0 a 1 |
+| `reasoning` | Una nota breve. La app del menor actual envía un resumen de las categorías, como `Detected: grooming`, no un texto redactado por el modelo |
+| `appSource` | El nombre de paquete de la app donde ocurrió |
+
+El backend los guarda tal como los recibe, tras quitar las etiquetas HTML y los bytes nulos. `reasoning` es texto libre que la API acepta tal como llega, así que se guarda tal como se recibe.
+
+## Qué guarda el backend
+
+### PostgreSQL
+
+| Dato | Detalles |
+|---|---|
+| Cuenta | Nombre, correo, si el correo está verificado, rol, estado de aprobación, un hash de la contraseña para las cuentas con correo, proveedores de inicio de sesión vinculados |
+| Sesiones | Token, caducidad, dirección IP y agente de usuario de cada inicio de sesión |
+| Seguridad | Secreto de la app de autenticación y códigos de respaldo (gestionados por Better Auth), claves públicas de las llaves de acceso |
+| Hijos | Nombre, y marcas de tiempo opcionales de la foto y el banner |
+| Dispositivos | Nombre del dispositivo, token de dispositivo, hora de vinculación, hora de última conexión |
+| Códigos de vinculación | El código, quién lo creó, la caducidad y cuándo se usó |
+| Alertas | Los campos anteriores, más la hora de lectura y la de creación |
+| Tokens push | El token push y la plataforma de cada teléfono registrado |
+| Preferencias | Interruptores de alertas y horas de silencio, por padre o madre y por hijo |
+| Ajustes de búsqueda | Preferencias de búsqueda y reglas de sitios, si las sincronizas |
+| Telegram | Tu ID de Telegram y tu nivel de token, solo si vinculas el bot |
+| Invitaciones | Qué código de invitación creó cada cuenta |
+
+### Cloudflare D1
+
+| Dato | Detalles |
+|---|---|
+| Métricas de peticiones | Hora, método HTTP, ruta, estado y duración. Sin dirección IP, ID de usuario ni cuerpo |
+| Eventos de producto | Eventos anónimos como `page_view`. Consulta [Telemetría](#telemetry) |
+
+### Cloudflare R2
+
+| Dato | Detalles |
+|---|---|
+| Imágenes de perfil | Foto y banner de padres e hijos. El panel las reduce y las recodifica como JPEG antes de subirlas, lo que también elimina los metadatos de ubicación. El servidor solo acepta JPEG, PNG y WebP, comprueba el contenido del archivo y limita las subidas a 1 MB |
+| Valoraciones de IA | Se crean solo cuando alguien envía una valoración en una app AI Playground. Contienen el sentimiento, un comentario opcional, la conversación que la persona introdujo en el playground y la respuesta del modelo |
+
+### Otros lugares
+
+- Los **informes de errores y las peticiones de funciones** enviados desde una app crean una incidencia en el sistema de comentarios de SafeCircle. La incidencia incluye el nombre y el correo de quien la envía, la pantalla, la versión de la app y el sistema operativo.
+- El **correo** de verificación, restablecimiento de contraseña e invitaciones se envía desde `no-reply@auth.safecircle.tech` y `no-reply@beta.safecircle.tech`.
+- Los mensajes **push** pasan por Firebase Cloud Messaging y contienen el nombre del menor, el nivel de riesgo y las categorías, además del ID de la alerta.
+- El **bot de Telegram** mantiene su propia tabla pequeña. Consulta [Bot de Telegram](/es/docs/developers/telegram-bot).
+- **SafeCircle Search** no registra las consultas y no establece cookies para usuarios anónimos. Consulta [SafeCircle Search](/es/docs/developers/search).
+
+## Telemetría [#telemetry]
+
+El panel envía unos pocos eventos anónimos (visitas a páginas, uso de filtros, lecturas de alertas y «marcar todo como leído») a `POST /api/telemetry/event`. Llevan un nombre de evento, la ruta de la página y hasta 10 propiedades. El backend descarta cualquier propiedad cuya clave parezca un ID, correo, usuario, token, nombre, dirección IP o número de teléfono.
+
+Puedes desactivarla en **Ajustes › Seguridad › Privacidad**. La decisión se guarda en tu navegador y, cuando está desactivada, el panel no envía nada. Consulta [Observabilidad](/es/docs/developers/observability).
+
+## Control de acceso
+
+Cada procedimiento de padre o madre comprueba que el hijo, el dispositivo o la alerta pertenezcan a quien tiene la sesión iniciada. Pedir el hijo de otra persona devuelve `NOT_FOUND`, y pedir la alerta de otra persona devuelve `FORBIDDEN`. Las imágenes de perfil son privadas para su propietario, y los administradores pueden leerlas pero no modificarlas.
+
+## Eliminación
+
+Hijos, dispositivos, alertas, códigos de vinculación, tokens push y preferencias están enlazados a su propietario con eliminaciones en cascada, así que borrar la cuenta de un padre o madre elimina todo lo que posee. Cuando el personal de SafeCircle rechaza una cuenta pendiente, el backend también borra del almacenamiento las imágenes del usuario y de sus hijos.
+
+Revocar un dispositivo (`devices.revoke`) elimina el registro del dispositivo, y las alertas que ese dispositivo creó se eliminan con él. Los tokens push que el servicio de push indica como ya no válidos se eliminan automáticamente.
+
+Para ver la eliminación de cuentas y de hijos tal como la ve un padre o madre, incluidos los periodos de retención, consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices#eliminar-un-hijo) y [Cuenta y seguridad](/es/docs/platform/dashboard/account-security#eliminar-tu-cuenta).
+
+<Callout type="info">
+  El servidor Prometheus del stack de observabilidad conserva las métricas durante 30 días. Guarda recuentos agregados, no eventos individuales.
+</Callout>
+
+## Relacionado
+
+<Cards>
+  <Card title="Arquitectura del backend" href="/es/docs/developers/backend" description="Dónde vive cada dato." />
+  <Card title="Preguntas frecuentes" href="/es/docs/support/faq" description="Preguntas habituales sobre privacidad y cuentas." />
+</Cards>

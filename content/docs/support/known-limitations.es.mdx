@@ -1,0 +1,98 @@
+---
+title: Limitaciones conocidas
+icon: TriangleAlert
+description: Limitaciones de la beta, plataformas compatibles, límites de la detección, entrega de alertas y retención de datos durante la beta privada.
+---
+
+SafeCircle se encuentra en **beta privada**. El producto funciona de extremo a extremo, pero varias áreas aún están en desarrollo. Esta página recoge lo que conviene saber antes de depender de él. Enlaza a las páginas detalladas en lugar de repetirlas.
+
+<Callout type="warn" title="No sustituye hablar con tu hijo">
+  La detección puede pasar por alto conversaciones graves y puede marcar otras inofensivas. No dependas de SafeCircle como única protección.
+</Callout>
+
+## Compatibilidad de plataformas
+
+<Tabs items={["Android", "iOS", "Otras"]}>
+  <Tab value="Android">
+    | Elemento | Estado |
+    |---|---|
+    | App del menor en Android 11+ | Compatible |
+    | App del menor en Android 10 e inferior | No compatible |
+    | App para padres (Android 11+) | Versión temprana, complemento del panel |
+    | Panel | Cualquier navegador moderno |
+  </Tab>
+  <Tab value="iOS">
+    <Callout type="warn">
+      **No hay app para iOS**, ni para menores ni para padres. Un iPhone o un iPad no se puede vincular ni supervisar. Sí puedes abrir el panel en el navegador de un iPhone. Consulta [iOS](/es/docs/platform/ios/overview).
+    </Callout>
+  </Tab>
+  <Tab value="Otras">
+    No se cubren otras plataformas, incluidos los ordenadores. [Canopy OS](/es/docs/platform/canopy-os/overview) es una distribución Linux experimental cuyos componentes de protección todavía no están instalados, así que no supervisa a nadie.
+  </Tab>
+</Tabs>
+
+## Qué supervisa la app del menor
+
+La app del menor lee el **texto visible en pantalla** mediante el Servicio de accesibilidad de Android, solo en estas apps:
+
+- WhatsApp (`com.whatsapp`)
+- Instagram (`com.instagram.android`)
+- Telegram (`org.telegram.messenger`)
+- Snapchat (`com.snapchat.android`)
+- TikTok (`com.zhiliaoapp.musically`)
+
+No se leen otras apps, sitios web, juegos, notificaciones, imágenes, mensajes de voz ni vídeo. La lista no se puede cambiar desde el panel. iMessage / Mensajes de Apple no son compatibles. Consulta [Apps compatibles](/es/docs/platform/android/supported-apps).
+
+## Limitaciones conocidas
+
+<Accordions>
+  <Accordion title="El modo Básico es el predeterminado">
+    Una instalación nueva de la app del menor empieza en modo **Básico**, que busca palabras clave y no necesita ninguna descarga. No detecta el texto reformulado y puede marcar texto inofensivo. Los modelos de IA en el dispositivo, más precisos (unos 600 MB o unos 1,2 GB), son opcionales y se eligen en **Settings › Advanced › AI Model tier** en la app del menor. Consulta [Modo básico y modelo de IA](/es/docs/platform/android/how-it-works#modo-básico-y-modelo-de-ia).
+  </Accordion>
+  <Accordion title="Precisión y falsos positivos">
+    No se ha medido la precisión en conversaciones reales de menores, así que espera tanto falsas alarmas como riesgos que pasan desapercibidos. La confianza es un indicador aproximado y no está calibrada. Consulta [Limitaciones de la IA](/es/docs/ai/limitations).
+  </Accordion>
+  <Accordion title="Idiomas">
+    La IA está pensada para inglés y español. Conviene dar por hecho que otros idiomas no son compatibles. Por ahora, las pantallas de la app del menor están en inglés. Consulta [Limitaciones de la IA](/es/docs/ai/limitations#idiomas).
+  </Accordion>
+  <Accordion title="La nota de la alerta es un resumen">
+    La nota de **Razonamiento IA** de una alerta es por ahora un breve resumen de las categorías detectadas, por ejemplo *Detected: grooming*. No explica la conversación y nunca la cita. Consulta [Categorías de riesgo](/es/docs/ai/risk-categories#la-nota-de-razonamiento).
+  </Accordion>
+  <Accordion title="Límite de frecuencia y muestreo">
+    El análisis está limitado a una vez cada 5 minutos por app monitorizada y por dispositivo, y trabaja con el texto visible en ese momento. Un intercambio arriesgado y breve entre dos comprobaciones puede pasar desapercibido.
+  </Accordion>
+  <Accordion title="Las alertas no se ponen en cola">
+    Si el teléfono del menor no tiene conexión cuando se enviaría una alerta, esa alerta no se reenvía más tarde.
+  </Accordion>
+  <Accordion title="Entrega de alertas">
+    Las alertas aparecen en directo en el panel mientras está abierto y como notificaciones push en la [app para padres](/es/docs/platform/parent-app/notifications). No hay notificaciones push del navegador. El bot de Telegram solo muestra tus hijos y las alertas recientes cuando se lo pides; no envía alertas. Consulta [Notificaciones](/es/docs/platform/dashboard/notifications).
+  </Accordion>
+  <Accordion title="El estado del dispositivo puede ir con retraso">
+    **En línea**, **En espera** y **Sin conexión** en el panel se basan en la hora de la última conexión de cada dispositivo. El backend no actualiza esa hora de forma fiable cuando la app del menor está activa, por lo que el estado puede ir con retraso o ser incorrecto. Usa la pantalla de estado de la propia app del menor (**MONITORING ACTIVE**) para confirmar que la protección funciona. Consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices#dispositivos).
+  </Accordion>
+  <Accordion title="Los permisos pueden desactivarse">
+    Android puede desactivar el Servicio de accesibilidad tras reinstalar la app, y el ahorro de batería agresivo de algunos teléfonos puede detenerla. La protección está apagada mientras el estado muestre **PERMISSION MISSING**. Consulta [Permisos](/es/docs/platform/android/permissions).
+  </Accordion>
+  <Accordion title="Vinculación">
+    Vincula con el **código QR** o el **código de 6 dígitos**. La opción **Hold phones together** (NFC) de la app del menor todavía no está activa. Los códigos duran 5 minutos y se usan una sola vez. Una app reinstalada hay que vincularla de nuevo.
+  </Accordion>
+  <Accordion title="Personalización de umbrales de alerta">
+    Los umbrales de nivel de riesgo son fijos: solo `medium` y `high` generan alertas. La configuración por categoría no está disponible aún.
+  </Accordion>
+  <Accordion title="SafeCircle Search es independiente">
+    SafeCircle Search es un alfa temprana en su propio sitio. No está integrada en el panel ni en las apps, las búsquedas que se hacen allí no aparecen en las alertas y el bloqueo familiar todavía no se puede activar desde SafeCircle. Consulta [SafeCircle Search](/es/docs/platform/search/overview).
+  </Accordion>
+</Accordions>
+
+## Retención de datos
+
+<Callout type="warn">
+  Actualmente no existe eliminación automática de datos. Los datos de alertas y cuenta se conservan hasta que los eliminas: revocar un dispositivo elimina las alertas que creó, eliminar un hijo elimina su perfil, alertas y dispositivos, y eliminar tu cuenta elimina todo lo que le pertenece.
+</Callout>
+
+Antes del lanzamiento general se publicará una política formal de retención de datos. Para saber qué se guarda hoy, consulta [Datos y privacidad](/es/docs/developers/data-and-privacy). Para preguntas sobre privacidad mientras tanto, contacta con **support@safecircle.tech**.
+
+<Cards>
+  <Card title="Preguntas frecuentes y solución de problemas" href="/es/docs/support/faq" description="Soluciones paso a paso para los problemas habituales." />
+  <Card title="Limitaciones de la IA" href="/es/docs/ai/limitations" description="Precisión, cobertura e idiomas, con más detalle." />
+</Cards>

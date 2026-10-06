@@ -1,0 +1,119 @@
+---
+title: Backend architecture
+icon: Server
+description: The stack behind api.safecircle.tech, how a request is processed, and an alert's journey from a child's phone to a parent.
+---
+
+The backend is a single Cloudflare Worker that serves authentication, the data API, push notifications, profile images, telemetry and the Telegram bot's endpoints.
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Runtime | Cloudflare Workers |
+| HTTP framework | Hono |
+| Data API | tRPC v11 mounted at `/trpc` |
+| Authentication | Better Auth, mounted at `/api/auth` |
+| Database | PostgreSQL, reached through Cloudflare Hyperdrive, with Drizzle ORM |
+| Validation | Zod on every procedure and route |
+| Push | Firebase Cloud Messaging (HTTP v1) |
+| Email | Cloudflare email sending (verification, password reset, invitations) |
+
+## Deployment shape
+
+The Worker is served on `api.safecircle.tech` (and `backend.safecircle.tech`). It uses these Cloudflare bindings:
+
+| Binding | Used for |
+|---|---|
+| Hyperdrive | Pooled connection to the PostgreSQL database |
+| D1 (`sc-analytics`) | Request metrics and anonymous product events |
+| R2 (`sc-media`) | Profile photos and banners for parents and children |
+| R2 (`sc-feedback`) | Opt-in AI rating submissions from the AI Playground |
+| Email | Sending verification, reset and invitation emails |
+
+Web origins on `safecircle.tech` and `safecircle.es` (and their subdomains) are allowed by CORS, with credentials.
+
+## How a request is processed
+
+Every request passes through the same pipeline, in this order:
+
+<Steps>
+  <Step>
+    ### Request ID and logging
+    Each request gets an ID and is logged by the Worker's built-in observability.
+  </Step>
+  <Step>
+    ### Body size limit
+    Bodies over **512 KB** are rejected with `413`. Image uploads under `/api/media/` may be up to **1 MB**.
+  </Step>
+  <Step>
+    ### Rate limiting
+    A global limit of **100 requests per minute per IP** applies to everything. Auth routes have a stricter bucket. See [Rate limits](/en/docs/developers/api#rate-limits).
+  </Step>
+  <Step>
+    ### CORS
+    Only SafeCircle origins are allowed. Credentials (cookies) are allowed. Headers accepted include `Authorization`, `x-device-token` and `x-captcha-response`.
+  </Step>
+  <Step>
+    ### Request metrics
+    The method, route, status and duration are written to D1 for the [metrics endpoint](/en/docs/developers/observability). No IP address, user ID or body is stored.
+  </Step>
+  <Step>
+    ### Routing
+    The request is handled by Better Auth, tRPC or one of the REST routes. Unhandled errors return a generic `{"error": "Internal server error"}` with status `500` and never include internal details.
+  </Step>
+</Steps>
+
+## Data model
+
+The main tables, all in PostgreSQL:
+
+| Table | Holds |
+|---|---|
+| `user` and the Better Auth tables | Accounts, sessions, linked sign-in providers, passkeys, 2-step verification secrets |
+| `children` | A child profile, owned by one parent |
+| `devices` | A paired child device and its device token |
+| `pairing_tokens` | Short-lived 6-digit pairing codes |
+| `alerts` | One row per alert: risk level, categories, confidence, reasoning, source app, read time |
+| `push_tokens` | A parent's registered push tokens |
+| `notification_preferences` | Per-parent and per-child alert preferences |
+| `invite_codes`, `invite_code_uses` | Private-beta invitations |
+| `search_settings` | Synced SafeCircle Search preferences and site rules |
+
+Children, devices, alerts, pairing codes, push tokens and preferences are linked with cascading deletes. Deleting a parent removes everything they own. See [Data and privacy](/en/docs/developers/data-and-privacy).
+
+## An alert, end to end
+
+<Steps>
+  <Step>
+    ### Detection on the device
+    The child app's Accessibility Service reads visible text in supported apps and keeps a rolling buffer per app. The on-device model classifies it. Nothing is sent unless the risk crosses a threshold. After an alert for an app, the child app waits **5 minutes** before sending another for the same app.
+  </Step>
+  <Step>
+    ### The alert is sent
+    The child app calls `alerts.create` with its `x-device-token`. The payload contains a risk level (`medium` or `high`), the categories, a confidence from 0 to 1, a short note (currently a summary of the categories) and the source app's package name. It does not contain the conversation.
+  </Step>
+  <Step>
+    ### The backend stores it
+    The device token is resolved to a device, a child and a parent. Text fields are stripped of HTML tags and null bytes, and the alert is inserted. The response is just `{ "id": "..." }`, so the child app never waits on push delivery.
+  </Step>
+  <Step>
+    ### Push is sent in the background
+    The Worker hands the push job to `waitUntil` so it finishes after the response. It loads the parent's preferences (a per-child setting wins over the global one) and skips the push if that risk level is turned off. **Medium** alerts are also skipped during quiet hours; **high** alerts always break through. Each registered push token receives a data message on the `sc_alerts_high` or `sc_alerts_medium` channel. Tokens that FCM reports as unregistered are deleted.
+  </Step>
+  <Step>
+    ### The parent sees it
+    The dashboard and parent app read alerts with `alerts.list`, `activity.list` and the analytics procedures, and mark them read with `alerts.markRead`.
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Quiet hours are compared against the **UTC** clock. The backend does not store each parent's time zone.
+</Callout>
+
+## Related
+
+<Cards>
+  <Card title="API reference" href="/en/docs/developers/api" description="Every route and procedure a client can call." />
+  <Card title="Authentication" href="/en/docs/developers/authentication" description="How callers prove who they are." />
+</Cards>

@@ -1,0 +1,16 @@
+{
+  "title": "IA",
+  "description": "Cómo detecta riesgos la IA en el dispositivo de SafeCircle, qué analiza y qué tan bien funciona.",
+  "icon": "Brain",
+  "root": true,
+  "pages": [
+    "overview",
+    "risk-categories",
+    "privacy",
+    "on-device",
+    "horizon",
+    "vigil",
+    "ai-playground",
+    "limitations"
+  ]
+}

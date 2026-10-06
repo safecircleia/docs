@@ -1,0 +1,86 @@
+---
+title: Bot de Telegram
+icon: Send
+description: Qué hace @safecirclehq_bot, cómo funciona por dentro la vinculación de cuentas y qué guarda.
+---
+
+**@safecirclehq_bot** te permite vincular tu cuenta de SafeCircle a Telegram, consultar desde un chat el estado de tus hijos y sus alertas recientes, y verificar tus tenencias de $SC.
+
+<Callout type="info" title="El bot muestra los datos bajo demanda">
+  El bot no envía alertas por su cuenta. Muestra tus hijos y las alertas recientes cuando abres su menú. Las alertas en tiempo real te llegan por el panel y por las notificaciones push de la app para padres. Para los pasos orientados a padres, consulta [Notificaciones](/es/docs/platform/dashboard/notifications#alertas-por-telegram).
+</Callout>
+
+## Qué hace
+
+| Comando | Propósito |
+|---|---|
+| `/start` | Inicia el bot. También acepta un enlace profundo, `/start link_CODE`, que vincula tu cuenta directamente |
+| `/menu` | Abre el menú principal |
+| `/link` | Vincula tu cuenta de SafeCircle. `/link CODE` la vincula directamente |
+| `/dashboard` | Tus hijos, el número de dispositivos, las alertas sin leer y la última conexión de cada dispositivo |
+| `/status` | El resumen de tu cuenta: nombre, correo, estado de aprobación, número de hijos y datos de la cartera |
+| `/wallet` | Verifica o actualiza tus tenencias de $SC |
+| `/tiers` | Muestra los niveles de token |
+| `/help` | Ayuda para empezar, con enlaces a los Términos y la Política de privacidad |
+| `/cancel` | Cancela una solicitud pendiente |
+
+El bot te pide aceptar los Términos del servicio y la Política de privacidad antes que nada. Los hijos y las alertas solo se muestran para cuentas aprobadas. La pantalla de alertas muestra hasta 20 alertas recientes.
+
+## Cómo funciona la vinculación
+
+<Steps>
+  <Step>
+    ### Genera un código en el panel
+    El panel llama a `POST /api/telegram/generate-link-code` con tu sesión. El backend crea un código de 8 caracteres válido durante **10 minutos** y sustituye cualquier código pendiente anterior de tu cuenta.
+  </Step>
+  <Step>
+    ### Envíaselo al bot
+    Envías `/link CODE` (o abres el enlace profundo `/start link_CODE`). Tras aceptar los Términos, el bot pasa al backend tu ID de Telegram y el código.
+  </Step>
+  <Step>
+    ### El backend lo verifica
+    El backend busca el código sin caducar, lo elimina para que funcione una sola vez, desvincula cualquier otra cuenta vinculada al mismo ID de Telegram y guarda tu ID de Telegram en tu cuenta. Después el bot recuerda a qué cuenta de SafeCircle pertenece el chat.
+  </Step>
+  <Step>
+    ### Desvincular
+    Desvincula desde el menú del bot o desde el panel (`POST /api/telegram/unlink-self`). `GET /api/telegram/status` le dice al panel si Telegram está vinculado.
+  </Step>
+</Steps>
+
+Las rutas del bot bajo `/api/telegram` (`link`, `unlink`, `user-access`, `user-profile`, `children`, `alerts` y `sync-tier`) requieren una clave privada del bot y no están disponibles para otros clientes. Las rutas del panel usan tu sesión normal.
+
+## Niveles del token $SC
+
+`/wallet` recibe una dirección de cartera en el formato habitual `0x…` y lee su saldo de $SC desde un endpoint RPC público de la blockchain. El bot nunca pide una clave privada, una frase semilla ni una firma. El nivel resultante se guarda en el bot y se sincroniza con tu cuenta de SafeCircle.
+
+| Nivel | Saldo mínimo |
+|---|---|
+| Nivel 1 | 500.000 $SC |
+| Nivel 2 | 1.000.000 $SC |
+| Nivel 3 | 2.000.000 $SC |
+
+Abre `/tiers` en el bot para ver las ventajas de cada nivel.
+
+## Qué guarda
+
+El bot guarda una fila por usuario de Telegram en su propia base de datos de Cloudflare D1:
+
+| Campo | Propósito |
+|---|---|
+| ID de Telegram | Identifica el chat |
+| ID de usuario de SafeCircle | Se establece tras vincular |
+| Aceptación de los Términos | Si los aceptaste y cuándo |
+| Dirección de cartera, saldo, nivel y marcas de tiempo | Se establecen tras `/wallet` |
+
+En el backend, vincular establece `telegram_id` en tu usuario y el nivel establece `token_tier`. Desvincular borra el ID de Telegram.
+
+## Despliegue
+
+El bot es una aplicación de Bun y grammY que usa long polling, empaquetada como imagen de contenedor. Lee del backend con una clave del lado del servidor y escribe en D1 a través de la API de Cloudflare. Lo opera SafeCircle y no tiene una guía pública de autoalojamiento.
+
+## Relacionado
+
+<Cards>
+  <Card title="Notificaciones" href="/es/docs/platform/dashboard/notifications" description="Alertas en el panel y en Telegram, desde el punto de vista de un padre o madre." />
+  <Card title="Autenticación" href="/es/docs/developers/authentication" description="Códigos de vinculación y otras credenciales." />
+</Cards>

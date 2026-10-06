@@ -1,0 +1,45 @@
+---
+title: Repositorios
+icon: GitBranch
+description: Los códigos fuente de SafeCircle, para qué sirve cada uno, el stack que usa y cómo está licenciado.
+---
+
+El código de SafeCircle vive en la organización `safecircleia` de GitHub. Hoy solo algunos repositorios son públicos, así que solo esos tienen enlace.
+
+## Plataforma
+
+| Repositorio | Propósito | Stack | Licencia | Visibilidad |
+|---|---|---|---|---|
+| `backend` | Autenticación, API de datos, alertas, push, imágenes y telemetría. Consulta [Arquitectura del backend](/es/docs/developers/backend) | Hono, tRPC, Better Auth, Drizzle, Cloudflare Workers, PostgreSQL | No publicada | Privado |
+| `dashboard` | Panel web para padres en `app.safecircle.tech` y `app.safecircle.es` | React 19, TypeScript, Vite, React Router, Cloudflare Workers | GPL-3.0-or-later | Privado |
+| `android-child` | App del menor: detección en el dispositivo y vinculación | Kotlin, Jetpack Compose, Hilt, Ktor, ONNX Runtime | MIT | Privado |
+| `parent-android` | App para padres: alertas, push y vinculación | Kotlin, Jetpack Compose, Hilt, Ktor | Propietaria | Privado |
+| `telegram-bot` | `@safecirclehq_bot`. Consulta [Bot de Telegram](/es/docs/developers/telegram-bot) | Bun, grammY, Cloudflare D1 | No publicada | Privado |
+| `observability` | Stack de Prometheus y Grafana. Consulta [Observabilidad](/es/docs/developers/observability) | Docker Compose, Prometheus, Grafana | No publicada | Privado |
+| SafeCircle Search | Metabuscador que prioriza la privacidad. Consulta [SafeCircle Search](/es/docs/developers/search) | Next.js 16, React 19, OpenNext, Cloudflare Workers | GPL-3.0-or-later | Aún no publicado |
+
+## IA
+
+| Repositorio | Propósito | Licencia | Visibilidad |
+|---|---|---|---|
+| [`horizon`](https://github.com/safecircleia/horizon) | Sistema de entrenamiento del modelo de detección de riesgos | SafeCircle Research License (SRL-1.0): uso en investigación y no comercial; el uso comercial requiere permiso por escrito | Público |
+| [`ai-playground-android`](https://github.com/safecircleia/ai-playground-android) | App de Android para probar modelos en el dispositivo | Apache-2.0 | Público |
+
+Cómo funciona el modelo se explica en la [visión general de la IA](/es/docs/ai/overview).
+
+## Convenciones entre repositorios
+
+- **Gestor de paquetes y entorno de ejecución:** Bun para los proyectos de TypeScript.
+- **Alojamiento:** Cloudflare Workers para el backend, el panel y Search.
+- **Commits:** Conventional Commits (`feat:`, `fix:`, `chore:`).
+- **Idiomas:** el panel y Search se publican en inglés y español, con una prueba que mantiene idénticos ambos conjuntos de claves.
+- **Seguridad de tipos:** Zod valida cada entrada en el límite de la API, y el esquema es la única fuente de los tipos de la base de datos.
+
+## Contribuir
+
+No hay un proceso público de contribución para los repositorios privados. Si quieres informar de un problema, usa **Más › Informar de un error** en el panel o escribe a **support@safecircle.tech**. Para los repositorios públicos, sigue las indicaciones del README y la licencia de cada uno.
+
+<Cards>
+  <Card title="Visión general para desarrolladores" href="/es/docs/developers/overview" description="Cómo encajan las piezas." />
+  <Card title="Preguntas frecuentes" href="/es/docs/support/faq" description="Preguntas sobre la beta y el soporte." />
+</Cards>

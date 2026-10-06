@@ -1,0 +1,36 @@
+---
+title: Editions
+icon: Layers
+description: The three planned Canopy OS editions — Family, Institutional and Personal — and the defaults each is set up with.
+---
+
+Canopy OS is built in three editions on one shared base. Each edition writes its name into `/etc/canopy-edition` and ships its own protection defaults.
+
+<Callout type="warn" title="Early and unfinished">
+  The defaults below are written in the images, but the Horizon and network-filter services that would read them aren't installed yet. They describe the intent of each edition, not protection you get today. See the [overview](/en/docs/platform/canopy-os/overview).
+</Callout>
+
+| | **Family** | **Institutional** | **Personal** |
+|---|---|---|---|
+| Image tag | `canopy-family` | `canopy-institutional` | `canopy-personal` |
+| Made for | Parental controls and child safety | Schools and managed fleets | Privacy-conscious adults |
+| Horizon AI risk detection | Strict | Moderate | Off (optional) |
+| Network filtering profile | Strict: adult, malware, social, violence | Moderate: adult, malware | Privacy: malware, trackers |
+| First-boot wizard | Includes a child profile step | Includes a fleet enrolment step | Standard |
+| Extra | | Folder prepared for device-management (MDM) settings | |
+
+## Family
+
+For a home computer used by children. It is the strictest edition: Horizon in strict mode, the strictest web filtering profile, and a setup wizard that asks you to create a child profile.
+
+## Institutional
+
+For schools and organisations that manage many computers. Detection and filtering are moderate, the wizard enrols the computer into a fleet instead of creating a child profile, and the image reserves a place for a device-management agent. An admin dashboard is part of the plan.
+
+## Personal
+
+For adults who want privacy defaults without monitoring. Horizon is off, and the filtering profile blocks malware and trackers.
+
+## Which one for my family?
+
+If you want protection for a child today, use the [Android child app](/en/docs/platform/android/setup) with the [dashboard](/en/docs/platform/dashboard/setup). Canopy OS editions aren't a substitute yet.

@@ -1,0 +1,10 @@
+{
+  "title": "Soporte",
+  "description": "Preguntas frecuentes, resolución de problemas y limitaciones conocidas.",
+  "icon": "LifeBuoy",
+  "root": true,
+  "pages": [
+    "faq",
+    "known-limitations"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "timeline_title": "Cronología de temporadas",
+  "current": "Actual",
+  "new_season": "Ha empezado una nueva temporada",
+  "season_ends": "{{season}} termina {{time}}",
+  "open_settings": "Abrir ajustes de temporada",
+  "chip_label": "Temporada de {{season}}",
+  "current_season": "Temporada actual",
+  "start_date": "Fecha de inicio",
+  "end_date": "Fecha de fin",
+  "next_season": "Próxima temporada",
+  "preview_title": "Vista previa",
+  "preview_card": "Una tarjeta de temporada",
+  "preview_season": "Temporada",
+  "preview_particles": "Partículas"
+}

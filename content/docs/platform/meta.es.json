@@ -1,0 +1,16 @@
+{
+  "title": "Plataforma",
+  "description": "Primeros pasos, panel y guías de la app infantil.",
+  "icon": "Layers",
+  "root": true,
+  "pages": [
+    "index",
+    "private-beta",
+    "dashboard",
+    "android",
+    "parent-app",
+    "search",
+    "ios",
+    "canopy-os"
+  ]
+}

@@ -1,0 +1,60 @@
+---
+title: App para padres
+icon: TabletSmartphone
+description: La app SafeCircle Parent para Android — qué hace, sus dos variantes y cómo se relaciona con el panel.
+---
+
+**SafeCircle Parent** es una app de Android para ti, padre o madre. Usa la misma cuenta que el [panel web](/es/docs/platform/dashboard/overview) y muestra los mismos hijos, dispositivos y alertas, con notificaciones push en tu teléfono.
+
+<Callout type="info">
+  La app para padres es un complemento, no un requisito. Todo lo que muestra también está en el panel, y el panel tiene más ajustes. Es una versión temprana (0.2).
+</Callout>
+
+## Qué puedes hacer
+
+| Pestaña | Para qué sirve |
+|---|---|
+| **Inicio** (*Home*) | Un panel de tarjetas que puedes añadir, quitar y mover, para todos los hijos o para uno. |
+| **Alertas** (*Alerts*) | El feed de alertas, agrupado por día. Filtra por **Todas** (*All*), **Sin leer** (*Unread*) o **Riesgo alto** (*High risk*). |
+| **Familia** (*Family*) | Tus hijos, su última alerta y la vinculación de dispositivos nuevos. |
+| **Insights** | Alertas por día en **7 días** o **30 días**, categorías principales, orígenes de alertas principales y el hijo con más actividad. |
+| **Ajustes** (*Settings*) | Perfil, notificaciones, apariencia, bloqueo de la app, sesiones, soporte y Acerca de. |
+
+Abre una alerta para ver el nivel de riesgo, el hijo y la hora, **Why this was flagged** («Por qué se marcó»), **Model confidence** («Confianza del modelo») y **Mark as read** («Marcar como leída»). Las alertas tienen el mismo contenido que en el panel: un resumen, nunca los mensajes del menor. Consulta [Alertas](/es/docs/platform/dashboard/alerts).
+
+<Callout type="info">
+  La interfaz de la app para padres está en inglés en la versión actual, por eso algunos nombres se dan en inglés.
+</Callout>
+
+## Dos variantes
+
+La app tiene dos variantes. Comparten la misma cuenta, los mismos datos y las mismas funciones; se diferencian en la interfaz.
+
+| Variante | Nombre de paquete | Interfaz |
+|---|---|---|
+| **Standard** | `com.safecircle.parent` | Diseño Material You (Material 3) con color dinámico opcional |
+| **Samsung** | `com.safecircle.parent.samsung` (la versión termina en `-oneui`) | Diseño One UI para teléfonos Samsung, más widgets de estado para la pantalla de inicio y la de bloqueo |
+
+Instala la que corresponda a tu teléfono. Solo necesitas una.
+
+## Cómo se relaciona con el panel
+
+- **Misma cuenta.** Inicias sesión con el correo y la contraseña de tu cuenta del panel. Los hijos, dispositivos y alertas que crees en uno aparecen en el otro.
+- **Vinculación.** Puedes añadir un hijo y vincular su teléfono desde cualquiera de los dos. Consulta [Configurar la app para padres](/es/docs/platform/parent-app/setup).
+- **Notificaciones.** La app añade notificaciones push. El panel muestra las alertas mientras está abierto y puede avisarte por Telegram. Consulta [Notificaciones](/es/docs/platform/parent-app/notifications).
+- **Autenticación en dos pasos.** La app puede iniciar sesión con un código de 6 dígitos de tu app de autenticación, pero la autenticación en dos pasos se configura y se gestiona en el panel. Consulta [Cuenta y seguridad](/es/docs/platform/dashboard/account-security).
+
+## Requisitos
+
+- Android 11 o posterior
+- Una cuenta de SafeCircle. Durante la beta privada necesitas un **código de invitación** para crearla. Consulta [Únete a la beta](/es/docs/platform/private-beta/join).
+- Conexión a internet
+
+## Conseguir la app
+
+La app para padres forma parte de la beta privada. Para obtener la versión actual, escribe al equipo de SafeCircle a **support@safecircle.tech**.
+
+<Cards>
+  <Card title="Configurar la app para padres" href="/es/docs/platform/parent-app/setup" description="Crea tu cuenta, añade un hijo y vincula un teléfono." />
+  <Card title="Notificaciones" href="/es/docs/platform/parent-app/notifications" description="Alertas push, canales, horas de silencio y silenciar por hijo." />
+</Cards>

@@ -1,0 +1,117 @@
+---
+title: Authentication
+icon: KeyRound
+description: How parents sign in, how child devices pair, and which credential each part of the API expects.
+---
+
+SafeCircle has two kinds of callers, and each has its own credential.
+
+| Caller | Credential | Obtained by | Sent as |
+|---|---|---|---|
+| Parent in a browser | Session cookie | Signing in on the dashboard | Cookie, automatically with `credentials: "include"` |
+| Parent in a native app | Session token | Signing in through the API | `Authorization: Bearer <token>` |
+| Child device | Device token | Pairing with a 6-digit code | `x-device-token: <token>` |
+
+Parent authentication is handled by [Better Auth](https://www.better-auth.com/docs) at `/api/auth/*`. The data API then reads the same session.
+
+## Parent accounts
+
+### Sign-up
+
+Sign-up is gated while SafeCircle is in private beta. Three things stand between a new account and the data API:
+
+<Steps>
+  <Step>
+    ### An invite code
+    Every self-service sign-up needs a valid code, sent as `inviteCode` in the sign-up request body. This applies to email sign-up and to sign-up through a social provider. Without a valid code the request fails with `400` and the message `A valid invite code is required to sign up`. A code can be single-use or multi-use, and it can expire or be revoked. Claiming a code is atomic, so two people cannot both take the last use.
+  </Step>
+  <Step>
+    ### Email verification
+    Email and password sign-up requires a verified address. The verification link expires after **24 hours**, and the user is signed in automatically once they verify.
+  </Step>
+  <Step>
+    ### Approval
+    New accounts start unapproved. Until an admin approves the account, every parent procedure returns `FORBIDDEN` with `Account pending approval`. `users.approvalStatus` reports the current state so an app can show a waiting screen. See [Join the private beta](/en/docs/platform/private-beta/join).
+  </Step>
+</Steps>
+
+### Sign-in methods
+
+| Method | Notes |
+|---|---|
+| Email and password | Passwords are checked against known breaches in production. Reset links expire after **1 hour** |
+| Social sign-in | Google, Apple, Discord and X (Twitter), each enabled only when configured |
+| Passkeys | WebAuthn, with the relying party name `SafeCircle` |
+| Authenticator app (2-step verification) | TOTP with backup codes. Issuer name `SafeCircle` |
+
+A last-used method is remembered per user, and a user can be signed in on several devices at once.
+
+### Bot protection
+
+When Cloudflare Turnstile is configured, the protected requests (such as sign-in and sign-up) must include the challenge result in an `x-captcha-response` header. The official Android apps satisfy this check through a separate mechanism that is not available to third parties.
+
+### Sessions
+
+On the web, the session is a cookie. Its name starts with `safecircle`, it is shared across `*.safecircle.tech`, and it is set `Secure` with `SameSite=None` so that `fetch` with credentials works from other SafeCircle subdomains. Your calls must include credentials, and your origin must be on the CORS list.
+
+Native apps use the bearer plugin instead. The sign-in response contains a `token`, which you send as `Authorization: Bearer <token>`.
+
+Useful Better Auth routes:
+
+| Route | Purpose |
+|---|---|
+| `POST /api/auth/sign-in/email` | Sign in. Returns `{ token, user }` |
+| `POST /api/auth/sign-up/email` | Create an account. Needs `email`, `password`, `name` and `inviteCode` |
+| `GET /api/auth/get-session` | Current session and user, or `null` |
+| `POST /api/auth/sign-out` | End the session |
+| `GET /api/auth/list-sessions`, `POST /api/auth/revoke-session` | See and sign out your sessions |
+| `POST /api/auth/request-password-reset`, `POST /api/auth/reset-password` | Password reset |
+| `POST /api/auth/two-factor/enable`, `.../verify-totp`, `.../disable` | 2-step verification |
+| `GET /api/auth/passkey/list-user-passkeys`, `DELETE /api/auth/passkey/delete-passkey` | Passkey management |
+
+The full surface, including social sign-in redirects and passkey registration, is documented by Better Auth.
+
+<Callout type="info">
+  `get-session` is called on every page load, so it uses the general rate-limit bucket. Other `/api/auth/*` routes are limited to 30 requests per minute per IP.
+</Callout>
+
+## Child devices
+
+A child's phone never has a parent account. It pairs once and keeps a device token.
+
+<Steps>
+  <Step>
+    ### The parent creates a code
+    A signed-in parent calls `devices.createPairingToken` for a child. The response is a **6-digit code** valid for **5 minutes**. Creating a new code invalidates any earlier unused code for that child.
+  </Step>
+  <Step>
+    ### The child app redeems it
+    The child app calls `devices.pair` with the code and a device name. This procedure is public. The code is claimed atomically, so it works **once**.
+  </Step>
+  <Step>
+    ### The device keeps a token
+    The response contains a random 256-bit `deviceToken`, a `deviceId` and the `childId`. The app stores them and sends the token in `x-device-token` on every later call.
+  </Step>
+  <Step>
+    ### Revoking
+    A parent calls `devices.revoke`. The device record is deleted, so the token stops working immediately.
+  </Step>
+</Steps>
+
+A device token can create alerts (`alerts.create`), request a safe-search family link (`search.familyLink`) and submit feedback (`POST /api/feedback`). It cannot read any data. It does not expire on its own; revoking it is the only way to end it.
+
+## Other credentials
+
+| Credential | Used by | Notes |
+|---|---|---|
+| Telegram link code | Dashboard and Telegram bot | 8 characters, valid for 10 minutes, deleted when used. See [Telegram bot](/en/docs/developers/telegram-bot) |
+| Family token | Child app and SafeCircle Search | Signed with HMAC, bound to a device, valid for 365 days. Once the device is unpaired, the parent's site rules stop applying. See [SafeCircle Search](/en/docs/developers/search) |
+| Bot key | Telegram bot to backend | Server to server only |
+| Admin role | SafeCircle staff | Gives access to invitation and approval procedures, which are not documented here |
+
+## Related
+
+<Cards>
+  <Card title="API reference" href="/en/docs/developers/api" description="Which procedures need which credential." />
+  <Card title="Account and security" href="/en/docs/platform/dashboard/account-security" description="The same features from a parent's point of view." />
+</Cards>

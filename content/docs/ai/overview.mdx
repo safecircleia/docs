@@ -1,0 +1,72 @@
+---
+title: How the AI works
+icon: Brain
+description: How SafeCircle detects risk in your child's chats end to end, in plain language, and what stays on the phone.
+---
+
+SafeCircle uses a small AI model that runs **on your child's Android phone**. It reads the text of recent chat messages in a few supported apps, decides whether they show one of seven kinds of online risk, and only if the result is serious enough does it send you an alert. The message text itself is never sent to SafeCircle.
+
+<Callout type="info" title="An assistant, not a verdict">
+  The model can be wrong in both directions: it can flag harmless chats and it can miss real ones. Treat an alert as a prompt to start a conversation, not as proof. See [Limitations](/en/docs/ai/limitations).
+</Callout>
+
+## What happens, step by step
+
+<Steps>
+  <Step>
+    ### The child app notices new text
+    The SafeCircle child app uses Android's Accessibility Service to read the text that is visible on screen in the supported messaging apps. It keeps the most recent snippets for each app in memory only.
+  </Step>
+  <Step>
+    ### The on-device model reads the conversation
+    The snippets are passed to the model stored on the phone. The model answers with a risk level, the categories it sees, and a confidence value. No network connection is needed for this step.
+  </Step>
+  <Step>
+    ### Only serious results become alerts
+    If the result is `medium` or `high`, the app builds an alert. Anything weaker is discarded on the phone. The app also waits between checks for the same app, so you do not get a flood of alerts.
+  </Step>
+  <Step>
+    ### You are notified
+    The alert (risk level, categories, confidence, a short note and the source app) is sent to SafeCircle and shown in your dashboard, with a push notification. See [Understanding alerts](/en/docs/platform/dashboard/alerts).
+  </Step>
+</Steps>
+
+## What stays on the device
+
+| Stays on the phone | Sent to SafeCircle |
+|---|---|
+| The text of the messages | Risk level (`medium` or `high`) |
+| The model's working, including the recent-messages buffer | Risk categories |
+| The model file itself, once downloaded | Confidence value |
+| | A short note and the app name |
+
+Read [Privacy](/en/docs/ai/privacy) for the full picture, including what the server stores.
+
+## Two ways the phone can analyse
+
+Not every phone can run the full model, so the child app has three tiers. A fresh install starts on the **keyword scan**, which needs no download. You can switch to an AI model in the child app under Settings → Advanced → AI Model tier, which marks the tier recommended for that phone based on its memory, free storage and Android version:
+
+| Tier | What it does |
+|---|---|
+| Full model | The larger on-device model (about 1.2 GB download) |
+| Lite model | A smaller, quantised version (well under 1 GB) for modest phones |
+| Keyword scan | A basic word-matching fallback for phones that cannot run either model. It needs no model download and is much less accurate |
+
+Details are in [On-device runtime](/en/docs/ai/on-device).
+
+## What the AI looks for
+
+Seven categories: grooming, bullying, sexual content, isolation, personal information, platform migration and threats. See [Risk categories](/en/docs/ai/risk-categories) for what each one means.
+
+## Where the model comes from
+
+The model family is called **Horizon**. It is trained on synthetic (AI-generated) conversations, not on real children's messages. See [Horizon models](/en/docs/ai/horizon) for how it is trained and evaluated.
+
+<Cards>
+  <Card title="Risk categories" href="/en/docs/ai/risk-categories" description="The seven categories, risk levels, confidence and the reasoning note." />
+  <Card title="Privacy" href="/en/docs/ai/privacy" description="What is analysed, what never leaves the device, and what the server sees." />
+  <Card title="On-device runtime" href="/en/docs/ai/on-device" description="Model tiers, download, supported apps, cooldown and performance." />
+  <Card title="Limitations" href="/en/docs/ai/limitations" description="Accuracy caveats and known gaps, from the evidence we have." />
+  <Card title="Set up the child app" href="/en/docs/platform/android/setup" description="Install the child app and choose a detection tier." />
+  <Card title="Developers" href="/en/docs/developers/overview" description="Architecture and APIs." />
+</Cards>

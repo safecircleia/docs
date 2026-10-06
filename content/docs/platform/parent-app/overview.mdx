@@ -1,0 +1,56 @@
+---
+title: Parent app overview
+icon: TabletSmartphone
+description: The SafeCircle Parent app for Android — what it does, its two variants and how it relates to the dashboard.
+---
+
+**SafeCircle Parent** is an Android app for you, the parent. It uses the same account as the [web dashboard](/en/docs/platform/dashboard/overview) and shows the same children, devices and alerts, with push notifications on your phone.
+
+<Callout type="info">
+  The parent app is a companion, not a requirement. Everything it shows is also in the dashboard, and the dashboard has more settings. It is an early version (0.2).
+</Callout>
+
+## What you can do
+
+| Tab | What it's for |
+|---|---|
+| **Home** | A dashboard of cards you can add, remove and move, for all children or one child. |
+| **Alerts** | The alert feed, grouped by day. Filter by **All**, **Unread** or **High risk**. |
+| **Family** | Your children, their latest alert, and pairing for new devices. |
+| **Insights** | Alerts per day over **7 days** or **30 days**, top categories, top alert sources and busiest child. |
+| **Settings** | Profile, notifications, appearance, app lock, sessions, support and About. |
+
+Open an alert to see the risk level, the child and the time, **Why this was flagged**, **Model confidence**, and **Mark as read**. Alerts have the same content as in the dashboard: a summary, never the child's messages. See [Alerts](/en/docs/platform/dashboard/alerts).
+
+## Two variants
+
+The app comes in two variants. They share the same account, data and features; they differ in the interface.
+
+| Variant | Package name | Interface |
+|---|---|---|
+| **Standard** | `com.safecircle.parent` | Material You (Material 3) design with optional dynamic colour |
+| **Samsung** | `com.safecircle.parent.samsung` (version ends in `-oneui`) | One UI design for Samsung phones, plus home-screen and lock-screen status widgets |
+
+Install the one that matches your phone. You only need one.
+
+## How it relates to the dashboard
+
+- **Same account.** You sign in with the email and password of your dashboard account. Children, devices and alerts you create in one appear in the other.
+- **Pairing.** You can add a child and pair their phone from either place. See [Set up the parent app](/en/docs/platform/parent-app/setup).
+- **Notifications.** The app adds push notifications. The dashboard shows alerts while it is open and can message you on Telegram. See [Notifications](/en/docs/platform/parent-app/notifications).
+- **Two-factor authentication.** The app can sign in with a 6-digit authenticator code, but you set up and manage two-factor authentication in the dashboard. See [Account and security](/en/docs/platform/dashboard/account-security).
+
+## Requirements
+
+- Android 11 or later
+- A SafeCircle account. During the private beta you need an **invite code** to create one. See [Join the beta](/en/docs/platform/private-beta/join).
+- An internet connection
+
+## Getting the app
+
+The parent app is part of the private beta. To get the current build, contact the SafeCircle team at **support@safecircle.tech**.
+
+<Cards>
+  <Card title="Set up the parent app" href="/en/docs/platform/parent-app/setup" description="Create your account, add a child and pair a phone." />
+  <Card title="Notifications" href="/en/docs/platform/parent-app/notifications" description="Push alerts, channels, quiet hours and per-child muting." />
+</Cards>

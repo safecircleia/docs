@@ -1,0 +1,37 @@
+---
+title: Permissions
+icon: KeyRound
+description: Every permission the Android child app uses and why it needs it.
+---
+
+The child app asks for as little as it can. Only the first two items need you to do something.
+
+| Permission | When | Why |
+|---|---|---|
+| **Accessibility Service** | Setup, step 4 | Lets the app read the text visible on screen in the [supported apps](/en/docs/platform/android/supported-apps). Without it the app can't detect anything. |
+| **Notifications** (Android 13 and later) | Setup, step 4 | Download progress while a model is downloading, and the **SafeCircle update available** notice when a newer AI model exists. |
+| **Camera** | Pairing, when you choose **Scan QR code** | Android asks the first time you scan the pairing QR code. It isn't used for anything else. |
+| **Internet** | Always | Pair with your account, send alerts and download or check for AI model updates. |
+| **Foreground service (data sync)** | During model downloads | Keeps a model download running if you leave the app. You see a **Downloading safety model** notification while it runs. |
+
+The app also declares the **NFC** permission for a tap-to-pair option that isn't active yet.
+
+The app doesn't ask for access to contacts, location, SMS, the microphone, photos or files.
+
+## The Accessibility Service
+
+Android treats this as a sensitive permission, so you grant it yourself in Android settings and Android shows a warning before you can enable it. In **Settings › Accessibility**, SafeCircle appears as **SafeCircle Protection**.
+
+- **What it can read** — text visible in WhatsApp, Instagram, Telegram, Snapchat and TikTok.
+- **What it does with it** — analyses it on the phone and keeps only the latest few lines in memory. See [How the child app works](/en/docs/platform/android/how-it-works).
+- **What happens if it's off** — the status screen shows **PERMISSION MISSING** and **Not protected.** Tap the status to open Android's accessibility settings, or tap **Open Settings** in the **Permission required** dialog, and enable the toggle again.
+
+<Callout type="warn">
+  Android can turn the Accessibility Service off after you reinstall the app. If protection stops, check this first.
+</Callout>
+
+## Turning permissions off
+
+Switching a permission off in Android settings takes effect immediately. Turning off the Accessibility Service stops monitoring. Turning off notifications only hides download and update notices.
+
+To stop monitoring for good, uninstall the app and revoke the device in the dashboard — see [Children and devices](/en/docs/platform/dashboard/children-devices).

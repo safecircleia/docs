@@ -1,0 +1,76 @@
+/* ─────────────────────────────────────────────────────────────
+   Seasonal decorations. Overlays only draw while a season with art is
+   active and "additional seasonal effects" isn't switched off.
+   Art lives in /public/seasonal (cobweb.svg 694x297, frost.svg 100x100 tile).
+   ───────────────────────────────────────────────────────────── */
+
+:where(.seasonal-card) { position: relative; }
+
+/* Halloween: a cobweb draped over the card's top-right corner */
+html[data-bleh--season="halloween"]:not([data-bleh--seasonal_overlays="false"]) .seasonal-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 800px;
+  height: 400px;
+  max-width: 100%;
+  border-top-right-radius: var(--card-radius);
+  pointer-events: none;
+  z-index: 100;
+  background: url("/seasonal/cobweb.svg") no-repeat 150px -130px / 694px 297px;
+  mix-blend-mode: soft-light;
+  opacity: 0.4;
+}
+html[data-bleh--season="halloween"][data-bleh--theme_type="light"]:not([data-bleh--seasonal_overlays="false"]) .seasonal-card::after {
+  mix-blend-mode: normal;
+  opacity: 0.15;
+}
+
+/* Halloween: hand-drawn, slightly crooked corners on buttons, menu rows and menus */
+html[data-bleh--season="halloween"]:not([data-bleh--seasonal_overlays="false"]) {
+  --button-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --item-med-radius: var(--button-radius);
+  --menu-radius: 255px 5px 225px 5px / 5px 225px 5px 255px;
+}
+
+/* Winter: an ice band along the card's top edge */
+html:is([data-bleh--season="fall"], [data-bleh--season="christmas"], [data-bleh--season="new_years"]):not([data-bleh--seasonal_overlays="false"]) .seasonal-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--ice-height, 100px);
+  max-height: 100%;
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.9;
+  background:
+    url("/seasonal/frost.svg") repeat-x 0 -60px / 100px,
+    linear-gradient(180deg, rgb(255 255 255 / 20%) 10%, transparent 100%);
+}
+html[data-bleh--season="fall"] { --ice-height: 90px; }
+html[data-bleh--season="christmas"] { --ice-height: 110px; }
+html[data-bleh--season="new_years"] { --ice-height: 100px; }
+
+/* the same frost along the top of the viewport behind the masthead */
+.seasonal-strip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  z-index: 20;
+  pointer-events: none;
+}
+html:is([data-bleh--season="fall"], [data-bleh--season="christmas"], [data-bleh--season="new_years"]):not([data-bleh--seasonal_overlays="false"]) .seasonal-strip {
+  background:
+    url("/seasonal/frost.svg") repeat-x 0 -60px / 100px,
+    linear-gradient(180deg, rgb(255 255 255 / 20%) 10%, transparent 100%);
+}
+
+@media (max-width: 768px) {
+  html[data-bleh--season] .seasonal-card::after { display: none; }
+}

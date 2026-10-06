@@ -1,0 +1,54 @@
+---
+title: Vigil (investigación)
+icon: Telescope
+description: Vigil, un clasificador compacto basado en un codificador que SafeCircle evalúa junto a Horizon - en qué se diferencia, cómo se compara y en qué punto está.
+---
+
+**Vigil** es un clasificador de investigación para los mismos siete riesgos que Horizon. Se puede probar en el [AI Playground para Android](/es/docs/ai/ai-playground), pero **no lo usa la app infantil** y hoy no genera alertas para los padres.
+
+## En qué se diferencia de Horizon
+
+| | Horizon Mobile | Vigil |
+|---|---|---|
+| Modelo base | Gemma 3 1B, un LLM que genera texto | Laya-multilingual, un codificador de 322M de parámetros (mmBERT-base) |
+| Cómo responde | Genera una respuesta JSON token a token | Lee la conversación en un número fijo de pasadas y devuelve puntuaciones |
+| Adaptación | Ajuste fino con QLoRA | Ajuste fino completo más un paso de calibración |
+| Umbrales | Ninguno, fijados por el entrenamiento | Uno por categoría, elegido con datos de validación |
+| Estado | Exportación para dispositivo ya distribuida | Investigación, con una exportación a Android en el playground |
+
+Como Vigil devuelve números y no texto, no puede producir una salida mal formada y tampoco escribe una explicación. La versión del playground se ejecuta en la CPU y ocupa unos 1,3 GB.
+
+## Cómo se compara
+
+La comparación siguiente procede del informe comparativo directo del repositorio de Vigil (2026-10-01). Ambos sistemas se puntuaron con el mismo código, con los mismos chats y en una única CPU de servidor. Los chats de prueba los escriben modelos de IA, y la muestra propia de Horizon es la única con la que este se entrenó. Las cifras de Vigil se suman sobre tres semillas de entrenamiento.
+
+| Conjunto de prueba | Vigil detecta chats de riesgo | Vigil marca chats benignos | Horizon (INT8) detecta | Horizon marca benignos |
+|---|---|---|---|---|
+| Muestra propia de Horizon | 98,3 % | 0,9 % | 93,9 % | 0,4 % |
+| Escrito por Llama 3.1 8B | 89,4 % | 11,6 % | 67,7 % | 21,1 % |
+| Escrito por Qwen3 8B | 93,0 % | 17,1 % | 62,6 % | 20,0 % |
+
+"Detecta" significa que se marcó al menos una categoría correcta en un chat de riesgo. Velocidad en la misma CPU de servidor: mediana de 207 ms por chat para Vigil frente a 747 ms para Horizon. Vigil ocupa más en disco (unos 1,2 GB frente a unos 1,0 GB de Horizon INT8).
+
+## Lo que la evidencia no demuestra
+
+- **Ninguno de los dos modelos alcanza el objetivo de falsas alarmas con texto no visto.** Ambos marcan aproximadamente del 12 al 21 % de los chats inofensivos de los generadores con los que no se entrenaron, frente a un objetivo del 2 %.
+- **Los umbrales no se trasladan.** Los ajustes calibrados con un conjunto de generadores produjeron más falsas alarmas con otros. Un presupuesto de validación es un suelo, no una promesa.
+- **Las bromas entre amigos son un punto débil.** Alrededor de la mitad de la escena de prueba "amigos bromeando" se marca, sea cual sea el dato que se añada.
+- **La precisión baja con texto no visto.** Por ejemplo, la precisión en bullying fue del 47 % frente al 80 % de Horizon en el conjunto escrito por Llama.
+- **Contexto corto.** La exportación a Android conserva los 512 tokens más recientes de una conversación.
+- **La gravedad es débil** y el comportamiento multietiqueta no se ha probado, porque los datos de entrenamiento tienen como máximo una categoría por chat.
+- **No existía ninguna medición en un teléfono** cuando se escribió el informe de la exportación: el modelo solo se había ejecutado con el intérprete de Python, así que la latencia, la memoria y la compatibilidad de operadores en dispositivo no se habían probado.
+- **Todo el texto de prueba lo escribe una IA.** Nada de esto mide el rendimiento con conversaciones reales.
+
+La conclusión del propio informe es que Vigil es el detector más fuerte y rápido según esta evidencia, mientras que Horizon es más pequeño y el único con una vía probada en el dispositivo, y que la siguiente evidencia necesaria es un conjunto de prueba escrito por personas y una medición en el dispositivo.
+
+<Callout type="info" title="Por qué la app infantil sigue usando Horizon">
+  Horizon Mobile tiene una vía probada con LiteRT-LM en teléfonos y es lo que se distribuye en la app infantil. Vigil se evalúa primero en el playground.
+</Callout>
+
+<Cards>
+  <Card title="Modelos Horizon" href="/es/docs/ai/horizon" description="La familia de modelos que usa la app infantil." />
+  <Card title="AI Playground" href="/es/docs/ai/ai-playground" description="Prueba Horizon y Vigil en tu propio teléfono." />
+  <Card title="Limitaciones" href="/es/docs/ai/limitations" description="Advertencias de precisión y carencias conocidas." />
+</Cards>

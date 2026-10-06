@@ -1,0 +1,19 @@
+{
+  "masthead_the": "The",
+  "masthead_brand": "SafeCircle",
+  "masthead_times": "Times",
+  "prev": "Anterior",
+  "next": "Siguiente",
+  "prev_tip": "Versión anterior",
+  "next_tip": "Versión más reciente",
+  "close": "Cerrar",
+  "major": "Versión mayor",
+  "minor": "Versión menor",
+  "patch": "Versión de corrección",
+  "earlier": "Versión anterior",
+  "version_fallback": "Versión {{version}}",
+  "empty": "Aún no hay notas de versión.",
+  "teaser_note": "Es una vista previa. Recarga para ver las notas completas.",
+  "teaser_reload": "Recargar ahora",
+  "load_failed": "No se pudieron cargar las notas de versión"
+}

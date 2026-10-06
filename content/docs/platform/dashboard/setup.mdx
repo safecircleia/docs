@@ -1,0 +1,80 @@
+---
+title: Setting up the parent dashboard
+icon: LayoutDashboard
+description: Sign in, add your first child, and generate the pairing code for their device.
+---
+
+The parent dashboard is at **app.safecircle.tech**. It runs in the browser, so there is nothing to install.
+
+<Callout>
+  You need an approved account to get in. If you don't have one yet, start with [Join the beta](/en/docs/platform/private-beta/join).
+</Callout>
+
+## Sign in
+
+Go to **app.safecircle.tech** and sign in with your email and password, or with Google, Discord or Twitter / X if you created your account that way.
+
+- **2-step verification** — if you turned it on, enter the 6-digit code from your authenticator app. Use **Can't access your app? Use a backup code** if you lost it.
+- **Passkey** — click **Sign in with a passkey** to use biometrics or a hardware key instead of a password.
+- **Forgot your password?** — click **Forgot password?**, enter your email and click **Send reset link**.
+
+If your account is still waiting for approval you will see an **Access pending** screen instead of the dashboard. See [Join the beta](/en/docs/platform/private-beta/join#wait-for-approval).
+
+## Onboarding
+
+The first time you sign in with no children on your account, the dashboard opens a two-step setup.
+
+<Steps>
+  <Step>
+    ### Add your first child
+    Enter the child's name (for example, *Alex*) and click **Continue**. Click **Skip for now** if you would rather do this later from the **Children** page.
+
+    <Callout>
+      You can add as many children as you need. Each one has their own alerts, devices and photo.
+    </Callout>
+  </Step>
+  <Step>
+    ### Pair their device
+    Step 2 shows the pairing code and a numbered guide:
+
+    1. Install the SafeCircle child app on the child's phone. See [Set up the child app](/en/docs/platform/android/setup).
+    2. Open the app and follow the pairing step.
+    3. Scan the **QR code**, or type the **6-digit code** shown under **PAIRING CODE**. Use **Copy** to copy it.
+
+    A countdown shows how long the code is valid. Click **Done** when the device is linked. If the code expires, click **Try again** for a new one.
+  </Step>
+</Steps>
+
+<Callout type="warn">
+  Pairing codes are valid for **5 minutes** and work once. Generating a new code invalidates any earlier unused one.
+</Callout>
+
+If pairing fails, check that both devices are online, the code hasn't expired and the child app is up to date. The onboarding screen has a **What if pairing fails?** note, and the [FAQ](/en/docs/support/faq) has a full checklist.
+
+## Add another child or device later
+
+Go to **Children** in the sidebar.
+
+- **+ Add child** creates a new profile and generates a pairing code straight away.
+- **New pairing code** (or **Add device** on an empty child) generates a code for another device.
+
+See [Children and devices](/en/docs/platform/dashboard/children-devices) for everything else you can do there.
+
+## Dashboard pages
+
+| Page | What it's for |
+|---|---|
+| **Overview** | Summary of the last 7 days, recent alerts and quick actions |
+| **Timeline** | Chronological log of alerts and device pairings |
+| **Alerts** | The alert feed, with filters and details |
+| **Analytics** | Charts and breakdowns of alerts over the last 30 days |
+| **Children** | Child profiles and their devices |
+| **Settings** | Your account, appearance, security and updates |
+
+## What's next
+
+<Cards>
+  <Card title="Set up the child app" href="/en/docs/platform/android/setup" description="Install, pair and grant permissions on the child's Android phone." />
+  <Card title="A tour of the Overview" href="/en/docs/platform/dashboard/overview" description="What each part of the home page tells you." />
+  <Card title="Understanding alerts" href="/en/docs/platform/dashboard/alerts" description="How to read an alert and what to do next." />
+</Cards>

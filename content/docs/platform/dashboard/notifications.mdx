@@ -1,0 +1,80 @@
+---
+title: Notifications
+icon: Bell
+description: How you find out about new alerts — live alerts in the dashboard, push notifications in the parent app, unread counts and the Telegram bot.
+---
+
+SafeCircle tells you about new alerts in two ways: live alerts inside the dashboard, and push notifications from the [parent app](/en/docs/platform/parent-app/notifications) on your Android phone. The optional Telegram bot lets you look up your children and recent alerts, but it does not send alerts by itself.
+
+## Live alerts in the dashboard
+
+While the dashboard is open, it checks for new alerts about every 30 seconds, and again whenever you switch back to the tab.
+
+- **Alert toasts** — when a new alert arrives, a notification pops up. Click it to open the **Alerts** page.
+- **Bell** — the bell in the top bar has a glowing dot when you have unread alerts. Hover over it to see how many are unread and how many are high risk; click it to see the latest five.
+- **Unread counts** — shown on the Overview, on each child and on the **Unread** tab of the Alerts page.
+
+To turn the pop-ups off, go to **Settings › Interface › Notifications** and switch off **Show alert toasts**. The bell and counts keep working.
+
+<Callout type="info">
+  Live alerts only appear while the dashboard is open in a browser tab. The dashboard doesn't send browser push notifications. To get a notification on your phone when the dashboard is closed, use the [parent app](/en/docs/platform/parent-app/notifications).
+</Callout>
+
+## Push notifications in the parent app
+
+The SafeCircle Parent app for Android sends a push notification when a child's device raises a medium or high risk alert, even if the app is closed. It uses the same account as the dashboard. See [Parent app notifications](/en/docs/platform/parent-app/notifications) for channels, quiet hours and troubleshooting.
+
+## Alerts on Telegram
+
+You can link your Telegram account to **@safecirclehq_bot**. The settings row is called **Telegram alerts**, but the bot only shows information when you ask for it: open its menu to see your children, their devices and your recent unread alerts. It does **not** push alerts to you as they arrive, so don't rely on it to be notified.
+
+<Steps>
+  <Step>
+    ### Generate a code
+    Go to **Settings › Profile**, find **Telegram alerts** and click **Generate code**. A **Link code** dialog opens with a code and a countdown.
+  </Step>
+  <Step>
+    ### Send it to the bot
+    Click **Open bot** to open **@safecirclehq_bot** in Telegram, then send:
+
+    ```
+    /link CODE
+    ```
+
+    Replace `CODE` with the code from the dialog. The dialog shows the full command ready to copy.
+  </Step>
+  <Step>
+    ### Check the status
+    Back in **Settings › Profile**, the Telegram row shows a **Linked** badge.
+  </Step>
+</Steps>
+
+The code is short-lived. If it expires, click **Regenerate code** for a new one. **Show code** reopens the current one.
+
+To stop using the bot, click **Unlink** on the same row. You can link again at any time. For what the bot does and stores, see [Telegram bot](/en/docs/developers/telegram-bot).
+
+## Expected latency
+
+The child app analyses each monitored app at most once every 5 minutes, and only on text that is on screen at that moment, so a risk is not always detected the instant a message arrives. After that, how quickly you see it depends on the network, on how often the dashboard checks for new alerts (about every 30 seconds) and, for the parent app, on push delivery.
+
+## Not receiving alerts?
+
+<Accordions>
+  <Accordion title="Device shows Offline">
+    If the child's device shows as **Offline** in the dashboard, the app may have been stopped by battery saver. On the child's phone, go to **Settings → Apps → SafeCircle → Battery** and set it to **Unrestricted**. See [Children and devices](/en/docs/platform/dashboard/children-devices#devices) for what the statuses mean.
+  </Accordion>
+  <Accordion title="Permissions not granted">
+    On the child's phone, open **Settings → Accessibility** and confirm that **SafeCircle Protection** is enabled. Without the Accessibility Service, the app can't read on-screen text, can't detect anything and no alerts are sent. The app's status screen shows **PERMISSION MISSING** when it is off.
+  </Accordion>
+  <Accordion title="No pop-ups appear">
+    Check that **Show alert toasts** is on in **Settings › Interface › Notifications**, and that the dashboard is open in a tab. Alerts still show up in the bell and on the Alerts page.
+  </Accordion>
+  <Accordion title="I get nothing on my phone when the dashboard is closed">
+    The dashboard only shows alerts while it is open, and the Telegram bot doesn't push alerts. Install the [parent app](/en/docs/platform/parent-app/setup) and allow notifications to get push alerts on your phone.
+  </Accordion>
+  <Accordion title="The Telegram bot doesn't show my children">
+    Open **Settings › Profile** and check the Telegram row says **Linked**. If it says **Not linked**, or the code expired before you sent it, generate a new code and send `/link CODE` to **@safecirclehq_bot** again. The bot only shows children for approved accounts.
+  </Accordion>
+</Accordions>
+
+If none of these resolve it, see the [FAQ](/en/docs/support/faq) or contact **support@safecircle.tech**. You can also use **More › Report a bug** in the dashboard.

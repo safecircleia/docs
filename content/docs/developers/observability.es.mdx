@@ -1,0 +1,91 @@
+---
+title: Observabilidad
+icon: Activity
+description: Cómo mide SafeCircle la salud de sus servicios, qué métricas existen y cómo funciona la recogida de analíticas y cómo desactivarla.
+---
+
+SafeCircle mide dos cosas: la salud del backend y, de forma anónima, cómo se usa el panel. Ninguna implica IDs de usuario, correos ni direcciones IP.
+
+```text
+ Panel ──(eventos anónimos)──────┐
+                                 ▼
+ Cada petición a la API ──►  Cloudflare D1  ◄── GET /api/telemetry/metrics
+ (método, ruta, estado,       (requests,          (texto Prometheus,
+  duración)                    events)             protegido con secreto)
+                                                         │ scrape, cada 60 s
+                                                         ▼
+                                              Prometheus ──► Grafana
+```
+
+## Qué se recoge
+
+| Origen | Se guarda en | Contenido |
+|---|---|---|
+| Métricas de peticiones | Tabla D1 `requests` | Hora, método HTTP, ruta, código de estado, duración en milisegundos |
+| Eventos de producto | Tabla D1 `events` | Nombre del evento, ruta de la página, hasta 10 propiedades filtradas, hora |
+
+Las peticiones de telemetría (`/api/telemetry/event` y `/api/model-feedback`) no se cuentan en las métricas de peticiones.
+
+### Eventos
+
+El panel envía un pequeño conjunto de eventos:
+
+| Evento | Cuándo |
+|---|---|
+| `page_view` | Se abre una página |
+| `filter_applied` | Se usa un filtro en una lista |
+| `alert_read` | Se abre una alerta, con su categoría, nivel de riesgo y app de origen |
+| `mark_all_read` | Se marcan todas las alertas como leídas |
+
+El endpoint de métricas también agrega eventos de embudo y de playground (por ejemplo `inference_run`, `sign_up`, `child_added`, `device_paired`). Otros clientes de SafeCircle, como el AI Playground, pueden enviarlos.
+
+El backend elimina cualquier propiedad cuya clave coincida con una palabra de tipo identificador (id, email, user, token, name, ip, phone) y conserva como máximo 10 propiedades por evento. Los eventos se agrupan en el navegador y se envían aproximadamente cada 10 segundos, y cuando la pestaña se oculta.
+
+## Cómo desactivarla
+
+En el panel, abre **Ajustes › Seguridad › Privacidad** y desactiva **Compartir analíticas de uso anónimas**. La decisión se guarda en el almacenamiento local de tu navegador con la clave `sc_analytics_optout`. Cuando la exclusión está activa, el panel no envía eventos y descarta los que estuvieran en cola.
+
+Si construyes un cliente, llama a `POST /api/telemetry/event` solo cuando la persona no se haya excluido. Consulta la [referencia de la API](/es/docs/developers/api#telemetry-event).
+
+## El endpoint de métricas
+
+`GET /api/telemetry/metrics` devuelve los datos agregados en formato de texto de Prometheus. Requiere `Authorization: Bearer <secreto>`, que solo tienen los operadores de SafeCircle. Todas las métricas son gauges cuyos nombres empiezan por `sc_`.
+
+| Grupo | Ejemplos |
+|---|---|
+| Salud del Worker | `sc_requests_total_24h`, `sc_error_rate_24h`, `sc_latency_p95_24h_ms`, `sc_requests_by_route`, `sc_requests_by_status` |
+| Analíticas de producto | `sc_pageviews_total_24h`, `sc_feature_usage_24h`, `sc_funnel_signup_7d`, `sc_onboard_complete_7d` |
+| Analíticas del playground | `sc_playground_inferences_24h`, `sc_playground_inferences_by_model`, `sc_playground_ratings` |
+| Analíticas de mensajes | `sc_alert_reads_24h`, `sc_alert_reads_by_category_24h`, `sc_alert_reads_by_risk_24h` |
+
+Las ventanas son de 1 hora, 6 horas, 24 horas o 7 días. Las métricas de alertas cuentan eventos de lectura de alertas del panel, no filas de la tabla de alertas.
+
+## El stack de Grafana
+
+El repositorio `observability` es un stack de Docker Compose:
+
+| Servicio | Función |
+|---|---|
+| Prometheus | Consulta el endpoint de métricas cada 60 segundos y conserva 30 días de historial |
+| Grafana | Paneles, aprovisionados automáticamente desde archivos |
+
+Se aprovisionan cuatro paneles: **Worker Health**, **Product Analytics**, **Message Analytics** y **Playground Analytics**. El registro en Grafana está desactivado.
+
+Para ejecutarlo contra tu propio despliegue, pon tu secreto de métricas en la configuración de scrape de Prometheus, define la contraseña de administrador de Grafana con la variable de entorno `GRAFANA_PASSWORD` y ejecuta:
+
+```bash
+docker compose up -d
+```
+
+Grafana queda entonces en el puerto 3000 y Prometheus en el 9090.
+
+## Registros
+
+El Worker del backend tiene activada la observabilidad integrada de Cloudflare para registros y errores. Los errores no controlados se registran en el servidor y nunca se devuelven a los clientes. SafeCircle Search desactiva la observabilidad por completo para que las consultas no puedan llegar a los registros.
+
+## Relacionado
+
+<Cards>
+  <Card title="Datos y privacidad" href="/es/docs/developers/data-and-privacy" description="Todo lo que guarda la plataforma." />
+  <Card title="Cuenta y seguridad" href="/es/docs/platform/dashboard/account-security#privacidad" description="El interruptor de analíticas desde el punto de vista de un padre o madre." />
+</Cards>

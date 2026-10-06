@@ -1,0 +1,36 @@
+---
+title: Ediciones
+icon: Layers
+description: Las tres ediciones previstas de Canopy OS — Familiar, Institucional y Personal — y los valores predeterminados de cada una.
+---
+
+Canopy OS se construye en tres ediciones sobre una base compartida. Cada edición escribe su nombre en `/etc/canopy-edition` e incluye sus propios valores de protección.
+
+<Callout type="warn" title="Temprana e inacabada">
+  Los valores de abajo están escritos en las imágenes, pero los servicios de Horizon y del filtro de red que los leerían todavía no están instalados. Describen la intención de cada edición, no una protección que tengas hoy. Consulta la [visión general](/es/docs/platform/canopy-os/overview).
+</Callout>
+
+| | **Familiar** | **Institucional** | **Personal** |
+|---|---|---|---|
+| Etiqueta de imagen | `canopy-family` | `canopy-institutional` | `canopy-personal` |
+| Pensada para | Control parental y seguridad infantil | Colegios y flotas gestionadas | Adultos preocupados por su privacidad |
+| Detección de riesgos con Horizon | Estricta | Moderada | Desactivada (opcional) |
+| Perfil de filtrado de red | Estricto: adultos, malware, redes sociales, violencia | Moderado: adultos, malware | Privacidad: malware, rastreadores |
+| Asistente de primer arranque | Incluye un paso de perfil infantil | Incluye un paso de alta en la flota | Estándar |
+| Extra | | Carpeta preparada para ajustes de gestión de dispositivos (MDM) | |
+
+## Familiar
+
+Para un ordenador doméstico que usan menores. Es la edición más estricta: Horizon en modo estricto, el perfil de filtrado web más estricto y un asistente de configuración que te pide crear un perfil infantil.
+
+## Institucional
+
+Para colegios y organizaciones que gestionan muchos ordenadores. La detección y el filtrado son moderados, el asistente da de alta el ordenador en una flota en lugar de crear un perfil infantil y la imagen reserva un lugar para un agente de gestión de dispositivos. Un panel de administración forma parte del plan.
+
+## Personal
+
+Para adultos que quieren valores de privacidad sin supervisión. Horizon está desactivado y el perfil de filtrado bloquea malware y rastreadores.
+
+## ¿Cuál para mi familia?
+
+Si quieres protección para un menor hoy, usa la [app del menor para Android](/es/docs/platform/android/setup) con el [panel](/es/docs/platform/dashboard/setup). Las ediciones de Canopy OS todavía no son un sustituto.

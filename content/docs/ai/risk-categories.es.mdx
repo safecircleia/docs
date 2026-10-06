@@ -1,0 +1,66 @@
+---
+title: Categorías de riesgo
+icon: Tags
+description: Las siete categorías de riesgo que detecta SafeCircle, cómo funcionan los niveles de riesgo, la confianza y la nota de razonamiento, y cómo interpretar los falsos positivos.
+---
+
+Cada vez que el modelo analiza una conversación devuelve un resultado estructurado con cuatro partes: un **nivel de riesgo**, una o más **categorías**, un valor de **confianza** y una breve nota de **razonamiento**.
+
+## Las siete categorías
+
+| Categoría | Etiqueta en el panel | Qué cubre |
+|---|---|---|
+| `grooming` | Grooming | Generar confianza, poner a prueba límites, pedir que se guarden secretos |
+| `bullying` | Bullying | Acoso, amenazas y ciberacoso |
+| `sexual_content` | Sexual Content | Mensajes explícitos y peticiones inapropiadas |
+| `isolation` | Isolation | Conducta controladora e intentos de aislar al menor de su entorno |
+| `personal_info` | Personal Info | Peticiones de datos identificativos, como la dirección o el colegio |
+| `platform_migration` | Platform Migration | Empujar la conversación hacia una app menos supervisada |
+| `threats` | Threats | Amenazas violentas y retos peligrosos |
+
+Una misma conversación puede coincidir con más de una categoría. Por ejemplo, el grooming suele aparecer junto con peticiones de información personal o con un empujón hacia otra plataforma.
+
+Las categorías describen el **patrón de la conversación**, no quién la escribió. El modelo no identifica personas.
+
+<Callout type="info" title="Potential Risk">
+  Si una alerta tiene nivel de riesgo pero ninguna categoría concreta, el panel la muestra como **Potential Risk**.
+</Callout>
+
+## Niveles de riesgo
+
+Durante el entrenamiento, el modelo aprende cinco niveles de gravedad: `none`, `low`, `medium`, `high` y `critical`. La app infantil le pide al modelo `low`, `medium` o `high`, y solo dos de ellos generan una alerta.
+
+| Nivel | Qué significa | ¿Genera una alerta? |
+|---|---|---|
+| `low` | No se encontró un riesgo significativo | No, se descarta en el teléfono |
+| `medium` | Un riesgo probable. Merece una revisión y puede ser un falso positivo | Sí (naranja) |
+| `high` | Un riesgo claro y explícito. Merece una conversación el mismo día | Sí (rojo) |
+
+Consulta [Entender las alertas](/es/docs/platform/dashboard/alerts) para ver cómo aparecen los niveles en el panel.
+
+## Confianza
+
+La confianza es un número de 0 a 1 que el panel muestra como porcentaje. Considérala un indicador aproximado, no una probabilidad:
+
+- Es un valor que el modelo escribe como parte de su respuesta. En los datos de entrenamiento, los valores de confianza objetivo se derivaron de la etiqueta de gravedad, no de medir con qué frecuencia acierta realmente el modelo.
+- **No está calibrada**. Un 90 % no significa que acierte nueve de cada diez veces.
+- Una puntuación baja en una alerta `medium` puede merecer igualmente una revisión.
+
+## La nota de razonamiento
+
+Cada alerta lleva una nota breve. En la app infantil actual, la nota es un resumen simple de las categorías encontradas (por ejemplo, "Detected: grooming, personal_info"). La nota **no** cita la conversación y la explicación en texto libre del propio modelo no se envía. En una alerta no verás fragmentos de mensajes.
+
+Cuando el teléfono usa el análisis por palabras clave en lugar del modelo, la nota indica que coincidió una palabra clave y la confianza se muestra como baja.
+
+## Cómo interpretar los falsos positivos
+
+Una alerta media es una invitación, no una conclusión. Ten en cuenta:
+
+- El modelo lee una ventana corta de texto reciente sin saber quiénes son las personas ni su historial. Las bromas entre amigos, el juego de roles y las conversaciones sobre videojuegos pueden parecer riesgo.
+- En conversaciones escritas por generadores de IA que el modelo no había visto durante el entrenamiento, nuestra evaluación encontró que aproximadamente uno de cada cinco chats inofensivos se marcaba. No se han medido las tasas en el mundo real. Consulta [Limitaciones](/es/docs/ai/limitations).
+- Empieza con curiosidad: pregunta a tu hijo qué ocurrió antes de abrir con él los detalles de la alerta.
+
+<Cards>
+  <Card title="Entender las alertas" href="/es/docs/platform/dashboard/alerts" description="Qué muestra una alerta en el panel y qué hacer después." />
+  <Card title="Limitaciones" href="/es/docs/ai/limitations" description="Advertencias de precisión y carencias conocidas." />
+</Cards>

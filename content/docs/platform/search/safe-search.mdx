@@ -1,0 +1,58 @@
+---
+title: Safe search and family lock
+icon: ShieldCheck
+description: Safe search levels, region and language, site rules, and the family lock for children's browsers.
+---
+
+## Safe search levels
+
+Choose the level in **Settings › Results › Safe search**:
+
+| Level | Effect |
+|---|---|
+| **Off** | No filtering of explicit results |
+| **Moderate** | The default. Filters explicit results from web and news searches |
+| **Strict** | The strongest filtering |
+
+In **Images**, **Moderate** is treated as **Strict**, because the image search only offers off and strict.
+
+Safe search relies on the search provider's filtering. It reduces explicit results but can't catch everything. Treat it as one layer, not a guarantee.
+
+## Region and language
+
+- **Region** — **All regions**, Spain, United States, United Kingdom, Mexico, Argentina, Germany or France. It changes which country's results are favoured.
+- **Language** — the interface is available in **English** and **Spanish**.
+- **Open results in a new tab** — an optional setting.
+
+Without an account, these choices are saved in your browser and passed along in the search address. With an account they sync across your devices.
+
+## Site rules
+
+With a SafeCircle login, **Site rules** let you shape results by website. Add a domain such as `example.com` and choose:
+
+- **Block** — never show results from that site.
+- **Lower** — show them lower down.
+- **Raise** — show them higher up.
+
+You can have up to 500 rules. Rules are saved to your account and sync across devices.
+
+## Family lock
+
+The **family lock** is designed to keep a child's browser on **Strict** safe search.
+
+When a browser opens a **family link**, it shows **Turn on family safe search**: *This browser will always use strict safe search and your family's site rules.* Pressing **Turn on** does two things on that browser:
+
+- Safe search is locked to **Strict**, and the setting can't be changed. Searches show *Safe search is locked by your family.*
+- Your **site rules** apply to the child's searches, so websites you blocked are hidden.
+
+An expired or invalid link shows *This family link is invalid or has expired. Ask a parent to send a new one.* A family link is valid for up to a year.
+
+<Callout type="warn" title="Not available to families yet">
+  The backend can create a family link for a paired child device, but neither the dashboard nor the child app offers it yet, so you can't turn the family lock on from SafeCircle today. We'll document how to get the link once it is connected.
+</Callout>
+
+### Limits of the family lock
+
+- It applies only to the browser that confirmed the link. It doesn't block other search engines or other browsers.
+- It filters search results. It isn't a website blocker for the whole device.
+- It doesn't report searches to you, because SafeCircle doesn't log them. See [Privacy](/en/docs/platform/search/privacy).

@@ -1,0 +1,16 @@
+{
+  "timeline_title": "Seasonal timeline",
+  "current": "Current",
+  "new_season": "A new season has started",
+  "season_ends": "{{season}} ends {{time}}",
+  "open_settings": "Open seasonal settings",
+  "chip_label": "{{season}} season",
+  "current_season": "Current season",
+  "start_date": "Start date",
+  "end_date": "End date",
+  "next_season": "Next season",
+  "preview_title": "Preview",
+  "preview_card": "A seasonal card",
+  "preview_season": "Season",
+  "preview_particles": "Particles"
+}

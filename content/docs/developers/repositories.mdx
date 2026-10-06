@@ -1,0 +1,45 @@
+---
+title: Repositories
+icon: GitBranch
+description: The SafeCircle code bases, what each one is for, the stack it uses and how it is licensed.
+---
+
+SafeCircle's code lives in the `safecircleia` GitHub organisation. Only some repositories are public today, so only those are linked.
+
+## Platform
+
+| Repository | Purpose | Stack | Licence | Visibility |
+|---|---|---|---|---|
+| `backend` | Auth, data API, alerts, push, media, telemetry. See [Backend architecture](/en/docs/developers/backend) | Hono, tRPC, Better Auth, Drizzle, Cloudflare Workers, PostgreSQL | Not published | Private |
+| `dashboard` | Parent web dashboard at `app.safecircle.tech` and `app.safecircle.es` | React 19, TypeScript, Vite, React Router, Cloudflare Workers | GPL-3.0-or-later | Private |
+| `android-child` | Child app: on-device detection and pairing | Kotlin, Jetpack Compose, Hilt, Ktor, ONNX Runtime | MIT | Private |
+| `parent-android` | Parent app: alerts, push and pairing | Kotlin, Jetpack Compose, Hilt, Ktor | Proprietary | Private |
+| `telegram-bot` | `@safecirclehq_bot`. See [Telegram bot](/en/docs/developers/telegram-bot) | Bun, grammY, Cloudflare D1 | Not published | Private |
+| `observability` | Prometheus and Grafana stack. See [Observability](/en/docs/developers/observability) | Docker Compose, Prometheus, Grafana | Not published | Private |
+| SafeCircle Search | Privacy-first metasearch. See [SafeCircle Search](/en/docs/developers/search) | Next.js 16, React 19, OpenNext, Cloudflare Workers | GPL-3.0-or-later | Not yet published |
+
+## AI
+
+| Repository | Purpose | Licence | Visibility |
+|---|---|---|---|
+| [`horizon`](https://github.com/safecircleia/horizon) | Training system for the risk-detection model | SafeCircle Research License (SRL-1.0): research and non-commercial use, commercial use needs written permission | Public |
+| [`ai-playground-android`](https://github.com/safecircleia/ai-playground-android) | Android app to try on-device models | Apache-2.0 | Public |
+
+How the model works is covered in the [AI overview](/en/docs/ai/overview).
+
+## Conventions across repositories
+
+- **Package manager and runtime:** Bun for the TypeScript projects.
+- **Hosting:** Cloudflare Workers for the backend, the dashboard and Search.
+- **Commits:** Conventional Commits (`feat:`, `fix:`, `chore:`).
+- **Languages:** the dashboard and Search ship in English and Spanish, with a test that keeps both key sets identical.
+- **Type safety:** Zod validates every input at the API boundary, and the schema is the single source for database types.
+
+## Contributing
+
+There is no public contribution process for the private repositories. If you want to report a problem, use **More › Report a bug** in the dashboard, or write to **support@safecircle.tech**. For the public repositories, follow the guidance in each repository's README and licence.
+
+<Cards>
+  <Card title="Developer overview" href="/en/docs/developers/overview" description="How the pieces fit together." />
+  <Card title="FAQ" href="/en/docs/support/faq" description="Questions about the beta and support." />
+</Cards>

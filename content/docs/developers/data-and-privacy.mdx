@@ -1,0 +1,93 @@
+---
+title: Data and privacy
+icon: ShieldCheck
+description: What SafeCircle's services store, what never leaves a child's device, and how data is removed.
+---
+
+This page describes what the code stores today. For the parent-facing view, see [Account and security](/en/docs/platform/dashboard/account-security).
+
+## What the child app sends
+
+The AI model runs **on the child's device**. The child app reads visible text locally and keeps a rolling buffer in memory to classify it. The backend has no field for message text.
+
+When risk is detected, the app sends one alert:
+
+| Field | Meaning |
+|---|---|
+| `riskLevel` | `medium` or `high` |
+| `categories` | One or more category labels |
+| `confidence` | A number from 0 to 1 |
+| `reasoning` | A short note. The current child app sends a summary of the categories, such as `Detected: grooming`, not model-written text |
+| `appSource` | The package name of the app where it happened |
+
+The backend stores these as received, after removing HTML tags and null bytes. `reasoning` is free text that the API accepts as sent, so it is stored as received.
+
+## What the backend stores
+
+### PostgreSQL
+
+| Data | Details |
+|---|---|
+| Account | Name, email, whether the email is verified, role, approval state, a password hash for email accounts, linked sign-in providers |
+| Sessions | Token, expiry, IP address and user agent of each sign-in |
+| Security | Authenticator-app secret and backup codes (managed by Better Auth), passkey public keys |
+| Children | Name, and optional photo and banner timestamps |
+| Devices | Device name, device token, paired time, last-seen time |
+| Pairing codes | The code, who made it, expiry and when it was used |
+| Alerts | The fields above, plus read time and creation time |
+| Push tokens | Each registered phone's push token and platform |
+| Preferences | Alert toggles and quiet hours, per parent and per child |
+| Search settings | Search preferences and site rules, if you sync them |
+| Telegram | Your Telegram ID and token tier, only if you link the bot |
+| Invitations | Which invite code created which account |
+
+### Cloudflare D1
+
+| Data | Details |
+|---|---|
+| Request metrics | Time, HTTP method, route, status and duration. No IP address, user ID or body |
+| Product events | Anonymous events such as `page_view`. See [Telemetry](#telemetry) |
+
+### Cloudflare R2
+
+| Data | Details |
+|---|---|
+| Profile images | Photo and banner for parents and children. The dashboard downsizes and re-encodes them as JPEG before upload, which also drops location metadata. The server accepts only JPEG, PNG and WebP, checks the file contents, and caps uploads at 1 MB |
+| AI rating submissions | Created only when someone submits a rating in an AI Playground app. It contains the sentiment, an optional comment, the conversation they entered in the playground and the model's answer |
+
+### Other places
+
+- **Bug reports and feature requests** sent from an app create an issue in SafeCircle's feedback tracker. The issue includes the author's name and email, the screen, the app version and the OS.
+- **Email** for verification, password reset and invitations is sent from `no-reply@auth.safecircle.tech` and `no-reply@beta.safecircle.tech`.
+- **Push** messages go through Firebase Cloud Messaging and contain the child's name, the risk level and the categories, plus the alert ID.
+- The **Telegram bot** keeps its own small table. See [Telegram bot](/en/docs/developers/telegram-bot).
+- **SafeCircle Search** does not log queries and sets no cookies for anonymous users. See [SafeCircle Search](/en/docs/developers/search).
+
+## Telemetry
+
+The dashboard sends a few anonymous events (page views, filter use, alert reads and "mark all read") to `POST /api/telemetry/event`. They carry an event name, the page route and up to 10 properties. The backend drops any property whose key looks like an ID, email, user, token, name, IP address or phone number.
+
+You can switch it off in **Settings › Security › Privacy**. The choice is stored in your browser, and when it is off the dashboard sends nothing. See [Observability](/en/docs/developers/observability).
+
+## Access control
+
+Every parent procedure checks that the child, device or alert belongs to the signed-in parent. Asking for someone else's child returns `NOT_FOUND`, and asking for someone else's alert returns `FORBIDDEN`. Profile images are private to their owner, and admins can read but not write them.
+
+## Deletion
+
+Children, devices, alerts, pairing codes, push tokens and preferences are linked to their owner with cascading deletes, so removing a parent account removes everything it owns. When SafeCircle staff reject a pending account, the backend also deletes the user's and their children's images from storage.
+
+Revoking a device (`devices.revoke`) deletes the device record, and the alerts that device created are deleted with it. Push tokens that the push service reports as no longer valid are deleted automatically.
+
+For account and child deletion as a parent sees it, including retention periods, see [Children and devices](/en/docs/platform/dashboard/children-devices#delete-a-child) and [Account and security](/en/docs/platform/dashboard/account-security#delete-your-account).
+
+<Callout type="info">
+  The Prometheus server in the observability stack keeps metrics for 30 days. It stores aggregated counts, not individual events.
+</Callout>
+
+## Related
+
+<Cards>
+  <Card title="Backend architecture" href="/en/docs/developers/backend" description="Where each piece of data lives." />
+  <Card title="FAQ" href="/en/docs/support/faq" description="Common privacy and account questions." />
+</Cards>

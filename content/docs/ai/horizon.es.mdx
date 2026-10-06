@@ -1,0 +1,111 @@
+---
+title: Modelos Horizon
+icon: Cpu
+description: La familia de modelos Horizon detrás de la detección de riesgos de SafeCircle - cómo se entrena, qué datos usa, cómo se evaluó y su licencia.
+---
+
+**Project Horizon** es el sistema de entrenamiento de SafeCircle para modelos de detección de riesgos. Esta página es para desarrolladores y lectores curiosos que quieren saber cómo se construyen los modelos y qué tan bien funcionan. Se limita a lo que muestran el repositorio de Horizon y sus informes.
+
+## Familia de modelos
+
+| Modelo | Base | Dónde se ejecuta | Notas |
+|---|---|---|---|
+| Horizon Full | Llama 3.2 3B Instruct, ajustado con QLoRA | Servidor o uso en investigación | No se distribuye a teléfonos |
+| Horizon Mobile | Gemma 3 1B Instruct, ajustado con QLoRA | En el teléfono Android del menor | Exportado a LiteRT-LM en dos tamaños |
+| Horizon Edge | Configuraciones de Gemma 4 E2B y E4B | Disponible en el playground de Android | Un modelo de agente de propósito general en el playground |
+
+Las dos exportaciones de Horizon Mobile:
+
+| Variante | Cuantización | Tamaño | Destino |
+|---|---|---|---|
+| `mobile-standard` | INT8 | Unos 1,2 GB | Teléfonos con 6 GB de RAM o más |
+| `mobile-lite` | INT4 | Unos 0,7 GB | Teléfonos con unos 3 a 4 GB de RAM |
+
+Documentos de diseño anteriores mencionan un clasificador MobileBERT. La compilación con Gemma 3 1B lo sustituyó, así que ignora esas referencias.
+
+## Formato de salida
+
+El modelo está entrenado para responder con un único objeto JSON y nada más:
+
+```json
+{
+  "risk_level": "high",
+  "categories": ["grooming", "personal_info"],
+  "confidence": 0.91,
+  "reasoning": "one sentence"
+}
+```
+
+- `risk_level` es uno de `none`, `low`, `medium`, `high`, `critical`.
+- `categories` enumera cualquiera de las siete [categorías de riesgo](/es/docs/ai/risk-categories).
+- Las preguntas que no son análisis de conversaciones (sobre el propio modelo o peticiones ajenas a la tarea) están entrenadas para devolver una negativa fija: `{"error": "I only analyze conversations for child safety risks."}`. Ejemplos como estos (unos 45.000 en la partición de entrenamiento) se mezclan en el entrenamiento como refuerzo.
+
+## Datos de entrenamiento
+
+- **Solo sintéticos.** Las conversaciones las generan modelos de lenguaje, con prompts que varían la edad del menor, la plataforma y la relación. Según la ficha del conjunto de datos, no se usaron mensajes de menores reales.
+- **Tamaño objetivo.** La configuración de generación apunta a 500.000 conversaciones repartidas en las siete categorías más una clase benigna, con un objetivo de 60 % en inglés y 40 % en español. Las conversaciones benignas son la clase individual más grande.
+- **Generadores.** La canalización admite Amazon Nova Micro (Bedrock), Qwen2.5-7B-Instruct (vLLM), Claude y GPT. En distintas etapas se usaron generadores diferentes.
+- **Etiquetas.** El nivel de riesgo, las categorías y la frase de razonamiento provienen del paso de generación. No las produjeron anotadores humanos. La ficha del conjunto de datos señala que las etiquetas las generó el mismo modelo que escribió las conversaciones y recomienda una revisión humana antes de usarlo en producción.
+- **Disponibilidad.** El conjunto de datos es privado.
+
+El entrenamiento usa una pérdida solo sobre la respuesta JSON. La configuración móvil entrena durante 8.000 pasos con un adaptador LoRA de rango 64, un contexto de 512 tokens y cuantización NF4 de 4 bits durante el entrenamiento. Un ajuste fino posterior, centrado en una mezcla con mucho grooming, continúa desde ese adaptador.
+
+## Evaluación
+
+Hay tres conjuntos de evidencia distintos. Léelos juntos, porque cuentan historias diferentes.
+
+### 1. Datos reservados del mismo generador
+
+El informe incluido en el repositorio (`evaluation/reports/mobile/results.json`) puntúa el modelo con conversaciones sintéticas reservadas de la misma distribución de entrenamiento:
+
+- El F1 por categoría está entre 0,997 y 1,000 en las siete categorías.
+- La gravedad (cinco niveles) es mucho más difícil: exactitud de 0,83 y F1 macro de 0,82. El nivel `critical` tiene la recuperación (recall) más baja (alrededor de 0,53), y se confunde sobre todo con `high`.
+
+Puntuaciones casi perfectas con datos parecidos a los de entrenamiento dicen poco sobre chats reales. Una comparación posterior encontró que este tipo de puntuación dentro de la distribución estaba inflada por la similitud entre generadores.
+
+### 2. Conversaciones de generadores que el modelo nunca vio
+
+Una prueba comparativa directa en el repositorio de Vigil (informe con fecha 2026-10-01) puntuó la compilación INT8 de Horizon Mobile, la versión centrada actual, con su propia muestra y con chats escritos por otros dos modelos. Todas las cifras proceden de texto escrito por IA, en una CPU de servidor.
+
+| Conjunto de prueba | Chats de riesgo detectados con la categoría correcta | Chats benignos marcados |
+|---|---|---|
+| Muestra propia de Horizon | 93,9 % (1.628 de 1.733) | 0,4 % (1 de 267) |
+| Escrito por Llama 3.1 8B | 67,7 % (463 de 684) | 21,1 % (31 de 147) |
+| Escrito por Qwen3 8B | 62,6 % (438 de 700) | 20,0 % (30 de 150) |
+
+Con texto no visto, la recuperación de `threats` cayó del 88,5 % a aproximadamente un 4 a 5 %, y la de `grooming` del 77 % a entre el 36 y el 58 %. La proporción de respuestas que no se pudieron interpretar subió del 0,5 % al 10 % en uno de los conjuntos no vistos. Parte de la diferencia se debe a nombres de categoría equivocados y no a chats no detectados: contando cualquier marca, la compilación detecta el 92,0 % y el 85,0 % en los dos conjuntos no vistos.
+
+La prueba tampoco logró reproducir una cifra de recuperación de grooming registrada antes, de alrededor del 90 % (midió cerca del 70 % para la compilación anterior con su propia muestra), por lo que las cifras antiguas pueden proceder de un protocolo distinto.
+
+### 3. Velocidad y memoria
+
+- **CPU de servidor, 8 núcleos:** mediana de 747 ms por conversación, memoria máxima de unos 2,6 GB.
+- **Teléfonos reales:** consulta [Ejecución en el dispositivo](/es/docs/ai/on-device) para ver los tiempos medidos en 60 dispositivos. Cifras como "menos de 100 ms" en borradores antiguos del repositorio son objetivos, no mediciones.
+
+## Qué no se sabe
+
+- No se ha medido la precisión con conversaciones reales de menores.
+- No hay resultados publicados por idioma, aunque los datos de entrenamiento apuntan a inglés y español.
+- En teléfonos reales se midieron la velocidad y la memoria, no la precisión de clasificación.
+
+Consulta [Limitaciones](/es/docs/ai/limitations).
+
+## Licencia
+
+Los pesos del modelo y el código relacionado se publican bajo la **SafeCircle Research License (SRL-1.0)**. En resumen, puedes usar los modelos para investigación, educación y fines no comerciales. No puedes:
+
+- usar el modelo, ni nada derivado de él, para dañar a menores,
+- construir sistemas que eludan o burlen la detección de seguridad infantil, ni sondear el clasificador con ese fin fuera de la investigación académica aprobada,
+- usarlo con fines comerciales sin permiso escrito de SafeCircle.
+
+La redistribución exige atribución y una copia de la licencia, y las obras derivadas deben mantenerse bajo la misma licencia o una más restrictiva. Lee el texto completo en `LICENSE-SAFECIRCLE.md` en el repositorio de Horizon. Para licencias comerciales o para informar de un uso indebido, usa la dirección de contacto que figura en la licencia. La app infantil pide al usuario que acepte esta licencia antes de descargar el modelo.
+
+<Callout type="info" title="¿Buscas el modelo de investigación más reciente?">
+  Se está evaluando un clasificador basado en un codificador, llamado Vigil, junto a Horizon. Consulta [Vigil](/es/docs/ai/vigil).
+</Callout>
+
+<Cards>
+  <Card title="Ejecución en el dispositivo" href="/es/docs/ai/on-device" description="Cómo se ejecuta Horizon Mobile en la app infantil." />
+  <Card title="Vigil" href="/es/docs/ai/vigil" description="El clasificador de investigación comparado con Horizon." />
+  <Card title="Desarrolladores" href="/es/docs/developers/overview" description="Arquitectura y APIs." />
+</Cards>

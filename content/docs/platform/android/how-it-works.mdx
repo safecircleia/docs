@@ -1,0 +1,94 @@
+---
+title: How the child app works
+icon: Workflow
+description: What the Android app reads, how it decides something is a risk, what it sends to you and how often.
+---
+
+The child app watches for risk signals in a few messaging apps, analyses them **on the child's phone**, and sends you a short summary only when something looks risky.
+
+## From screen to alert
+
+<Steps>
+  <Step>
+    ### Read
+    The app uses Android's **Accessibility Service** to read the text visible on screen in the [supported apps](/en/docs/platform/android/supported-apps), and only in those apps. For each app it keeps the most recent lines of visible text (up to 10) in memory.
+  </Step>
+  <Step>
+    ### Analyse on the device
+    Every so often it analyses that text locally. Nothing is sent to a server for analysis. It looks for these categories: grooming, bullying, sexual content, isolation, personal information, moving the conversation to another platform, and threats.
+  </Step>
+  <Step>
+    ### Decide
+    The result is a risk level — **low**, **medium** or **high**. Low results are discarded on the phone. Only **medium** and **high** create an alert.
+  </Step>
+  <Step>
+    ### Send a summary
+    The app sends the alert to the SafeCircle backend, and it appears in your [dashboard](/en/docs/platform/dashboard/alerts).
+  </Step>
+</Steps>
+
+## What is sent
+
+An alert contains:
+
+- The risk level (medium or high)
+- The detected categories
+- A confidence score
+- A short reason, such as which categories were detected
+- The name of the app where it was detected (for example `com.whatsapp`)
+
+It does **not** contain the message text, contact names or screenshots, and the conversation is not stored by the app.
+
+## How often
+
+To avoid flooding you, the app analyses each monitored app at most **once every 5 minutes**. Alerts are created from what is on screen at that moment.
+
+<Callout type="info">
+  The app doesn't queue alerts. If the phone has no connection when an alert would be sent, that alert isn't resent later.
+</Callout>
+
+## Basic mode and the AI model
+
+The app has two ways to detect risks.
+
+| Mode | How it works | Download | Accuracy |
+|---|---|---|---|
+| **Basic** (keyword scan) | Looks for risk-related phrases in the visible text | None | Lower — expect missed risks and false alarms |
+| **Horizon Mobile INT4** | On-device AI model, 4-bit | About 600 MB (3 GB+ RAM recommended) | Higher |
+| **Horizon Mobile INT8** | On-device AI model, 8-bit | About 1.2 GB (6 GB+ RAM recommended) | Highest |
+
+A new installation starts in **Basic** mode, and the status screen shows **Basic protection mode — AI model not installed — using keyword scanning**. The AI models are optional and run entirely on the device.
+
+### Switch to an AI model
+
+<Steps>
+  <Step>
+    ### Open the tier setting
+    In the child app, open **Settings** and tap **AI Model tier** under **Advanced**.
+  </Step>
+  <Step>
+    ### Pick a model
+    In **Change AI Model**, choose a tier. The one that suits the phone's memory and storage is marked **Recommended**. Tap **Apply**.
+  </Step>
+  <Step>
+    ### Accept the model licence
+    Before the download, a **Model License Agreement** sheet shows the SafeCircle Research License (SRL-1.0). Tick the box and tap **Accept & Continue**. If you tap **Decline**, the app stays in Basic mode.
+  </Step>
+  <Step>
+    ### Wait for the download
+    Keep the phone on a good connection. The download continues in the background and you can leave the screen. When it finishes, **Settings › AI Model** shows **Active**.
+  </Step>
+</Steps>
+
+Choosing a tier deletes the model file currently on the phone and downloads the new one. To go back, pick **Basic (keyword scan)** and confirm **Switch to Basic**. The app warns that detection accuracy is significantly reduced.
+
+See [Updates](/en/docs/platform/android/updates) for how model updates arrive, and [How the AI works](/en/docs/ai/overview) for more on the technology.
+
+## Limits
+
+- Only the [supported apps](/en/docs/platform/android/supported-apps) are monitored.
+- Detection isn't perfect. Use alerts as a prompt to talk to your child, not as proof.
+- Protection stops while the Accessibility Service is off. The status shows **PERMISSION MISSING** until it is enabled again.
+- Android 11 or later is required.
+
+More in [Known limitations](/en/docs/support/known-limitations).

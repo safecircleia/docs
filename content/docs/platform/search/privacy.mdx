@@ -1,0 +1,33 @@
+---
+title: Privacy
+icon: Lock
+description: What SafeCircle Search does and doesn't collect, and who sees your searches.
+---
+
+SafeCircle Search is built so that nobody, including SafeCircle and parents, keeps a record of what you search for.
+
+## What it does
+
+- **Doesn't log searches.** The text of your search isn't written to logs, and request logging and tracing are turned off for the service.
+- **No cookies for anonymous visitors.** If you aren't logged in, the site doesn't set any cookie. Your preferences stay in your browser's local storage.
+- **No third-party requests.** Fonts are served by SafeCircle, and your browser never contacts Brave or any result site while you browse results.
+- **Images go through a proxy.** Result thumbnails and site icons are fetched by SafeCircle's servers on your behalf, so image hosts don't see your address or browser details. Only images are proxied; very large files and vector (SVG) images are refused.
+- **Plain result links.** A result link goes straight to the website, with no redirect through SafeCircle and no referrer, so the site doesn't learn that you came from a search.
+- **Shared short-term cache.** To keep searches fast, identical results are cached for 15 minutes. The cache is shared and never tied to a person.
+- **Works without scripts.** Results are rendered on the server and work without JavaScript.
+
+## What the search provider sees
+
+Results come from **Brave Search**. When you search, SafeCircle's server sends Brave your search text together with the options you chose (type, page, safe search level and region). It doesn't send your IP address, cookies or browser details. Brave's own privacy policy applies to what it does with the request.
+
+## What is stored when you're logged in
+
+If you log in with your SafeCircle account, SafeCircle stores your **search preferences** and **site rules** so they sync between devices. It doesn't store your searches. Logging in also tells the service who you are so it can apply higher limits.
+
+## Cookies
+
+The only cookie the site ever sets is the **family lock** cookie, and only after someone confirms a family link on that browser. See [Safe search and family lock](/en/docs/platform/search/safe-search#family-lock).
+
+## For parents
+
+Because searches aren't logged, parents can't see what a child searched for through SafeCircle Search, and SafeCircle's alerts don't cover searches. If safe search matters to you, use the [family lock](/en/docs/platform/search/safe-search#family-lock) when it becomes available and talk with your child about what they search.

@@ -1,0 +1,40 @@
+---
+title: Canopy OS
+icon: Monitor
+description: Canopy OS is an experimental Linux distribution being built with SafeCircle protection included. What it is and how far along it is.
+---
+
+**Canopy OS** is a Linux distribution that SafeCircle is building with SafeCircle protection meant to be part of the system itself, rather than an app you add.
+
+<Callout type="warn" title="Experimental — not ready for families">
+  Canopy OS is at a very early, build-pipeline stage. The latest work in its repository dates from **May 2026**. The images build a Fedora-based desktop with an edition marker and placeholder settings, but the SafeCircle components that would provide protection are **not installed yet**. Don't rely on it to protect or monitor anyone, and don't use it to replace the [Android child app](/en/docs/platform/android/setup).
+</Callout>
+
+## What it is meant to be
+
+- **Based on Fedora 44** using `bootc`: the whole system is an image that updates as one piece, so it is immutable.
+- **GNOME desktop on Wayland only**, with the X11 server removed.
+- **SELinux in enforcing mode.**
+- **Three editions** for different needs: [Family, Institutional and Personal](/en/docs/platform/canopy-os/editions).
+- **SafeCircle built in**, planned as system services and apps: the Horizon AI risk-detection daemon, a network filter, the dashboard, a first-boot setup wizard, the Orbit browser and a Canopy theme.
+
+## Where it stands
+
+| Area | Status |
+|---|---|
+| Base image (Fedora bootc, GNOME, Wayland, SELinux) | Builds |
+| Edition images and installer ISOs | Build pipeline exists (GitHub Actions) |
+| Horizon, network filter, dashboard, wizard, Orbit browser, theme | Packaging placeholders only; not yet installed in the images |
+| Public downloads | None that we can point to |
+| Installer and update experience | Not documented, because it isn't ready |
+
+Nothing about Canopy OS is part of the private beta today, and there is no support for it. If you're curious about the project or want to follow progress, write to **support@safecircle.tech**.
+
+## Is it for me?
+
+- **Parents** — use the [Android child app](/en/docs/platform/android/setup) and the [dashboard](/en/docs/platform/dashboard/setup). Canopy OS won't change what you can monitor today.
+- **Developers and tinkerers** — people working on the project build the images locally with Podman. See the [developer overview](/en/docs/developers/overview).
+
+<Cards>
+  <Card title="Editions" href="/en/docs/platform/canopy-os/editions" description="Family, Institutional and Personal — what each is meant for." />
+</Cards>

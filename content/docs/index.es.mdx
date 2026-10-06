@@ -1,0 +1,74 @@
+---
+title: ¿Qué es SafeCircle?
+icon: Shield
+description: Una introducción a SafeCircle — qué hace, cómo funciona y qué datos recopila.
+---
+
+SafeCircle es una plataforma de seguridad familiar que ayuda a los padres a estar al tanto de posibles riesgos en los chats online de sus hijos, sin leer sus mensajes.
+
+Tiene tres partes que puedes usar hoy: un **panel para padres** (una aplicación web en `app.safecircle.tech`), una **app para padres** de Android y una **app del menor** de Android. La app del menor lee el texto visible en pantalla en unas pocas apps de mensajería y lo analiza **en el teléfono del menor**. Cuando detecta un posible riesgo, recibes una alerta con el nivel de riesgo, las categorías, una puntuación de confianza y una nota breve. El texto de los mensajes nunca se envía a los servidores de SafeCircle.
+
+<Callout type="info" title="Un asistente, no un veredicto">
+  La detección puede equivocarse en ambos sentidos: puede marcar chats inofensivos y pasar por alto otros reales. Toma una alerta como un punto de partida para hablar con tu hijo, no como una prueba. Consulta las [limitaciones de la IA](/es/docs/ai/limitations).
+</Callout>
+
+## Cómo funciona
+
+<Steps>
+  <Step>
+    ### Configura el panel y vincula el teléfono
+    Creas el perfil de un hijo en el panel (o en la app para padres) y generas un código de vinculación. En el teléfono Android del menor instalas la app del menor desde el canal de pruebas internas de Google Play (consulta [Únete a la beta](/es/docs/platform/private-beta/join)), escaneas el **código QR** o escribes el **código de 6 dígitos** y concedes el permiso de accesibilidad.
+  </Step>
+  <Step>
+    ### La app del menor lee el texto en pantalla
+    Con el Servicio de accesibilidad de Android, la app lee el texto que se ve en las [apps compatibles](/es/docs/platform/android/supported-apps) (WhatsApp, Instagram, Telegram, Snapchat y TikTok), y nada más. Empieza en modo **Basic**, que busca palabras clave y no necesita ninguna descarga. Puedes cambiarla a un modelo de IA en el dispositivo para una detección más precisa. Consulta [Cómo funciona la app del menor](/es/docs/platform/android/how-it-works).
+  </Step>
+  <Step>
+    ### Solo se envía un resumen breve
+    Cuando el resultado es de riesgo medio o alto, la app envía una alerta con la categoría, la confianza, la marca de tiempo, la app de origen y una nota breve. Los resultados más débiles se descartan en el teléfono. La app analiza cada app monitorizada como máximo una vez cada 5 minutos.
+  </Step>
+  <Step>
+    ### Revisas la alerta
+    La alerta aparece en el panel y como notificación push en la app para padres, con un **nivel de riesgo** (`medium` o `high`), las categorías, una puntuación de confianza y la nota de **Razonamiento IA**. Por ahora esa nota es un simple resumen de las categorías detectadas, no una cita de la conversación. Consulta [Entender las alertas](/es/docs/platform/dashboard/alerts).
+  </Step>
+</Steps>
+
+## Apps y dispositivos compatibles
+
+- **Apps de mensajería que lee la app del menor:** WhatsApp, Instagram, Telegram, Snapchat y TikTok. No se monitoriza ninguna otra app. Consulta [Apps compatibles](/es/docs/platform/android/supported-apps).
+- **Teléfono del menor:** Android 11 o posterior. No hay app para iOS. Consulta [iOS](/es/docs/platform/ios/overview).
+- **Padres:** el panel funciona en cualquier navegador y la app para padres funciona en Android 11 o posterior.
+
+## Resumen de privacidad
+
+| Qué guarda SafeCircle | Qué NO recibe |
+|---|---|
+| Nivel de riesgo, categorías y puntuación de confianza | El texto de los mensajes, de ninguna forma |
+| Marca de tiempo, app de origen y una nota breve (un resumen de las categorías) | Capturas ni grabaciones de pantalla |
+| Tu cuenta, tus hijos, dispositivos y estado de vinculación | Contactos, ubicación, fotos ni micrófono |
+| Estado de lectura de las alertas | Historial de navegación |
+
+El tráfico entre las apps y los servidores de SafeCircle usa HTTPS. El texto reciente de los chats que analiza la app se queda en el teléfono, solo en memoria. Lee la [privacidad de la IA](/es/docs/ai/privacy) y [Datos y privacidad](/es/docs/developers/data-and-privacy) para ver todos los detalles.
+
+<Callout title="Beta privada">
+  SafeCircle es actualmente solo por invitación. El acceso requiere un código de invitación enviado por el equipo de SafeCircle.
+</Callout>
+
+## Primeros pasos
+
+<Cards>
+  <Card title="Únete a la beta" href="/es/docs/platform/private-beta/join" description="Del código de invitación a un dispositivo vinculado: cuenta, aprobación, pruebas en Google Play y acuerdo de la beta." />
+  <Card title="Configura el panel para padres" href="/es/docs/platform/dashboard/setup" description="Añade el perfil de un hijo y genera un código de vinculación." />
+  <Card title="Configura la app del menor" href="/es/docs/platform/android/setup" description="Instala, vincula y concede permisos en la app de Android." />
+  <Card title="Consigue la app para padres" href="/es/docs/platform/parent-app/overview" description="Alertas, estadísticas y notificaciones push en tu teléfono Android." />
+</Cards>
+
+## Explora la documentación
+
+<Cards>
+  <Card title="Plataforma" href="/es/docs/platform" description="El panel, las apps de Android, el buscador, el estado de iOS y Canopy OS." />
+  <Card title="Cómo funciona la IA" href="/es/docs/ai/overview" description="Detección en el dispositivo, categorías de riesgo, privacidad y limitaciones." />
+  <Card title="SafeCircle Search" href="/es/docs/platform/search/overview" description="Un buscador privado con búsqueda segura. Es un sitio aparte, todavía no conectado a las apps." />
+  <Card title="Desarrolladores" href="/es/docs/developers/overview" description="Arquitectura, referencia de la API, autenticación y tratamiento de datos." />
+  <Card title="Soporte" href="/es/docs/support/faq" description="Preguntas frecuentes, solución de problemas y limitaciones conocidas." />
+</Cards>

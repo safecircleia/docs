@@ -1,0 +1,91 @@
+---
+title: Configurar la app del menor (Android)
+icon: Smartphone
+description: Cómo instalar, vincular y conceder permisos a la app SafeCircle de Android en el dispositivo del menor.
+---
+
+La app SafeCircle para el menor se ejecuta en segundo plano en el teléfono Android del menor. No le muestra alertas: todo va al panel de control del padre o la madre. La configuración lleva unos minutos y tiene cinco pantallas, que la app etiqueta como **SETUP 1 OF 5** a **SETUP 5 OF 5**.
+
+<Callout type="info">
+  En la versión actual de la app los textos de las pantallas aparecen en inglés. Esta guía da el nombre en español y, entre paréntesis, el texto tal como se ve en pantalla. El contador de pasos de la app se salta **SETUP 3 OF 5**: pasas del paso 2 al 4. Es lo esperado.
+</Callout>
+
+## Requisitos
+
+- Android 11 o posterior
+- Conexión a internet
+- Un código de vinculación (6 dígitos) o código QR del panel — consulta [configurar el panel de control](/es/docs/platform/dashboard/setup)
+- Acceso al canal de pruebas internas de Google Play — consulta [Únete a la beta](/es/docs/platform/private-beta/join)
+
+<Steps>
+  <Step>
+    ### Instala la app
+    En el teléfono del menor, abre la ficha de SafeCircle en Google Play y toca **Instalar**. En el teléfono la app se llama **SafeCircle Child**.
+
+    <Callout>
+      Durante la beta la app solo es visible para las cuentas del grupo de Google **SafeCircle Testers** que han activado el canal de pruebas. Si no la encuentras, consulta [Únete a la beta](/es/docs/platform/private-beta/join#únete-a-la-beta-de-google-play).
+    </Callout>
+
+    La primera vez que la abras, una pantalla de **beta cerrada** (*Closed Beta*) te pide confirmar **Soy tester beta y no compartiré esta app** (*I'm a beta tester and won't share this app*) y **Entiendo que la distribución está prohibida y puede derivar en acciones legales** (*I understand distribution is prohibited and may result in legal action*). Marca las dos casillas y toca **Continuar** (*Continue*).
+  </Step>
+  <Step>
+    ### Lee la nota de privacidad
+    En **SETUP 1 OF 5** (*You're in good hands.*, «Estás en buenas manos.»), lee la nota: solo se envía un resumen de seguridad y los mensajes reales nunca salen del dispositivo. Marca **Lo entiendo y estoy de acuerdo** (*I understand and agree*) y toca **Continuar**.
+  </Step>
+  <Step>
+    ### Vincula con el panel de control
+    En **SETUP 2 OF 5** (*Connect with your parent.*, «Conéctate con tu padre o madre.»), elige cómo vincular:
+
+    - **Escanear código QR** (*Scan QR code*) — escanea el código QR que muestra el panel.
+    - **Introducir código de 6 dígitos** (*Enter 6-digit code*) — escribe el código en **Código de 6 dígitos** (*6-digit code*) y toca **Confirmar** (*Confirm*).
+
+    Cuando la vinculación se complete, la app continúa y el panel muestra **Dispositivo conectado**.
+
+    <Callout type="warn">
+      Los códigos de vinculación son válidos durante **5 minutos** y se pueden usar una sola vez. Si caduca, genera uno nuevo en el panel.
+    </Callout>
+
+    <Callout type="info">
+      La pantalla también muestra la opción **Acercar los teléfonos** (*Hold phones together*, NFC). Todavía no está activa: usa el código QR o el código de 6 dígitos.
+    </Callout>
+  </Step>
+  <Step>
+    ### Concede los permisos
+    En **SETUP 4 OF 5** (*Two quick permissions.*, «Dos permisos rápidos.»):
+
+    1. En Android 13 y posteriores, toca **Permitir** (*Allow*) junto a **Notificaciones** (*Notifications*). La app usa las notificaciones para el progreso de descarga y sus propios mensajes de estado.
+    2. Toca **Abrir ajustes** (*Open Settings*) para abrir los ajustes de accesibilidad de Android, busca **SafeCircle Protection** (la app lo llama SafeCircle), tócalo y activa el interruptor.
+    3. Vuelve a la app. Continúa sola en cuanto detecta que el Servicio de accesibilidad está activado.
+
+    <Callout type="warn">
+      Sin el Servicio de accesibilidad la app no puede ver las conversaciones y no se envía ninguna alerta. Android puede desactivar el permiso tras una reinstalación — si la app lo pide de nuevo, vuelve a activarlo. Consulta [Permisos](/es/docs/platform/android/permissions).
+    </Callout>
+  </Step>
+  <Step>
+    ### Termina
+    En **SETUP 5 OF 5** (*Downloading your shield.*, «Descargando tu escudo.») la app prepara su motor de detección. Al terminar muestra **All set.** («Todo listo.») y abre la pantalla de estado, con **MONITORIZACIÓN ACTIVA** (*MONITORING ACTIVE*) y **Protegido.** (*Protected.*).
+
+    La primera vez, la app arranca en modo **Básico** (*Basic*), que busca palabras clave y no necesita descarga. Para usar el modelo de IA en el dispositivo, más preciso, consulta [Modo básico y modelo de IA](/es/docs/platform/android/how-it-works#modo-básico-y-modelo-de-ia).
+  </Step>
+</Steps>
+
+## Qué ve el menor
+
+- La pantalla de **Inicio** (*Home*) con el estado de protección y una pantalla de **Ajustes** (*Settings*). No hay lista de alertas ni historial de mensajes.
+- Una notificación breve mientras se descarga un modelo y, cuando hay un modelo de IA más reciente, una notificación **Actualización de SafeCircle disponible**.
+- Una entrada llamada **SafeCircle Protection** en los ajustes de accesibilidad de Android, que Android describe como la supervisión de conversaciones para detectar riesgos de seguridad y avisar al padre o la madre.
+
+Todo lo que detecta la app va al padre o la madre. Habla con tu hijo o hija sobre qué se supervisa y por qué antes de configurarla.
+
+## Después de la configuración
+
+La app se ejecuta en segundo plano; no hay nada que abrir a diario. Ábrela para comprobar el estado: **MONITORIZACIÓN ACTIVA** significa que la protección funciona. **Ajustes** permite cambiar el tema, ver qué modo de detección está activo y reportar un error.
+
+Para dejar de supervisar, desinstala la app en el teléfono del menor y revoca el dispositivo en el panel — consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices). Una app reinstalada hay que vincularla de nuevo con un código nuevo.
+
+<Cards>
+  <Card title="Cómo funciona" href="/es/docs/platform/android/how-it-works" description="Qué lee la app, qué envía y con qué frecuencia." />
+  <Card title="Apps compatibles" href="/es/docs/platform/android/supported-apps" description="Las apps de mensajería que supervisa la app del menor." />
+  <Card title="Permisos" href="/es/docs/platform/android/permissions" description="Para qué sirve cada permiso." />
+  <Card title="Solución de problemas" href="/es/docs/platform/android/troubleshooting" description="Falló la vinculación, el estado muestra un problema, dispositivo sin conexión." />
+</Cards>

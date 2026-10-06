@@ -1,0 +1,95 @@
+---
+title: SafeCircle Search
+icon: Search
+description: SafeCircle's privacy-first metasearch — how it protects searchers, how family safe-search locking works, and how to run it yourself.
+---
+
+**SafeCircle Search** (`search.safecircle.tech`) is a metasearch engine. It shows web, image and news results from Brave Search, rendered on the server in the SafeCircle look, with no cookies, no tracking and no third-party requests from your browser. It is licensed GPL-3.0-or-later.
+
+## Privacy rules
+
+These rules are binding for the project, not just defaults:
+
+| Rule | What it means |
+|---|---|
+| No cookies for anonymous users | The only cookie the service ever sets is `sc_family`, for the family lock below |
+| Queries are never logged | No log statement may include a query or a results URL, and Cloudflare observability is turned off for the Worker |
+| No third-party browser requests | Fonts are self-hosted, and every thumbnail and favicon goes through SafeCircle's own image proxy |
+| No tracking hop on result links | Links go straight to the result with `rel="noreferrer noopener"`, and the site sends `Referrer-Policy: no-referrer` |
+| No provider HTML | Result snippets are parsed into plain segments and never rendered as raw HTML |
+| Results work without JavaScript | Result pages are server-rendered |
+
+**Image proxy.** Remote images are fetched through a signed `/img` route. It streams up to **5 MB**, accepts only `image/*` types and rejects SVG.
+
+**Caching.** Results are cached at the edge for **15 minutes**. The cache key is the search type, query, page, region and safe-search level, and is never per user. A Brave request times out after 3 seconds.
+
+**Rate limits.** 30 requests per minute for anonymous visitors, keyed on IP, and 120 per minute for signed-in users, keyed on user ID.
+
+## Settings
+
+| Setting | Values |
+|---|---|
+| Theme and colours | The same themes as the dashboard |
+| Safe search | `off`, `moderate` or `strict` |
+| Region | A region code |
+| Language | English or Spanish |
+| Open results in a new tab | On or off |
+| Site rules | Per domain: `block`, `lower` or `raise`. Up to 500 rules |
+
+**Anonymous users** keep settings in their browser's local storage, and the search form passes non-default ones as query parameters. Nothing is stored on the server.
+
+**Signed-in users** can sync settings and site rules with their SafeCircle account. The service reads them through the backend's `search` tRPC router (`search.getSettings` and `search.saveSettings`), described in the [API reference](/en/docs/developers/api#search).
+
+## Family safe-search lock
+
+The family lock keeps safe search on `strict` on a child's device, and applies the parent's site rules.
+
+<Steps>
+  <Step>
+    ### The child's device requests a link
+    The child app calls `search.familyLink` with its device token. The backend returns a URL of the form `https://search.safecircle.tech/family?token=…`. The token is signed with a secret shared by the backend and the search service, is bound to that device, and is valid for **365 days**.
+  </Step>
+  <Step>
+    ### The device confirms it
+    Opening the link shows a confirmation page. Confirming it sends a same-origin `POST` to `/family/confirm`. If the token is valid and unexpired, the service stores it in an `HttpOnly`, `Secure` cookie named `sc_family`.
+  </Step>
+  <Step>
+    ### Searches are locked
+    While the cookie is present, safe search is forced to `strict`. Site rules come from the parent's synced settings, which the service fetches with `search.familyRules`.
+  </Step>
+  <Step>
+    ### Unpairing and expiry
+    Once the device is revoked, `search.familyRules` returns nothing, so the parent's site rules stop applying. Strict safe search is checked from the signed cookie itself, so it stays in force until the token expires or the site data on that device is cleared. Device-level enforcement is the child app's job.
+  </Step>
+</Steps>
+
+<Callout type="info">
+  The backend and the search service both support the family link. Requesting it from the child app is a client change that follows separately.
+</Callout>
+
+## Running it yourself
+
+The service is a Next.js 16 app (React Server Components) deployed to Cloudflare Workers with OpenNext. You need a Brave Search API key.
+
+```bash
+bun install
+bun run preview   # builds with OpenNext and serves on http://localhost:8787
+bun run test      # unit tests
+```
+
+Local secrets go in a `.dev.vars` file that is not committed:
+
+| Secret | Purpose |
+|---|---|
+| `BRAVE_API_KEY` | Brave Search API key. The value `mock` serves local test fixtures and is for development only |
+| `IMG_PROXY_SECRET` | Signs image proxy URLs |
+| `FAMILY_SECRET` | Signs family tokens. It must equal the value the backend uses, if you use the family lock |
+
+In production, set the same three with `wrangler secret put`. The `API_ORIGIN` variable in the Worker configuration points to the backend used for account sync and family rules. Account sync and the family lock need a SafeCircle backend, so a stand-alone instance serves only anonymous search.
+
+## Related
+
+<Cards>
+  <Card title="Repositories" href="/en/docs/developers/repositories" description="Where the code lives and how it is licensed." />
+  <Card title="Data and privacy" href="/en/docs/developers/data-and-privacy" description="What the rest of the platform stores." />
+</Cards>

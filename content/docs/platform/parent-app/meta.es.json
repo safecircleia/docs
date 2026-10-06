@@ -1,0 +1,11 @@
+{
+  "title": "App para padres",
+  "description": "La app complementaria SafeCircle Parent para Android.",
+  "icon": "TabletSmartphone",
+  "defaultOpen": true,
+  "pages": [
+    "overview",
+    "setup",
+    "notifications"
+  ]
+}

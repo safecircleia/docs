@@ -1,13 +1,74 @@
 ---
-title: Hello World
-description: Your first document
+title: What is SafeCircle?
+icon: Shield
+description: An introduction to SafeCircle — what it does, how it works, and what data it collects.
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+SafeCircle is a family safety platform that helps parents stay informed about possible risks in their child's online chats, without reading their messages.
 
-## What is Next?
+It has three parts you use today: a **parent dashboard** (a web app at `app.safecircle.tech`), a **parent app** for Android, and a **child app** for Android. The child app reads the text visible on screen in a few messaging apps and analyses it **on the child's phone**. When it sees a possible risk, you get an alert with the risk level, the categories, a confidence score and a short note. The message text itself is never sent to SafeCircle's servers.
+
+<Callout type="info" title="An assistant, not a verdict">
+  The detection can be wrong in both directions: it can flag harmless chats and miss real ones. Treat an alert as a prompt to talk with your child, not as proof. See [AI limitations](/en/docs/ai/limitations).
+</Callout>
+
+## How it works
+
+<Steps>
+  <Step>
+    ### Set up the dashboard and pair the phone
+    You create a child profile in the dashboard (or the parent app) and generate a pairing code. On the child's Android phone you install the child app from the Google Play internal testing track (see [Join the beta](/en/docs/platform/private-beta/join)), scan the **QR code** or type the **6-digit code**, and grant the Accessibility permission.
+  </Step>
+  <Step>
+    ### The child app reads on-screen text
+    Using Android's Accessibility Service, the app reads the text that is visible in the [supported apps](/en/docs/platform/android/supported-apps) (WhatsApp, Instagram, Telegram, Snapchat and TikTok), and nothing else. It starts in **Basic** mode, which scans for keywords and needs no download. You can switch it to an on-device AI model for more accurate detection. See [How the child app works](/en/docs/platform/android/how-it-works).
+  </Step>
+  <Step>
+    ### Only a short summary is sent
+    When the result is medium or high risk, the app sends an alert with the category, confidence, timestamp, source app and a short note. Weaker results are discarded on the phone. The app analyses each monitored app at most once every 5 minutes.
+  </Step>
+  <Step>
+    ### You review the alert
+    The alert appears in the dashboard and as a push notification in the parent app, with a **risk level** (`medium` or `high`), the categories, a confidence score and the **AI Reasoning** note. For now that note is a plain summary of the detected categories, not a quote from the conversation. See [Understanding alerts](/en/docs/platform/dashboard/alerts).
+  </Step>
+</Steps>
+
+## Supported apps and devices
+
+- **Messaging apps the child app reads:** WhatsApp, Instagram, Telegram, Snapchat and TikTok. Other apps are not monitored. See [Supported apps](/en/docs/platform/android/supported-apps).
+- **Child's phone:** Android 11 or later. There is no iOS app. See [iOS](/en/docs/platform/ios/overview).
+- **Parents:** the dashboard works in any browser, and the parent app runs on Android 11 or later.
+
+## Privacy overview
+
+| What SafeCircle stores | What it does NOT receive |
+|---|---|
+| Risk level, categories and confidence score | The text of messages, in any form |
+| Timestamp, source app and a short note (a summary of the categories) | Screenshots or screen recordings |
+| Your account, children, devices and pairing status | Contacts, location, photos or the microphone |
+| Alert read state | Browsing history |
+
+Traffic between the apps and SafeCircle's servers uses HTTPS. The recent chat text the app analyses stays on the phone, in memory only. Read [AI privacy](/en/docs/ai/privacy) and [Data and privacy](/en/docs/developers/data-and-privacy) for the full detail.
+
+<Callout title="Private beta">
+  SafeCircle is currently invite-only. Access requires an invite code sent by the SafeCircle team.
+</Callout>
+
+## Get started
 
 <Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
+  <Card title="Join the beta" href="/en/docs/platform/private-beta/join" description="From invite code to a paired device: account, approval, Google Play testing and the beta agreement." />
+  <Card title="Set up the parent dashboard" href="/en/docs/platform/dashboard/setup" description="Add a child profile and generate a pairing code." />
+  <Card title="Set up the child app" href="/en/docs/platform/android/setup" description="Install, pair, and grant permissions on the Android app." />
+  <Card title="Get the parent app" href="/en/docs/platform/parent-app/overview" description="Alerts, insights and push notifications on your Android phone." />
+</Cards>
+
+## Explore the docs
+
+<Cards>
+  <Card title="Platform" href="/en/docs/platform" description="The dashboard, the Android apps, search, iOS status and Canopy OS." />
+  <Card title="How the AI works" href="/en/docs/ai/overview" description="On-device detection, risk categories, privacy and limitations." />
+  <Card title="SafeCircle Search" href="/en/docs/platform/search/overview" description="A private search engine with safe search. A separate site, not connected to the apps yet." />
+  <Card title="Developers" href="/en/docs/developers/overview" description="Architecture, API reference, authentication and data handling." />
+  <Card title="Support" href="/en/docs/support/faq" description="FAQ, troubleshooting and known limitations." />
 </Cards>

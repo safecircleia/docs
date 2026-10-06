@@ -1,0 +1,28 @@
+---
+title: Supported apps
+icon: AppWindow
+description: The messaging apps the Android child app monitors, with their package names.
+---
+
+The child app only reads the screen of these five apps. Android enforces the limit: the Accessibility Service is registered for these apps and no others.
+
+| App | Package name |
+|---|---|
+| WhatsApp | `com.whatsapp` |
+| Instagram | `com.instagram.android` |
+| Telegram | `org.telegram.messenger` |
+| Snapchat | `com.snapchat.android` |
+| TikTok | `com.zhiliaoapp.musically` |
+
+Any app that isn't on this list isn't monitored, even if it's a messaging app.
+
+## What this means for you
+
+- The app name shown in an alert comes from the package name above.
+- Detection only runs while the child has one of these apps open on screen.
+- Each app is analysed at most once every 5 minutes. See [How the child app works](/en/docs/platform/android/how-it-works).
+- Only the Android versions of these apps are covered. There is no iOS child app — see [iOS](/en/docs/platform/ios/overview).
+
+<Callout type="info">
+  The list is fixed in the app and can't be changed from the dashboard. If you need another app covered, tell us through **More › Request a feature** in the dashboard or at **support@safecircle.tech**.
+</Callout>

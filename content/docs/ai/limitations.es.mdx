@@ -1,0 +1,61 @@
+---
+title: Limitaciones
+icon: TriangleAlert
+description: Advertencias de precisión, carencias de cobertura y debilidades conocidas de la IA de SafeCircle, según lo que muestran los repositorios y los informes.
+---
+
+La IA de SafeCircle es una señal de apoyo. Esta página enumera lo que no puede hacer y dónde se sabe que es débil, para que puedas fijar expectativas con tu familia.
+
+<Callout type="warn" title="No sustituye hablar con tu hijo">
+  El modelo puede pasar por alto conversaciones graves y puede marcar otras inofensivas. No confíes en él como única protección.
+</Callout>
+
+## Cobertura
+
+- **Solo Android y cinco apps.** La app infantil lee el texto de WhatsApp, Instagram, Telegram, Snapchat y TikTok. No se leen otras apps, sitios web ni juegos.
+- **Solo el texto en pantalla.** No se analizan imágenes, mensajes de voz, vídeo ni nada que una app no exponga a la API de accesibilidad de Android.
+- **Una muestra, no una lectura completa.** Cada app se analiza como máximo una vez cada 5 minutos, con los últimos 10 fragmentos de texto visibles. Un intercambio corto de riesgo entre dos análisis puede pasar desapercibido.
+- **Básico por defecto.** Una instalación nueva usa el análisis por palabras clave hasta que elijas un nivel de modelo de IA. Un nivel de modelo no analiza nada hasta que termina su descarga y el modelo se carga.
+- **Los fallos son silenciosos.** Si el modelo no se carga, se bloquea o devuelve una respuesta ilegible, la app lo trata como "sin riesgo" y no envía nada.
+
+## Precisión
+
+- **Entrenado y probado con texto generado por IA.** Los datos de entrenamiento son sintéticos. Todas las cifras que tenemos proceden de chats de prueba escritos por IA. **No se ha medido la precisión con conversaciones reales de menores.**
+- **Fuerte con texto conocido, más débil con texto nuevo.** Con datos reservados del generador de entrenamiento, las puntuaciones por categoría son casi perfectas. Con chats escritos por otros dos modelos de IA, la compilación actual de Horizon Mobile detectó aproximadamente del 63 al 68 % de los chats de riesgo con la categoría correcta y marcó cerca del 20 % de los inofensivos. La recuperación de `threats` y de `grooming` fue la que más cayó. Consulta [Modelos Horizon](/es/docs/ai/horizon).
+- **Los falsos positivos son esperables.** Las bromas entre amigos, el juego de roles y las conversaciones sobre videojuegos pueden parecer riesgo. Por eso las alertas medias se presentan como algo que merece una revisión, no como un hallazgo.
+- **La gravedad es lo más difícil.** En la evaluación interna, distinguir `high` de `critical` fue el punto más débil. La app infantil pide tres niveles (`low`, `medium`, `high`) y trata cualquier otro como `low`.
+- **La confianza no es una probabilidad.** No está calibrada. Consulta [Categorías de riesgo](/es/docs/ai/risk-categories#confianza).
+- **La precisión en teléfonos no se ha medido.** Las compilaciones para dispositivo se midieron en velocidad y memoria en teléfonos reales, pero la precisión de clasificación se midió en servidores.
+- **El análisis por palabras clave es tosco.** Usa palabras y frases fijas, así que no detecta reformulaciones ni algunas grafías y puede activarse con texto inocente.
+
+## Idiomas
+
+- Los datos de entrenamiento apuntan a **inglés y español** (aproximadamente 60 % y 40 %).
+- No hay cifras de precisión publicadas por idioma para Horizon.
+- Otros idiomas no forman parte de los datos de entrenamiento y debe asumirse que no están admitidos.
+- En las pruebas con otros generadores, las conversaciones en español fueron un punto débil del modelo de investigación Vigil en rondas anteriores, y la diferencia se redujo tras entrenar con datos más variados.
+
+## Lo que una alerta no te dice
+
+- No cita ni resume la conversación. La nota de una alerta es un breve resumen de las categorías encontradas.
+- No dice quién es la otra persona ni si es adulta.
+- No puede decirte si algo es un hecho aislado o un patrón. Consulta la [Línea de tiempo](/es/docs/platform/dashboard/analytics-timeline) para ver alertas repetidas.
+
+## Carencias conocidas en la investigación
+
+- Todavía no existe un conjunto de prueba escrito por personas.
+- Ni Horizon ni el modelo de investigación Vigil alcanzan el objetivo del equipo del 2 % de falsas alarmas con texto que no han visto.
+- No se ha medido el impacto en batería ni en temperatura en teléfonos reales.
+- Las cifras registradas antes de recuperación de grooming de Horizon no se pudieron reproducir en una prueba posterior.
+
+## Qué ayuda
+
+- Considera las alertas como puntos de partida para conversar. Pregunta con curiosidad qué ocurrió.
+- Mantén actualizados la app infantil y el modelo. Las actualizaciones se comprueban una vez al día.
+- Si faltan alertas o parecen incorrectas, repasa las [Preguntas frecuentes y solución de problemas](/es/docs/support/faq).
+
+<Cards>
+  <Card title="Categorías de riesgo" href="/es/docs/ai/risk-categories" description="Niveles de riesgo, confianza y falsos positivos." />
+  <Card title="Modelos Horizon" href="/es/docs/ai/horizon" description="Métodos y resultados de la evaluación." />
+  <Card title="Entender las alertas" href="/es/docs/platform/dashboard/alerts" description="Qué muestra una alerta y qué hacer después." />
+</Cards>

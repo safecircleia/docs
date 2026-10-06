@@ -1,0 +1,57 @@
+---
+title: Notificaciones
+icon: Bell
+description: Cómo funcionan las alertas push en la app SafeCircle Parent — canales, horas de silencio y solución de problemas.
+---
+
+La app para padres envía una **notificación push** a tu teléfono cuando el dispositivo de tu hijo genera una alerta de riesgo medio o alto. No hace falta tener la app abierta.
+
+## Cómo es una notificación
+
+- **Título** — el color del riesgo y el nombre del hijo, por ejemplo *SafeCircle alert — Alex*.
+- **Texto** — las categorías detectadas, por ejemplo *Risk detected: grooming*. Nunca incluye los mensajes del menor.
+- **Acciones** — **View** abre la alerta y **Mark read** la marca como leída sin abrir la app.
+- **Pantalla de bloqueo** — el contenido se oculta hasta que desbloqueas el teléfono.
+
+Varias notificaciones del mismo canal se agrupan en un solo resumen para que no inunden el panel de notificaciones.
+
+<Callout type="info">
+  Las notificaciones push se entregan mediante Firebase Cloud Messaging de Google. El teléfono necesita los servicios de Google Play y conexión a internet. Los textos de las notificaciones y de la app están en inglés en la versión actual.
+</Callout>
+
+## Canales de notificación
+
+En **Settings › Notifications** puedes activar o desactivar cada canal:
+
+| Canal | Para qué sirve | Cómo se comporta |
+|---|---|---|
+| **High priority alerts** (alertas de prioridad alta) | Alertas graves | Notificación emergente con sonido y vibración |
+| **Medium priority alerts** (alertas de prioridad media) | Alertas rutinarias | Notificación estándar |
+| **Device status** (estado del dispositivo) | Novedades sobre el dispositivo de un hijo | Silenciosa |
+| **System** (sistema) | Actualizaciones de la cuenta y de la app | Notificación estándar |
+
+El sonido, la vibración y las luces los controla Android, no la app. Toca el icono de ajustes junto a un canal para abrir los ajustes propios de Android para ese canal, o el icono de campana para enviar una **notificación de prueba** (*Send test notification*).
+
+## Horas de silencio
+
+Define **Quiet hours** con una hora de inicio y una de fin (**Start (HH:mm)**, **End (HH:mm)**). Durante ese intervalo el teléfono retiene las notificaciones de prioridad media, de estado del dispositivo y del sistema. **Las alertas de prioridad alta siempre se muestran.**
+
+Las horas de silencio usan la hora local del teléfono. Las alertas que te pierdas durante ese intervalo siguen en la pestaña **Alerts**.
+
+## Solución de problemas
+
+<Accordions>
+  <Accordion title="No recibo notificaciones">
+    1. En **Settings › Notifications**, comprueba que ningún canal esté desactivado. Si ves **Notifications are off** o **Blocked in system settings**, tócalo para abrir los ajustes de Android y permitirlas.
+    2. En Android 13 y posteriores, asegúrate de haber permitido el permiso de notificaciones cuando la app lo pidió.
+    3. Envía una **notificación de prueba** desde la misma pantalla. Si llega, el push funciona en el teléfono.
+    4. Comprueba que las **Quiet hours** no estén activas.
+    5. Los ahorradores de batería de algunos teléfonos restringen las apps en segundo plano. Permite que SafeCircle Parent se ejecute sin restricciones en los ajustes de batería de Android.
+  </Accordion>
+  <Accordion title="Veo las alertas en la app pero no como notificaciones">
+    La pestaña Alerts siempre está al día cuando la abres. Si faltan notificaciones, sigue los pasos anteriores y luego cierra sesión y vuelve a iniciarla para que el teléfono se registre de nuevo para recibir push.
+  </Accordion>
+  <Accordion title="Quiero recibir alertas también en otro sitio">
+    El panel también puede avisarte por Telegram. Consulta [Notificaciones del panel](/es/docs/platform/dashboard/notifications).
+  </Accordion>
+</Accordions>

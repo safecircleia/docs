@@ -1,0 +1,84 @@
+---
+title: AI Playground
+icon: FlaskConical
+description: El SafeCircle AI Playground para Android y el playground web - qué son, qué modelos y entornos de ejecución admiten, cómo obtenerlos y cómo tratan tus datos.
+---
+
+SafeCircle publica dos playgrounds donde puedes probar por ti mismo sus modelos de detección de riesgos. Ninguno supervisa nada y ninguno forma parte del producto de control parental.
+
+<Callout type="warn" title="Herramientas experimentales">
+  Ambos playgrounds sirven para explorar y probar modelos. Los resultados pueden ser erróneos. No los uses como única protección para un menor.
+</Callout>
+
+<Tabs items={["App de Android", "Playground web"]}>
+<Tab value="App de Android">
+### SafeCircle AI Playground para Android
+
+Una app de Android para ejecutar modelos de IA directamente en tu teléfono: conversar con ellos, probarlos y medir su rendimiento. Está basada en AI Edge Gallery de Google y se publica bajo la licencia Apache 2.0.
+
+**Qué puedes hacer**
+
+| Función | Qué hace |
+|---|---|
+| AI Chat | Conversaciones de varios turnos con un modelo de lenguaje en el dispositivo |
+| Prompt Lab | Prompts individuales con plantillas y ajustes |
+| Ask Image / Ask Audio | Preguntas sobre imágenes y audio con los modelos que lo admiten |
+| Safety Detection | Pega una conversación y mira cómo la clasifican los modelos Horizon |
+| Vigil | Puntúa una conversación completa con el modelo de investigación [Vigil](/es/docs/ai/vigil) |
+| Agent Chat | Deja que un modelo use habilidades integradas y servidores MCP |
+| Benchmark | Mide la latencia y el rendimiento en tu hardware |
+| Model Manager | Explora, descarga y elimina modelos, o importa los tuyos desde el almacenamiento o una URL |
+
+**Modelos**
+
+| Modelo | Notas |
+|---|---|
+| Horizon Mobile INT4 | El modelo de seguridad más rápido (Gemma 3 1B, 4 bits) |
+| Horizon Mobile INT8 | Mayor precisión para la misma tarea (Gemma 3 1B, 8 bits) |
+| Horizon Edge | Modelo de agente de propósito general basado en Gemma 4 E2B, para teléfonos con 8 GB de RAM o más |
+| Vigil | Codificador multilingüe compacto, de unos 1,3 GB, que se ejecuta en la CPU |
+
+Los modelos se ejecutan con los entornos de Google AI Edge (LiteRT y LiteRT-LM). Puedes elegir CPU, GPU o NPU cuando el teléfono y el modelo lo admiten, con regreso automático a la CPU. Algunos modelos restringidos requieren iniciar sesión en Hugging Face para descargarlos.
+
+**Requisitos y cómo obtenerla**
+
+- Android 11 o superior. Se recomiendan 4 GB de RAM o más para los modelos más grandes.
+- Los modelos son grandes, así que usa Wi-Fi y deja almacenamiento libre.
+- El código fuente y las versiones están en GitHub, en el repositorio `safecircleia/ai-playground-android`.
+
+**Privacidad**
+
+Una vez descargado un modelo, el texto que pruebas se procesa en tu teléfono y no se envía a SafeCircle. La red se usa para descargar modelos y para funciones que decides usar, como las descargas restringidas de Hugging Face, las consultas a Wikipedia o los servidores MCP. En la compilación de la app no hay ningún SDK de analíticas ni de informes de fallos.
+</Tab>
+<Tab value="Playground web">
+### Playground web
+
+Una versión en el navegador que ejecuta el modelo dentro de la pestaña con WebGPU. Está pensada para pruebas y demostraciones.
+
+- **Modelo.** Carga un modelo de unos 2 GB y 2.000 millones de parámetros, llamado "Horizon Web", y devuelve los cinco niveles de riesgo (de `none` a `critical`), las categorías, la confianza y un razonamiento de una línea.
+- **Requisitos.** Un navegador y una GPU con WebGPU, y unos 4 GB de memoria de vídeo.
+- **Caché.** El modelo se guarda en el almacenamiento local de tu navegador tras la primera descarga, y la descarga se reanuda si se interrumpe.
+- **Acceso.** Hay que iniciar sesión y SafeCircle aprueba el acceso durante la beta privada. Consulta [Unirse a la beta privada](/es/docs/platform/private-beta/join).
+- **En el primer uso** verás un aviso de que el playground es experimental y de que los resultados no deben tomarse como definitivos.
+
+### Privacidad
+
+La clasificación se ejecuta en un worker dentro de tu navegador. El texto que pegas no se sube para clasificarlo. La página sí envía a SafeCircle eventos de uso básicos, como las visitas a la página, qué modelo elegiste, el tiempo de carga y, en cada ejecución, la longitud del texto (no el texto en sí) y el nivel de riesgo resultante.
+
+Los **botones de valoración** son la excepción. Si valoras un resultado y lo envías, SafeCircle recibe tu valoración, tu comentario opcional, el texto que probaste y el nivel de riesgo, las categorías y la confianza del modelo. No valores resultados de texto que no quieras compartir.
+</Tab>
+</Tabs>
+
+## Cuál debería usar
+
+| Quiero | Usar |
+|---|---|
+| Probar los modelos en mi propio teléfono, incluido Vigil | App de Android |
+| Comparar el comportamiento rápidamente sin instalar nada | Playground web (acceso a la beta privada) |
+| Proteger y supervisar el dispositivo de un menor | La app infantil de SafeCircle, no un playground. Consulta [Configurar la app infantil](/es/docs/platform/android/setup) |
+
+<Cards>
+  <Card title="Modelos Horizon" href="/es/docs/ai/horizon" description="Cómo se entrenan y evalúan los modelos." />
+  <Card title="Vigil" href="/es/docs/ai/vigil" description="El clasificador de investigación disponible en la app de Android." />
+  <Card title="Unirse a la beta privada" href="/es/docs/platform/private-beta/join" description="Solicita acceso a las funciones beta de SafeCircle." />
+</Cards>

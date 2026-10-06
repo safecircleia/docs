@@ -1,0 +1,257 @@
+{
+  "tab": {
+    "general": "General",
+    "visual": "Visual",
+    "interface": "Interfaz",
+    "profile": "Perfil",
+    "security": "Seguridad",
+    "seasonal": "Estacional",
+    "accessibility": "Accesibilidad",
+    "advanced": "Avanzado"
+  },
+  "section": {
+    "themes": "Temas",
+    "colours": "Colores",
+    "fonts": "Tipografía",
+    "avatars": "Avatares y tarjetas",
+    "datetime": "Fecha y hora",
+    "layout": "Diseño",
+    "notifications": "Notificaciones",
+    "adapt": "Estaciones",
+    "particles": "Partículas",
+    "effects": "Efectos",
+    "motion": "Movimiento",
+    "text": "Texto",
+    "updates": "Actualizaciones",
+    "developer": "Desarrollo"
+  },
+  "theme_group": {
+    "bright": {
+      "title": "Claros",
+      "body": "Perfectos para la luz del día"
+    },
+    "moody": {
+      "title": "Oscuros",
+      "body": "Ponte cómodo bajo la luz de la luna"
+    },
+    "new_tag": "Nuevo"
+  },
+  "schedule": {
+    "tip": "Tu tema será {{day}} o {{night}}, según la configuración de tu sistema.",
+    "change": "Cambiar horario"
+  },
+  "reason": {
+    "schedule_off": "Activa «Seguir el sistema» para usar esto",
+    "external_theme": "Este tema define sus propios colores",
+    "seasonal_off": "Activa la adaptación estacional para usar esto",
+    "custom_font": "Elige «Usar mi propia fuente» para usar esto"
+  },
+  "accent_presets": {
+    "default": "Predeterminado",
+    "avatar": "Avatar",
+    "custom": "Personalizado",
+    "limited": "Por tiempo limitado",
+    "red": "Rojo",
+    "orange": "Naranja",
+    "yellow": "Amarillo",
+    "lime": "Lima",
+    "green": "Verde",
+    "aqua": "Aguamarina",
+    "blue": "Azul",
+    "purple": "Morado",
+    "pink": "Rosa",
+    "grey": "Gris",
+    "nonsense": "Una Navidad disparatada",
+    "fruitcake": "Pastel de frutas",
+    "mistletoe": "Muérdago",
+    "festival": "Nochebuena"
+  },
+  "theme": {
+    "title": "Temas",
+    "body": "Elige el esquema de color de todo SafeCircle",
+    "opt": {
+      "light": "Claro",
+      "ink": "Tinta",
+      "rose_pine_dawn": "Rosé Pine Dawn",
+      "dark": "Ceniza",
+      "darker": "Oscuro",
+      "oled": "Vacío",
+      "rose_pine": "Rosé Pine",
+      "kanagawa_dragon": "Kanagawa Dragon"
+    }
+  },
+  "theme_schedule": {
+    "title": "Seguir el sistema",
+    "body": "Sigue tu dispositivo y cambia entre un tema de día y uno de noche"
+  },
+  "theme_day": {
+    "title": "Día",
+    "body": "Cuando tu sistema usa el tema claro"
+  },
+  "theme_night": {
+    "title": "Noche",
+    "body": "Cuando tu sistema usa el tema oscuro"
+  },
+  "solarium": {
+    "title": "Activar efectos de cristal solarium",
+    "body": "Aplica un material translúcido y cristalino a muchas superficies"
+  },
+  "noise": {
+    "title": "Opacidad del ruido",
+    "body": "Añade una capa sutil de grano para dar variación a los fondos lisos"
+  },
+  "sat_bg": {
+    "title": "Intensidad del color de las tarjetas",
+    "body": "Trae algo de color a tu mundo (o redúcelo)"
+  },
+  "accent_type": {
+    "title": "Preajustes",
+    "body": "Sigue la estación, usa tu avatar o elige un color propio",
+    "opt": {
+      "default": "Predeterminado",
+      "avatar": "Avatar",
+      "colour": "Preajuste",
+      "customise": "Personalizado"
+    }
+  },
+  "hue": {
+    "title": "Color de acento",
+    "body": "Recorre todo el arcoíris"
+  },
+  "sat": {
+    "title": "Intensidad",
+    "body": "Cuán vivo o apagado se ve el acento"
+  },
+  "lit": {
+    "title": "Luminosidad",
+    "body": "Cuán brillante se ve el acento"
+  },
+  "font_choice": {
+    "title": "Fuente de la interfaz",
+    "body": "Elige la tipografía que se usa en todo SafeCircle",
+    "opt": {
+      "font_2026": "Con estilo",
+      "font_2025": "Sencilla",
+      "hyperlegible": "Accesible",
+      "custom": "Usar mi propia fuente"
+    }
+  },
+  "font": {
+    "title": "Fuente personalizada",
+    "body": "Escribe el nombre de una fuente instalada en tu dispositivo"
+  },
+  "font_serif": {
+    "title": "Usar una tipografía serif clásica en algunos títulos",
+    "body": "Añade una serif cursiva a los títulos principales y de sección"
+  },
+  "font_weight": {
+    "title": "Grosor de la fuente",
+    "body": "Se usa en los párrafos de texto normal"
+  },
+  "font_weight_medium": {
+    "title": "Grosor medio de la fuente",
+    "body": "Se usa en el texto de botones y encabezados pequeños"
+  },
+  "font_weight_bold": {
+    "title": "Grosor en negrita",
+    "body": "Se usa en los encabezados grandes"
+  },
+  "grid_glow": {
+    "title": "Reflejar el color bajo tarjetas y avatares",
+    "body": "Añade un resplandor bajo las tarjetas según el color principal"
+  },
+  "avatar_radius": {
+    "title": "Forma del avatar",
+    "body": "Se aplica a todos los avatares y solo lo ves tú",
+    "opt": {
+      "circle": "Circular",
+      "squircle": "Redondeada",
+      "square": "Cuadrada"
+    }
+  },
+  "time_format": {
+    "title": "Formato de hora",
+    "body": "Elige cómo se muestran las horas en el panel",
+    "opt": {
+      "auto": "Según mi idioma",
+      "12h": "12 horas",
+      "24h": "24 horas"
+    }
+  },
+  "relative_times": {
+    "title": "Mostrar tiempos relativos",
+    "body": "Muestra «hace 3 minutos» en lugar de la fecha exacta; pasa el cursor para ver la fecha completa"
+  },
+  "compact": {
+    "title": "Modo compacto",
+    "body": "Filas y espacios más ajustados para que quepa más en pantalla"
+  },
+  "start_page": {
+    "title": "Página de inicio",
+    "body": "La página que se abre al entrar en el panel",
+    "opt": {
+      "overview": "Resumen",
+      "alerts": "Alertas",
+      "timeline": "Cronología",
+      "children": "Hijos"
+    }
+  },
+  "carousel_mode": {
+    "title": "Carrusel del resumen",
+    "body": "Qué muestra el carrusel de la página de resumen",
+    "opt": {
+      "auto": "Automático",
+      "alerts": "Alertas recientes",
+      "children": "Hijos"
+    }
+  },
+  "alert_toasts": {
+    "title": "Mostrar avisos de alertas",
+    "body": "Muestra una notificación en cuanto llega una alerta nueva"
+  },
+  "seasonal": {
+    "title": "Adaptarse automáticamente a las fechas especiales",
+    "body": "Cambia el color predeterminado y muestra partículas según la estación"
+  },
+  "seasonal_particles": {
+    "title": "Mostrar partículas en algunas estaciones",
+    "body": "Nieve que cae y otros efectos de ambiente",
+    "opt": {
+      "all": "Todas",
+      "less": "Menos",
+      "none": "Ninguna"
+    }
+  },
+  "seasonal_particles_lite": {
+    "title": "Reducir la calidad de las partículas",
+    "body": "Quita el resplandor de las partículas para aligerar la carga en equipos lentos"
+  },
+  "seasonal_overlays": {
+    "title": "Mostrar efectos estacionales adicionales",
+    "body": "Telarañas, escarcha y otras decoraciones en las tarjetas"
+  },
+  "reduced_motion": {
+    "title": "Reducir el movimiento de las animaciones",
+    "body": "Baja la intensidad de las animaciones, los efectos al pasar el cursor y otros elementos en movimiento"
+  },
+  "show_scroller": {
+    "title": "Mostrar la barra de desplazamiento",
+    "body": "Las barras están ocultas por defecto; actívalo para recuperar la barra de la página"
+  },
+  "underline_links": {
+    "title": "Subrayar siempre los enlaces",
+    "body": "Obliga a botones, enlaces y otros elementos interactivos a mostrar subrayado"
+  },
+  "update_auto_check": {
+    "title": "Buscar actualizaciones automáticamente",
+    "body": "Busca una versión nueva de SafeCircle en segundo plano"
+  },
+  "play_beta": {
+    "title": "Actualizaciones beta de Google Play",
+    "body": "Recibe versiones anticipadas de la app de SafeCircle para Android desde Google Play"
+  },
+  "developer": {
+    "title": "Modo desarrollador",
+    "body": "Muestra detalles de depuración e identificadores internos"
+  }
+}

@@ -1,0 +1,67 @@
+---
+title: Set up the parent app
+icon: ListChecks
+description: Create or sign in to your account in the SafeCircle Parent app, add a child and pair their phone.
+---
+
+## Before you start
+
+- Android 11 or later.
+- To create an account you need an **invite code** (private beta). See [Join the beta](/en/docs/platform/private-beta/join). If you already have a dashboard account, just sign in with it.
+- The child app on your child's phone — see [Set up the child app](/en/docs/platform/android/setup).
+
+<Steps>
+  <Step>
+    ### Open the app and take the tour
+    Tap **Get started**. A short tour covers real-time alerts, every child in one place, and trends. Then choose **Create account** or **I already have an account**.
+  </Step>
+  <Step>
+    ### Create your account or sign in
+    - **Create account** — enter **Your name**, **Email**, **Password** (at least 8 characters) and **Invite code**, then tap **Create account**.
+    - **Sign in** — enter **Email** and **Password**, then tap **Sign in**.
+
+    If two-factor authentication is on for your account, the app asks for the **Two-factor code**. Enter the 6-digit code from your authenticator app and tap **Verify**.
+
+    <Callout type="info">
+      The email verification link opens in the app. You can keep going with setup before you've verified your email. New beta accounts also need approval from the SafeCircle team; see [Join the beta](/en/docs/platform/private-beta/join).
+    </Callout>
+  </Step>
+  <Step>
+    ### Allow notifications
+    On Android 13 and later, **Stay in the loop** asks for the notification permission. Tap **Allow notifications**, or **Not now** if you'd rather decide later. Without it you won't get push alerts. See [Notifications](/en/docs/platform/parent-app/notifications).
+  </Step>
+  <Step>
+    ### Add your first child
+    Enter **Child's name** and tap **Continue**, or **Skip for now** and add a child later from the **Family** tab. Then choose whether to **Notify me about new alerts** for this child and tap **Finish setup**.
+  </Step>
+</Steps>
+
+## Pair a child's phone
+
+<Steps>
+  <Step>
+    ### Show the pairing code
+    Open the **Family** tab and tap **Add child**, or **Pair a device for** an existing child. The **Pair Child's Device** sheet shows a QR code.
+  </Step>
+  <Step>
+    ### Scan it on the child's phone
+    In the child app, choose **Scan QR code** and point the camera at the code. The Samsung variant also shows a code you can type into **Enter 6-digit code** on the child's phone.
+  </Step>
+  <Step>
+    ### Wait for the connection
+    The sheet says **Waiting for the device to connect…** and then **Connected!** with the device name. The code expires after **5 minutes**, the sheet shows the countdown, and it generates a new code on its own when the old one expires.
+  </Step>
+</Steps>
+
+If the child already has a paired device, the app says so and offers **Pair another device anyway**.
+
+## Account and security settings
+
+In **Settings** you can:
+
+- **Change password** and edit your name under **Profile**.
+- Turn on **Biometric lock** to require biometrics to open SafeCircle.
+- Review **Active sessions** and sign out other devices.
+- **Sign out**, or delete your account and all its data under **Danger zone** (**Delete account**). This can't be undone.
+
+Two-factor authentication is managed in the dashboard. See [Account and security](/en/docs/platform/dashboard/account-security).

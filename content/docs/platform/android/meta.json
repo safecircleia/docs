@@ -1,0 +1,14 @@
+{
+  "title": "Android (child app)",
+  "description": "Install, pair and understand the SafeCircle child app on Android.",
+  "icon": "Smartphone",
+  "defaultOpen": true,
+  "pages": [
+    "setup",
+    "how-it-works",
+    "supported-apps",
+    "permissions",
+    "updates",
+    "troubleshooting"
+  ]
+}

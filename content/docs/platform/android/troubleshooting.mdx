@@ -1,0 +1,49 @@
+---
+title: Troubleshooting
+icon: Wrench
+description: Fixes for the most common problems with the Android child app.
+---
+
+<Accordions>
+  <Accordion title="Pairing failed">
+    - Pairing codes last **5 minutes** and work once. Generate a new one in the dashboard (**New pairing code**) and try again.
+    - Check that the phone has an internet connection.
+    - If you typed the code, make sure it has exactly 6 digits.
+    - If you scan the QR code and nothing happens, allow the camera when Android asks, or use **Enter 6-digit code** instead.
+  </Accordion>
+  <Accordion title="The app isn't visible in Google Play">
+    Join the **SafeCircle Testers** group with the Google account used on Google Play and opt in to the testing track. See [Join the beta](/en/docs/platform/private-beta/join#troubleshooting). The phone must run Android 11 or later.
+  </Accordion>
+  <Accordion title="The status shows PERMISSION MISSING">
+    The Accessibility Service is off. Tap the status, then **Open Settings** in the **Permission required** dialog. Find **SafeCircle Protection** and enable the toggle. See [Permissions](/en/docs/platform/android/permissions).
+  </Accordion>
+  <Accordion title="The status shows STARTING UP or Loading…">
+    The app is loading its detection engine. It activates by itself once ready. If it stays like this, open **Settings** and check the **AI Model** row. If it never turns **Active**, restart the app, then see the next item.
+  </Accordion>
+  <Accordion title="The model download failed">
+    The status screen shows **Download failed — will retry**, and the setup screen shows **Download failed** with a **Retry** button. Check the connection and free storage (about 1.2 GB for INT8, 600 MB for INT4), then tap **Retry**. A partial download resumes where it stopped. In the meantime, the app keeps protecting in Basic mode if you haven't switched models.
+  </Accordion>
+  <Accordion title="No alerts are arriving">
+    - Check that the status shows **MONITORING ACTIVE**.
+    - Only the [supported apps](/en/docs/platform/android/supported-apps) are monitored, and only medium and high risks create alerts.
+    - Each app is analysed at most once every 5 minutes.
+    - The phone needs a connection when an alert is sent. Alerts aren't resent later.
+    - In Basic mode, detection is less accurate. See [Basic mode and the AI model](/en/docs/platform/android/how-it-works#basic-mode-and-the-ai-model).
+  </Accordion>
+  <Accordion title="The device shows as offline in the dashboard">
+    See [Children and devices](/en/docs/platform/dashboard/children-devices) for what the statuses mean and the [FAQ](/en/docs/support/faq) for a checklist.
+  </Accordion>
+  <Accordion title="Battery saver closes the app">
+    Android doesn't normally stop an enabled Accessibility Service, but some phones have aggressive battery limits. If protection stops on its own, go to **Settings › Apps › SafeCircle Child › Battery** and choose **Unrestricted**. The exact path varies by phone maker.
+  </Accordion>
+  <Accordion title="I reinstalled the app and it asks me to set up again">
+    This is expected. A new installation starts from the beginning: accept the beta agreement, pair with a new code, and enable the Accessibility Service again. Revoke the old device in the dashboard if it still appears.
+  </Accordion>
+  <Accordion title="The app is in English">
+    In the current version the app's screens are in English. The Accessibility Service description in Android settings is available in English and Spanish.
+  </Accordion>
+</Accordions>
+
+## Report a problem
+
+In the child app open **Settings** and tap **Report a bug**. Write a title and a description and tap **Submit report**. The app version and the screen you were on are attached automatically. You can also email **support@safecircle.tech** with your Android version and phone model.

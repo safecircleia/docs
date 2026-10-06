@@ -1,0 +1,71 @@
+---
+title: Configurar la app para padres
+icon: ListChecks
+description: Crea tu cuenta o inicia sesión en la app SafeCircle Parent, añade un hijo y vincula su teléfono.
+---
+
+## Antes de empezar
+
+- Android 11 o posterior.
+- Para crear una cuenta necesitas un **código de invitación** (beta privada). Consulta [Únete a la beta](/es/docs/platform/private-beta/join). Si ya tienes una cuenta del panel, inicia sesión con ella.
+- La app del menor en el teléfono de tu hijo o hija — consulta [Configurar la app del menor](/es/docs/platform/android/setup).
+
+<Callout type="info">
+  La interfaz de la app para padres está en inglés en la versión actual. Esta guía muestra el texto en inglés tal como aparece y lo explica en español.
+</Callout>
+
+<Steps>
+  <Step>
+    ### Abre la app y haz el recorrido
+    Toca **Get started**. Un breve recorrido explica las alertas en tiempo real, todos los hijos en un solo lugar y las tendencias. Luego elige **Create account** (crear cuenta) o **I already have an account** (ya tengo una cuenta).
+  </Step>
+  <Step>
+    ### Crea tu cuenta o inicia sesión
+    - **Create account** — escribe **Your name** (tu nombre), **Email** (correo), **Password** (contraseña, al menos 8 caracteres) e **Invite code** (código de invitación) y toca **Create account**.
+    - **Sign in** — escribe **Email** y **Password** y toca **Sign in**.
+
+    Si la autenticación en dos pasos está activada en tu cuenta, la app pide el **Two-factor code**. Escribe el código de 6 dígitos de tu app de autenticación y toca **Verify**.
+
+    <Callout type="info">
+      El enlace de verificación del correo se abre en la app. Puedes seguir con la configuración antes de verificar tu correo. Las cuentas nuevas de la beta también necesitan la aprobación del equipo de SafeCircle; consulta [Únete a la beta](/es/docs/platform/private-beta/join).
+    </Callout>
+  </Step>
+  <Step>
+    ### Permite las notificaciones
+    En Android 13 y posteriores, **Stay in the loop** pide el permiso de notificaciones. Toca **Allow notifications**, o **Not now** si prefieres decidirlo más tarde. Sin él no recibirás alertas push. Consulta [Notificaciones](/es/docs/platform/parent-app/notifications).
+  </Step>
+  <Step>
+    ### Añade a tu primer hijo
+    Escribe **Child's name** (nombre del hijo) y toca **Continue**, o **Skip for now** y añade un hijo más tarde desde la pestaña **Family**. Después elige si quieres **Notify me about new alerts** para este hijo y toca **Finish setup**.
+  </Step>
+</Steps>
+
+## Vincular el teléfono de un hijo
+
+<Steps>
+  <Step>
+    ### Muestra el código de vinculación
+    Abre la pestaña **Family** y toca **Add child**, o **Pair a device for** un hijo existente. La hoja **Pair Child's Device** muestra un código QR.
+  </Step>
+  <Step>
+    ### Escanéalo en el teléfono del menor
+    En la app del menor, elige **Escanear código QR** y apunta la cámara al código. La variante Samsung también muestra un código que puedes escribir en **Introducir código de 6 dígitos** en el teléfono del menor.
+  </Step>
+  <Step>
+    ### Espera la conexión
+    La hoja dice **Waiting for the device to connect…** y después **Connected!** con el nombre del dispositivo. El código caduca a los **5 minutos**, la hoja muestra la cuenta atrás y genera un código nuevo por sí sola cuando caduca el anterior.
+  </Step>
+</Steps>
+
+Si el hijo ya tiene un dispositivo vinculado, la app lo indica y ofrece **Pair another device anyway**.
+
+## Ajustes de cuenta y seguridad
+
+En **Settings** puedes:
+
+- **Change password** y editar tu nombre en **Profile**.
+- Activar **Biometric lock** para exigir biometría al abrir SafeCircle.
+- Revisar **Active sessions** y cerrar la sesión en otros dispositivos.
+- **Sign out**, o eliminar tu cuenta y todos sus datos en **Danger zone** (**Delete account**). No se puede deshacer.
+
+La autenticación en dos pasos se gestiona en el panel. Consulta [Cuenta y seguridad](/es/docs/platform/dashboard/account-security).

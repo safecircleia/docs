@@ -1,0 +1,23 @@
+{
+  "close": "Close",
+  "loading": "Loading",
+  "reset": "Reset",
+  "incompatible": "Incompatible",
+  "view": "View",
+  "copy": "Copy",
+  "copied": "Copied",
+  "dismiss": "Dismiss",
+  "select": "Select",
+  "risk_high": "High",
+  "risk_medium": "Medium",
+  "alert_high_title": "High risk · {{child}}",
+  "alert_medium_title": "Medium risk · {{child}}",
+  "alerts_count": "{{count}} new alerts",
+  "alerts_more": "{{child}}: {{categories}} and {{count}} more",
+  "error_title": "Something went wrong",
+  "error_default": "An unexpected error occurred.",
+  "refresh_page": "Refresh page",
+  "report_bug": "Report this bug →",
+  "empty_face": "(ᵕ—ᴗ—)",
+  "load_failed": "Couldn't load this"
+}

@@ -1,0 +1,9 @@
+{
+  "title": "iOS",
+  "description": "iOS status — no iOS app is available yet.",
+  "icon": "Apple",
+  "defaultOpen": true,
+  "pages": [
+    "overview"
+  ]
+}

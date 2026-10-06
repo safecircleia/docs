@@ -1,0 +1,11 @@
+{
+  "loading": "Cargando...",
+  "saved": "Guardado",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "just_now": "ahora mismo",
+  "m_ago": "hace {{n}}m",
+  "h_ago": "hace {{n}}h",
+  "d_ago": "hace {{n}}d",
+  "back_to_sign_in": "← Volver al inicio de sesión"
+}

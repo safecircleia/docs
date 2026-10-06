@@ -1,0 +1,11 @@
+{
+  "title": "Parent app",
+  "description": "The SafeCircle Parent companion app for Android.",
+  "icon": "TabletSmartphone",
+  "defaultOpen": true,
+  "pages": [
+    "overview",
+    "setup",
+    "notifications"
+  ]
+}

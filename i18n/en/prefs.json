@@ -1,0 +1,257 @@
+{
+  "tab": {
+    "general": "General",
+    "visual": "Visual",
+    "interface": "Interface",
+    "profile": "Profile",
+    "security": "Security",
+    "seasonal": "Seasonal",
+    "accessibility": "Accessibility",
+    "advanced": "Advanced"
+  },
+  "section": {
+    "themes": "Themes",
+    "colours": "Colours",
+    "fonts": "Fonts",
+    "avatars": "Avatars & cards",
+    "datetime": "Date & time",
+    "layout": "Layout",
+    "notifications": "Notifications",
+    "adapt": "Seasons",
+    "particles": "Particles",
+    "effects": "Effects",
+    "motion": "Motion",
+    "text": "Text",
+    "updates": "Updates",
+    "developer": "Developer"
+  },
+  "theme_group": {
+    "bright": {
+      "title": "Bright",
+      "body": "Perfect for daylight"
+    },
+    "moody": {
+      "title": "Moody",
+      "body": "Get cosy under the moonlight"
+    },
+    "new_tag": "New"
+  },
+  "schedule": {
+    "tip": "Your theme preference will be either {{day}} or {{night}}, based on your system.",
+    "change": "Change schedule"
+  },
+  "reason": {
+    "schedule_off": "Turn on \"Match system settings\" to use this",
+    "external_theme": "This theme defines its own colours independently",
+    "seasonal_off": "Turn on seasonal adaptation to use this",
+    "custom_font": "Choose \"Provide your own font\" to use this"
+  },
+  "accent_presets": {
+    "default": "Default",
+    "avatar": "Avatar",
+    "custom": "Custom",
+    "limited": "Limited time",
+    "red": "Red",
+    "orange": "Orange",
+    "yellow": "Yellow",
+    "lime": "Lime",
+    "green": "Green",
+    "aqua": "Aqua",
+    "blue": "Blue",
+    "purple": "Purple",
+    "pink": "Pink",
+    "grey": "Grey",
+    "nonsense": "A Nonsense Christmas",
+    "fruitcake": "Fruitcake",
+    "mistletoe": "Mistletoe",
+    "festival": "Christmas Eve"
+  },
+  "theme": {
+    "title": "Themes",
+    "body": "Choose the colour scheme used across SafeCircle",
+    "opt": {
+      "light": "Light",
+      "ink": "Ink",
+      "rose_pine_dawn": "Rosé Pine Dawn",
+      "dark": "Ash",
+      "darker": "Dark",
+      "oled": "Void",
+      "rose_pine": "Rosé Pine",
+      "kanagawa_dragon": "Kanagawa Dragon"
+    }
+  },
+  "theme_schedule": {
+    "title": "Match system settings",
+    "body": "Follow your device and switch between a day and a night theme"
+  },
+  "theme_day": {
+    "title": "Day",
+    "body": "When your system reports light theme"
+  },
+  "theme_night": {
+    "title": "Night",
+    "body": "When your system reports dark theme"
+  },
+  "solarium": {
+    "title": "Enable solarium glass effects",
+    "body": "Apply a see-through glassy material to many surfaces"
+  },
+  "noise": {
+    "title": "Noise overlay opacity",
+    "body": "Apply a coat of subtle noise to add variation to solid backgrounds"
+  },
+  "sat_bg": {
+    "title": "Card background vibrancy",
+    "body": "Bring some colour into your world (or reduce it)"
+  },
+  "accent_type": {
+    "title": "Presets",
+    "body": "Follow the season, use your avatar, or pick a colour of your own",
+    "opt": {
+      "default": "Default",
+      "avatar": "Avatar",
+      "colour": "Preset",
+      "customise": "Custom"
+    }
+  },
+  "hue": {
+    "title": "Accent colour",
+    "body": "Slide through the rainbow"
+  },
+  "sat": {
+    "title": "Vibrancy",
+    "body": "How rich or muted the accent looks"
+  },
+  "lit": {
+    "title": "Lightness",
+    "body": "How bright the accent looks"
+  },
+  "font_choice": {
+    "title": "Interface font",
+    "body": "Choose the typeface used across SafeCircle",
+    "opt": {
+      "font_2026": "Stylised",
+      "font_2025": "Simple",
+      "hyperlegible": "Accessible",
+      "custom": "Provide your own font"
+    }
+  },
+  "font": {
+    "title": "Font choice",
+    "body": "Type the name of a font installed on your device"
+  },
+  "font_serif": {
+    "title": "Use old-fashioned Serif font for some headings",
+    "body": "Adds an italic serif to hero and section titles"
+  },
+  "font_weight": {
+    "title": "Font weight",
+    "body": "Used for regular text paragraphs"
+  },
+  "font_weight_medium": {
+    "title": "Medium font weight",
+    "body": "Used for button text and small headers"
+  },
+  "font_weight_bold": {
+    "title": "Bold font weight",
+    "body": "Used for large headers"
+  },
+  "grid_glow": {
+    "title": "Reflect colour below cards and avatars",
+    "body": "Applies a glow below cards based on the primary colour"
+  },
+  "avatar_radius": {
+    "title": "Profile avatar shape",
+    "body": "Applies to every avatar, only visible to you",
+    "opt": {
+      "circle": "Circular",
+      "squircle": "Rounded",
+      "square": "Square"
+    }
+  },
+  "time_format": {
+    "title": "Time format",
+    "body": "Choose how times are shown across the dashboard",
+    "opt": {
+      "auto": "Match my language",
+      "12h": "12-hour",
+      "24h": "24-hour"
+    }
+  },
+  "relative_times": {
+    "title": "Show relative times",
+    "body": "Show \"3 minutes ago\" instead of exact dates; hover to see the full date"
+  },
+  "compact": {
+    "title": "Compact mode",
+    "body": "Tighter rows and spacing so more fits on screen"
+  },
+  "start_page": {
+    "title": "Start page",
+    "body": "The page SafeCircle opens when you visit the dashboard",
+    "opt": {
+      "overview": "Overview",
+      "alerts": "Alerts",
+      "timeline": "Timeline",
+      "children": "Children"
+    }
+  },
+  "carousel_mode": {
+    "title": "Overview carousel",
+    "body": "What the cover-flow on the Overview page shows",
+    "opt": {
+      "auto": "Automatic",
+      "alerts": "Recent alerts",
+      "children": "Children"
+    }
+  },
+  "alert_toasts": {
+    "title": "Show alert toasts",
+    "body": "Pop up a notification the moment a new alert arrives"
+  },
+  "seasonal": {
+    "title": "Automatically adapt to seasonal events",
+    "body": "Adapts the default colour and shows particles depending on the season"
+  },
+  "seasonal_particles": {
+    "title": "Show particles during select seasons",
+    "body": "Falling snow and other ambient effects",
+    "opt": {
+      "all": "Full",
+      "less": "Less",
+      "none": "None"
+    }
+  },
+  "seasonal_particles_lite": {
+    "title": "Reduce quality of particles",
+    "body": "Drops the glow around particles to ease the load on slower devices"
+  },
+  "seasonal_overlays": {
+    "title": "Display additional seasonal effects",
+    "body": "Cobwebs, frost and other decorations on cards"
+  },
+  "reduced_motion": {
+    "title": "Reduce motion in animations",
+    "body": "Decreases the intensity of animations, hover effects, and other moving parts"
+  },
+  "show_scroller": {
+    "title": "Show page scrollbar",
+    "body": "Scrollbars are hidden by default; turn this on to bring the page scrollbar back"
+  },
+  "underline_links": {
+    "title": "Always underline links",
+    "body": "Forces buttons, links, and other interactables to have an underline"
+  },
+  "update_auto_check": {
+    "title": "Check for updates automatically",
+    "body": "Look for a new version of SafeCircle in the background"
+  },
+  "play_beta": {
+    "title": "Google Play beta updates",
+    "body": "Get early builds of the SafeCircle Android app from Google Play"
+  },
+  "developer": {
+    "title": "Developer mode",
+    "body": "Shows debug details and internal setting ids"
+  }
+}

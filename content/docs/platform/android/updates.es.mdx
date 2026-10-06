@@ -1,0 +1,43 @@
+---
+title: Actualizaciones
+icon: RefreshCw
+description: Cómo se actualizan la app del menor en Android y su modelo de IA.
+---
+
+Hay dos tipos de actualización: la **app** y el **modelo de IA** que usa.
+
+## Actualizaciones de la app
+
+Durante la beta privada la app se entrega mediante el canal de pruebas internas de Google Play, así que las actualizaciones llegan como cualquier otra de Play. Mantén activadas las actualizaciones automáticas, o abre la página de SafeCircle en Google Play en el teléfono del menor y toca **Actualizar**. Consulta [Únete a la beta](/es/docs/platform/private-beta/join#actualizar-las-versiones-beta).
+
+Tras una actualización, comprueba que la pantalla de estado sigue mostrando **MONITORIZACIÓN ACTIVA**.
+
+## Actualizaciones del modelo de IA
+
+Las actualizaciones del modelo solo se aplican si has [cambiado a un modelo de IA](/es/docs/platform/android/how-it-works#cambiar-a-un-modelo-de-ia). En modo **Básico** no hay ningún modelo que actualizar.
+
+La app busca un modelo más reciente aproximadamente una vez al día mientras el teléfono tiene conexión, y también al abrirla si ha pasado más de un día desde la última comprobación. Cuando hay uno disponible:
+
+- El teléfono muestra la notificación **Actualización de SafeCircle disponible**: *Hay un nuevo modelo de IA listo para descargar.*
+- La pantalla de estado muestra **Model update available** con **Download the latest safety model**.
+
+<Steps>
+  <Step>
+    ### Toca Update
+    Toca **Update** en el aviso. Se abre una hoja **AI Model Update**.
+  </Step>
+  <Step>
+    ### Descarga
+    Toca **Download now** y mantén la app abierta. La hoja muestra el progreso e indica **Please keep the app open.**
+  </Step>
+  <Step>
+    ### Listo
+    Cuando la hoja dice **Model updated successfully.**, el modelo nuevo ya está en uso. Puedes cerrar la hoja.
+  </Step>
+</Steps>
+
+El archivo descargado se comprueba con una suma de verificación antes de sustituir al modelo anterior, así que se rechaza una descarga dañada o incompleta. La supervisión sigue funcionando con el modelo existente mientras descargas.
+
+<Callout type="info">
+  Estos textos de la app aparecen en inglés en la versión actual. Si cierras el aviso, vuelve a aparecer la próxima vez que abras la app.
+</Callout>

@@ -1,0 +1,68 @@
+/* seasonal: timeline, icon gradient, overlay art tweaks. Overlay hooks live in src/styles/seasonal.css. */
+
+.season-icon-grad { position: relative; display: inline-flex; flex: none; }
+.season-icon-grad :is(svg, path, g, circle, rect) { fill: var(--season-grad); }
+.season-icon-grad > svg[width="0"] { position: absolute; }
+
+/* ── timeline (04 §5.18) ── */
+.seasonal-timeline-wrap { display: flex; flex-direction: column; gap: 20px; padding: 20px 0; }
+.seasonal-timeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 50px;
+  padding: 0 100px;
+  cursor: default;
+}
+.seasonal-timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 130px;
+  min-width: 0;
+  text-align: center;
+  opacity: 0.7;
+}
+.seasonal-timeline-item[data-current] { opacity: 1; }
+.seasonal-timeline-icon { margin-bottom: 10px; }
+.seasonal-timeline-name {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: var(--fw-medium, 500);
+  color: oklch(var(--l3-c));
+}
+.seasonal-timeline-item:not([data-season]) .seasonal-timeline-name { color: oklch(var(--c1)); }
+.seasonal-rainbow-text {
+  background: linear-gradient(90deg, oklch(0.72 0.19 25), oklch(0.78 0.16 70), oklch(0.82 0.16 110), oklch(0.74 0.16 150), oklch(0.72 0.14 240), oklch(0.7 0.17 300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.seasonal-desc { font-size: 13px; line-height: 18px; color: oklch(var(--c3)); }
+
+.seasonal-timeline-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, transparent, oklch(var(--b2) / 60%), transparent);
+}
+.seasonal-timeline-segment {
+  flex: none;
+  width: 130px;
+  height: 4px;
+  border-radius: 10px;
+  background: oklch(var(--l3-c));
+  box-shadow: 0 0 0 4px oklch(var(--b5));
+}
+
+@media (max-width: 980px) {
+  .seasonal-timeline { gap: 12px; padding: 0 12px; }
+  .seasonal-timeline-item { width: auto; }
+  .seasonal-timeline-segment { width: min(130px, 30%); }
+}
+
+/* ── dev preview ── */
+.seasonal-gallery-card { min-height: 220px; background: oklch(var(--b4)); border-radius: var(--card-radius); overflow: hidden; }

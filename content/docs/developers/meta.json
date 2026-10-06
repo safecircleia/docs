@@ -1,0 +1,17 @@
+{
+  "title": "Developers",
+  "description": "Architecture, API reference, authentication, data and privacy, and the services behind SafeCircle.",
+  "icon": "Code",
+  "root": true,
+  "pages": [
+    "overview",
+    "backend",
+    "api",
+    "authentication",
+    "data-and-privacy",
+    "telegram-bot",
+    "observability",
+    "search",
+    "repositories"
+  ]
+}

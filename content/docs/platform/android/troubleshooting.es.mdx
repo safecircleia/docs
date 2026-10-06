@@ -1,0 +1,49 @@
+---
+title: Solución de problemas
+icon: Wrench
+description: Soluciones a los problemas más habituales de la app del menor en Android.
+---
+
+<Accordions>
+  <Accordion title="Falló la vinculación">
+    - Los códigos de vinculación duran **5 minutos** y se usan una sola vez. Genera uno nuevo en el panel (**Nuevo código de vinculación**) e inténtalo de nuevo.
+    - Comprueba que el teléfono tiene conexión a internet.
+    - Si escribiste el código, asegúrate de que tiene exactamente 6 dígitos.
+    - Si escaneas el código QR y no pasa nada, permite la cámara cuando Android lo pida, o usa **Introducir código de 6 dígitos**.
+  </Accordion>
+  <Accordion title="No veo la app en Google Play">
+    Únete al grupo **SafeCircle Testers** con la cuenta de Google que usas en Google Play y activa el canal de pruebas. Consulta [Únete a la beta](/es/docs/platform/private-beta/join#solución-de-problemas). El teléfono debe tener Android 11 o posterior.
+  </Accordion>
+  <Accordion title="El estado muestra PERMISSION MISSING">
+    El Servicio de accesibilidad está desactivado. Toca el estado y luego **Open Settings** en el diálogo **Permission required**. Busca **SafeCircle Protection** y activa el interruptor. Consulta [Permisos](/es/docs/platform/android/permissions).
+  </Accordion>
+  <Accordion title="El estado muestra STARTING UP o Loading…">
+    La app está cargando su motor de detección. Se activa sola cuando está lista. Si se queda así, abre **Settings** y revisa la fila **AI Model**. Si nunca pasa a **Active**, reinicia la app y consulta el siguiente punto.
+  </Accordion>
+  <Accordion title="Falló la descarga del modelo">
+    La pantalla de estado muestra **Download failed — will retry** y la pantalla de configuración muestra **Download failed** con un botón **Retry**. Comprueba la conexión y el almacenamiento libre (unos 1,2 GB para INT8 y 600 MB para INT4) y toca **Retry**. Una descarga parcial se reanuda donde se quedó. Mientras tanto, la app sigue protegiendo en modo Básico si no has cambiado de modelo.
+  </Accordion>
+  <Accordion title="No llegan alertas">
+    - Comprueba que el estado muestra **MONITORIZACIÓN ACTIVA**.
+    - Solo se supervisan las [apps compatibles](/es/docs/platform/android/supported-apps) y solo los riesgos medios y altos crean alertas.
+    - Cada app se analiza como máximo una vez cada 5 minutos.
+    - El teléfono necesita conexión cuando se envía una alerta. Las alertas no se reenvían más tarde.
+    - En modo Básico la detección es menos precisa. Consulta [Modo básico y modelo de IA](/es/docs/platform/android/how-it-works#modo-básico-y-modelo-de-ia).
+  </Accordion>
+  <Accordion title="El dispositivo aparece sin conexión en el panel">
+    Consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices) para ver qué significan los estados y las [preguntas frecuentes](/es/docs/support/faq) para una lista de comprobación.
+  </Accordion>
+  <Accordion title="El ahorro de batería cierra la app">
+    Android no suele detener un Servicio de accesibilidad activado, pero algunos teléfonos tienen límites de batería agresivos. Si la protección se detiene sola, ve a **Ajustes › Aplicaciones › SafeCircle Child › Batería** y elige **Sin restricciones**. La ruta exacta varía según el fabricante.
+  </Accordion>
+  <Accordion title="Reinstalé la app y me pide configurarla de nuevo">
+    Es lo esperado. Una instalación nueva empieza desde el principio: acepta el acuerdo de la beta, vincula con un código nuevo y vuelve a activar el Servicio de accesibilidad. Revoca el dispositivo anterior en el panel si sigue apareciendo.
+  </Accordion>
+  <Accordion title="La app está en inglés">
+    En la versión actual las pantallas de la app están en inglés. La descripción del Servicio de accesibilidad en los ajustes de Android está disponible en inglés y español.
+  </Accordion>
+</Accordions>
+
+## Reportar un problema
+
+En la app del menor abre **Settings** y toca **Report a bug**. Escribe un título y una descripción y toca **Submit report**. La versión de la app y la pantalla en la que estabas se adjuntan automáticamente. También puedes escribir a **support@safecircle.tech** indicando tu versión de Android y el modelo del teléfono.

@@ -1,0 +1,119 @@
+---
+title: Arquitectura del backend
+icon: Server
+description: El stack detrás de api.safecircle.tech, cómo se procesa una petición y el recorrido de una alerta desde el teléfono del menor hasta un padre o madre.
+---
+
+El backend es un único Cloudflare Worker que sirve la autenticación, la API de datos, las notificaciones push, las imágenes de perfil, la telemetría y los endpoints del bot de Telegram.
+
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Entorno de ejecución | Cloudflare Workers |
+| Framework HTTP | Hono |
+| API de datos | tRPC v11 montado en `/trpc` |
+| Autenticación | Better Auth, montado en `/api/auth` |
+| Base de datos | PostgreSQL, a través de Cloudflare Hyperdrive, con Drizzle ORM |
+| Validación | Zod en cada procedimiento y ruta |
+| Push | Firebase Cloud Messaging (HTTP v1) |
+| Correo | Envío de correo de Cloudflare (verificación, restablecimiento de contraseña, invitaciones) |
+
+## Forma del despliegue
+
+El Worker se sirve en `api.safecircle.tech` (y en `backend.safecircle.tech`). Usa estos bindings de Cloudflare:
+
+| Binding | Para qué se usa |
+|---|---|
+| Hyperdrive | Conexión agrupada a la base de datos PostgreSQL |
+| D1 (`sc-analytics`) | Métricas de peticiones y eventos de producto anónimos |
+| R2 (`sc-media`) | Fotos y banners de perfil de padres e hijos |
+| R2 (`sc-feedback`) | Valoraciones de IA enviadas voluntariamente desde el AI Playground |
+| Correo | Envío de correos de verificación, restablecimiento e invitación |
+
+CORS permite, con credenciales, los orígenes web de `safecircle.tech` y `safecircle.es` (y sus subdominios).
+
+## Cómo se procesa una petición
+
+Todas las peticiones pasan por el mismo recorrido, en este orden:
+
+<Steps>
+  <Step>
+    ### ID de petición y registro
+    Cada petición recibe un ID y la registra la observabilidad integrada del Worker.
+  </Step>
+  <Step>
+    ### Límite de tamaño del cuerpo
+    Los cuerpos de más de **512 KB** se rechazan con `413`. Las subidas de imágenes bajo `/api/media/` pueden llegar a **1 MB**.
+  </Step>
+  <Step>
+    ### Límite de uso
+    Se aplica un límite global de **100 peticiones por minuto por IP** a todo. Las rutas de autenticación tienen un cubo más estricto. Consulta [Límites de uso](/es/docs/developers/api#rate-limits).
+  </Step>
+  <Step>
+    ### CORS
+    Solo se permiten orígenes de SafeCircle. Se permiten credenciales (cookies). Entre las cabeceras aceptadas están `Authorization`, `x-device-token` y `x-captcha-response`.
+  </Step>
+  <Step>
+    ### Métricas de peticiones
+    El método, la ruta, el estado y la duración se escriben en D1 para el [endpoint de métricas](/es/docs/developers/observability). No se guarda ninguna IP, ID de usuario ni cuerpo.
+  </Step>
+  <Step>
+    ### Enrutado
+    La petición la gestiona Better Auth, tRPC o una de las rutas REST. Los errores no controlados devuelven un genérico `{"error": "Internal server error"}` con estado `500` y nunca incluyen detalles internos.
+  </Step>
+</Steps>
+
+## Modelo de datos
+
+Las tablas principales, todas en PostgreSQL:
+
+| Tabla | Contiene |
+|---|---|
+| `user` y las tablas de Better Auth | Cuentas, sesiones, proveedores de inicio de sesión vinculados, llaves de acceso, secretos de verificación en dos pasos |
+| `children` | El perfil de un menor, perteneciente a un padre o madre |
+| `devices` | Un dispositivo de menor vinculado y su token de dispositivo |
+| `pairing_tokens` | Códigos de vinculación de 6 dígitos y corta duración |
+| `alerts` | Una fila por alerta: nivel de riesgo, categorías, confianza, razonamiento, app de origen, hora de lectura |
+| `push_tokens` | Los tokens push registrados de un padre o madre |
+| `notification_preferences` | Preferencias de alertas por padre o madre y por hijo |
+| `invite_codes`, `invite_code_uses` | Invitaciones de la beta privada |
+| `search_settings` | Preferencias y reglas de sitios de SafeCircle Search sincronizadas |
+
+Hijos, dispositivos, alertas, códigos de vinculación, tokens push y preferencias están enlazados con eliminaciones en cascada. Eliminar a un padre o madre borra todo lo que posee. Consulta [Datos y privacidad](/es/docs/developers/data-and-privacy).
+
+## Una alerta, de principio a fin
+
+<Steps>
+  <Step>
+    ### Detección en el dispositivo
+    El Servicio de accesibilidad de la app del menor lee el texto visible en las apps compatibles y mantiene un búfer continuo por app. El modelo local lo clasifica. No se envía nada a menos que el riesgo supere un umbral. Tras una alerta de una app, la app del menor espera **5 minutos** antes de enviar otra de la misma app.
+  </Step>
+  <Step>
+    ### Se envía la alerta
+    La app del menor llama a `alerts.create` con su `x-device-token`. La carga incluye un nivel de riesgo (`medium` o `high`), las categorías, una confianza de 0 a 1, una nota breve (actualmente un resumen de las categorías) y el nombre de paquete de la app de origen. No incluye la conversación.
+  </Step>
+  <Step>
+    ### El backend la guarda
+    El token de dispositivo se resuelve a un dispositivo, un hijo y un padre o madre. A los campos de texto se les quitan las etiquetas HTML y los bytes nulos, y se inserta la alerta. La respuesta es solo `{ "id": "..." }`, así que la app del menor nunca espera a que se entregue el push.
+  </Step>
+  <Step>
+    ### El push se envía en segundo plano
+    El Worker pasa la tarea de push a `waitUntil` para que termine después de responder. Carga las preferencias del padre o madre (un ajuste por hijo prevalece sobre el global) y omite el push si ese nivel de riesgo está desactivado. Las alertas **medium** también se omiten durante las horas de silencio; las alertas **high** siempre las atraviesan. Cada token push registrado recibe un mensaje de datos en el canal `sc_alerts_high` o `sc_alerts_medium`. Los tokens que FCM indica como no registrados se eliminan.
+  </Step>
+  <Step>
+    ### El padre o madre la ve
+    El panel y la app para padres leen las alertas con `alerts.list`, `activity.list` y los procedimientos de analíticas, y las marcan como leídas con `alerts.markRead`.
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Las horas de silencio se comparan con el reloj **UTC**. El backend no guarda la zona horaria de cada padre o madre.
+</Callout>
+
+## Relacionado
+
+<Cards>
+  <Card title="Referencia de la API" href="/es/docs/developers/api" description="Cada ruta y procedimiento que puede llamar un cliente." />
+  <Card title="Autenticación" href="/es/docs/developers/authentication" description="Cómo demuestran quiénes son los clientes." />
+</Cards>

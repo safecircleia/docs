@@ -1,0 +1,74 @@
+{
+  "masthead": "Main",
+  "alpha": "Alpha",
+  "search": {
+    "label": "Search",
+    "placeholder": "Search",
+    "empty": "No results for “{{query}}”",
+    "group_pages": "Pages",
+    "group_children": "Children",
+    "group_devices": "Devices",
+    "group_alerts": "Alerts",
+    "devices_one": "{{count}} device",
+    "devices_other": "{{count}} devices"
+  },
+  "more": {
+    "label": "More",
+    "report_bug": "Report a bug",
+    "report_bug_desc": "Found something broken?",
+    "request_feature": "Request a feature",
+    "request_feature_desc": "Have an idea?",
+    "whats_new": "What's new",
+    "check_updates": "Check for updates",
+    "version": "SafeCircle {{version}}"
+  },
+  "alerts": {
+    "label": "Alerts",
+    "unread_tip": "{{count}} unread",
+    "high_tip": "{{count}} high risk",
+    "tab_unread": "Unread",
+    "tab_all": "All",
+    "mark_all_read": "Mark all read",
+    "view_all": "View all alerts",
+    "empty_unread": "You're all caught up",
+    "empty_all": "No alerts yet",
+    "marking": "Marking alerts as read…",
+    "marked_one": "{{count}} alert marked as read",
+    "marked_other": "{{count}} alerts marked as read"
+  },
+  "account": {
+    "settings": "Settings",
+    "theme": "Theme",
+    "themes": "Themes",
+    "back": "Back",
+    "admin": "Admin",
+    "whats_new": "What's new",
+    "sign_out": "Sign out",
+    "menu": "Account menu"
+  },
+  "hero": {
+    "greeting_night": "Good night",
+    "greeting_morning": "Good morning",
+    "greeting_afternoon": "Good afternoon",
+    "greeting_evening": "Good evening",
+    "avatar": "Open profile settings"
+  },
+  "tabs": {
+    "nav": "Sections"
+  },
+  "footer": {
+    "made_with": "Made with",
+    "for_families": "for families",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "report_issue": "Report an issue",
+    "alpha": "alpha",
+    "heart": "Love"
+  },
+  "mobile": {
+    "nav": "Primary",
+    "me_menu": "Your account",
+    "search_label": "Search SafeCircle"
+  },
+  "loader": "Loading"
+}

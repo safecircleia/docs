@@ -1,0 +1,95 @@
+---
+title: SafeCircle Search
+icon: Search
+description: El metabuscador de SafeCircle que prioriza la privacidad — cómo protege a quien busca, cómo funciona el bloqueo familiar de búsqueda segura y cómo ejecutarlo tú mismo.
+---
+
+**SafeCircle Search** (`search.safecircle.tech`) es un metabuscador. Muestra resultados web, de imágenes y de noticias de Brave Search, renderizados en el servidor con el aspecto de SafeCircle, sin cookies, sin rastreo y sin peticiones de terceros desde tu navegador. Tiene licencia GPL-3.0-or-later.
+
+## Reglas de privacidad
+
+Estas reglas son vinculantes para el proyecto, no solo valores por defecto:
+
+| Regla | Qué significa |
+|---|---|
+| Sin cookies para usuarios anónimos | La única cookie que el servicio establece es `sc_family`, para el bloqueo familiar de más abajo |
+| Las consultas nunca se registran | Ninguna instrucción de registro puede incluir una consulta ni una URL de resultados, y la observabilidad de Cloudflare está desactivada para el Worker |
+| Sin peticiones de terceros desde el navegador | Las fuentes están alojadas en el propio servicio, y cada miniatura y favicon pasa por el proxy de imágenes de SafeCircle |
+| Sin salto de rastreo en los enlaces | Los enlaces van directos al resultado con `rel="noreferrer noopener"`, y el sitio envía `Referrer-Policy: no-referrer` |
+| Sin HTML del proveedor | Los fragmentos de los resultados se convierten en segmentos de texto plano y nunca se renderizan como HTML sin procesar |
+| Los resultados funcionan sin JavaScript | Las páginas de resultados se renderizan en el servidor |
+
+**Proxy de imágenes.** Las imágenes remotas se obtienen a través de una ruta `/img` firmada. Transmite hasta **5 MB**, solo acepta tipos `image/*` y rechaza SVG.
+
+**Caché.** Los resultados se guardan en caché en el borde durante **15 minutos**. La clave de caché es el tipo de búsqueda, la consulta, la página, la región y el nivel de búsqueda segura, y nunca es por usuario. Una petición a Brave caduca a los 3 segundos.
+
+**Límites de uso.** 30 peticiones por minuto para visitantes anónimos, según la IP, y 120 por minuto para usuarios con sesión iniciada, según el ID de usuario.
+
+## Ajustes
+
+| Ajuste | Valores |
+|---|---|
+| Tema y colores | Los mismos temas que el panel |
+| Búsqueda segura | `off`, `moderate` o `strict` |
+| Región | Un código de región |
+| Idioma | Inglés o español |
+| Abrir resultados en una pestaña nueva | Activado o desactivado |
+| Reglas de sitios | Por dominio: `block`, `lower` o `raise`. Hasta 500 reglas |
+
+**Los usuarios anónimos** guardan los ajustes en el almacenamiento local de su navegador, y el formulario de búsqueda pasa los que no son los predeterminados como parámetros de la consulta. No se guarda nada en el servidor.
+
+**Los usuarios con sesión iniciada** pueden sincronizar los ajustes y las reglas de sitios con su cuenta de SafeCircle. El servicio los lee a través del router tRPC `search` del backend (`search.getSettings` y `search.saveSettings`), descrito en la [referencia de la API](/es/docs/developers/api#search).
+
+## Bloqueo familiar de búsqueda segura
+
+El bloqueo familiar mantiene la búsqueda segura en `strict` en el dispositivo de un menor y aplica las reglas de sitios del padre o madre.
+
+<Steps>
+  <Step>
+    ### El dispositivo del menor pide un enlace
+    La app del menor llama a `search.familyLink` con su token de dispositivo. El backend devuelve una URL con la forma `https://search.safecircle.tech/family?token=…`. El token está firmado con un secreto compartido por el backend y el servicio de búsqueda, está ligado a ese dispositivo y es válido **365 días**.
+  </Step>
+  <Step>
+    ### El dispositivo lo confirma
+    Al abrir el enlace aparece una página de confirmación. Al confirmar, se envía un `POST` del mismo origen a `/family/confirm`. Si el token es válido y no ha caducado, el servicio lo guarda en una cookie `HttpOnly` y `Secure` llamada `sc_family`.
+  </Step>
+  <Step>
+    ### Las búsquedas quedan bloqueadas
+    Mientras exista la cookie, la búsqueda segura se fuerza a `strict`. Las reglas de sitios provienen de los ajustes sincronizados del padre o madre, que el servicio obtiene con `search.familyRules`.
+  </Step>
+  <Step>
+    ### Desvinculación y caducidad
+    Cuando se revoca el dispositivo, `search.familyRules` deja de devolver nada, así que las reglas de sitios del padre o madre dejan de aplicarse. La búsqueda segura estricta se comprueba a partir de la propia cookie firmada, por lo que sigue activa hasta que caduca el token o se borran los datos del sitio en ese dispositivo. La aplicación a nivel de dispositivo es responsabilidad de la app del menor.
+  </Step>
+</Steps>
+
+<Callout type="info">
+  Tanto el backend como el servicio de búsqueda admiten el enlace familiar. Pedirlo desde la app del menor es un cambio de cliente que llega por separado.
+</Callout>
+
+## Ejecutarlo tú mismo
+
+El servicio es una app de Next.js 16 (React Server Components) desplegada en Cloudflare Workers con OpenNext. Necesitas una clave de la API de Brave Search.
+
+```bash
+bun install
+bun run preview   # compila con OpenNext y sirve en http://localhost:8787
+bun run test      # pruebas unitarias
+```
+
+Los secretos locales van en un archivo `.dev.vars` que no se sube al repositorio:
+
+| Secreto | Propósito |
+|---|---|
+| `BRAVE_API_KEY` | Clave de la API de Brave Search. El valor `mock` sirve datos de prueba locales y es solo para desarrollo |
+| `IMG_PROXY_SECRET` | Firma las URL del proxy de imágenes |
+| `FAMILY_SECRET` | Firma los tokens familiares. Debe ser igual al valor que usa el backend, si usas el bloqueo familiar |
+
+En producción, define los mismos tres con `wrangler secret put`. La variable `API_ORIGIN` de la configuración del Worker apunta al backend que se usa para la sincronización de cuenta y las reglas familiares. La sincronización de cuenta y el bloqueo familiar necesitan un backend de SafeCircle, así que una instancia independiente solo sirve búsquedas anónimas.
+
+## Relacionado
+
+<Cards>
+  <Card title="Repositorios" href="/es/docs/developers/repositories" description="Dónde vive el código y cómo está licenciado." />
+  <Card title="Datos y privacidad" href="/es/docs/developers/data-and-privacy" description="Qué guarda el resto de la plataforma." />
+</Cards>

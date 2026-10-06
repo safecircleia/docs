@@ -1,0 +1,41 @@
+---
+title: Permisos
+icon: KeyRound
+description: Todos los permisos que usa la app del menor en Android y para qué los necesita.
+---
+
+La app del menor pide lo mínimo posible. Solo los dos primeros elementos requieren que hagas algo.
+
+| Permiso | Cuándo | Para qué |
+|---|---|---|
+| **Servicio de accesibilidad** | Configuración, paso 4 | Permite a la app leer el texto visible en pantalla en las [apps compatibles](/es/docs/platform/android/supported-apps). Sin él la app no puede detectar nada. |
+| **Notificaciones** (Android 13 y posteriores) | Configuración, paso 4 | Progreso de la descarga mientras se descarga un modelo y el aviso **Actualización de SafeCircle disponible** cuando hay un modelo de IA más reciente. |
+| **Cámara** | Vinculación, al elegir **Escanear código QR** | Android lo pide la primera vez que escaneas el código QR de vinculación. No se usa para nada más. |
+| **Internet** | Siempre | Vincular con tu cuenta, enviar alertas y descargar o comprobar actualizaciones del modelo de IA. |
+| **Servicio en primer plano (sincronización de datos)** | Durante las descargas del modelo | Mantiene en marcha la descarga de un modelo si sales de la app. Mientras se ejecuta ves una notificación **Downloading safety model**. |
+
+La app también declara el permiso de **NFC** para una opción de vinculación por contacto que todavía no está activa.
+
+La app no pide acceso a contactos, ubicación, SMS, micrófono, fotos ni archivos.
+
+## El Servicio de accesibilidad
+
+Android lo trata como un permiso sensible, así que lo concedes tú en los ajustes de Android y Android muestra un aviso antes de poder activarlo. En **Ajustes › Accesibilidad**, SafeCircle aparece como **SafeCircle Protection**.
+
+- **Qué puede leer** — el texto visible en WhatsApp, Instagram, Telegram, Snapchat y TikTok.
+- **Qué hace con él** — lo analiza en el teléfono y guarda en memoria solo las últimas líneas. Consulta [Cómo funciona la app del menor](/es/docs/platform/android/how-it-works).
+- **Qué pasa si está desactivado** — la pantalla de estado muestra **PERMISSION MISSING** y **Not protected.** Toca el estado para abrir los ajustes de accesibilidad de Android, o toca **Open Settings** en el diálogo **Permission required**, y vuelve a activar el interruptor.
+
+<Callout type="warn">
+  Android puede desactivar el Servicio de accesibilidad tras reinstalar la app. Si la protección se detiene, comprueba esto primero.
+</Callout>
+
+## Desactivar permisos
+
+Desactivar un permiso en los ajustes de Android tiene efecto de inmediato. Desactivar el Servicio de accesibilidad detiene la supervisión. Desactivar las notificaciones solo oculta los avisos de descarga y actualización.
+
+Para dejar de supervisar definitivamente, desinstala la app y revoca el dispositivo en el panel — consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices).
+
+<Callout type="info">
+  En la versión actual de la app los textos de las pantallas están en inglés, por eso aparecen así en esta página.
+</Callout>

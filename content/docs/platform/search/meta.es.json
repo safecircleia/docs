@@ -1,0 +1,11 @@
+{
+  "title": "Búsqueda",
+  "description": "SafeCircle Search: búsqueda privada con búsqueda segura y bloqueo familiar.",
+  "icon": "Search",
+  "defaultOpen": true,
+  "pages": [
+    "overview",
+    "privacy",
+    "safe-search"
+  ]
+}

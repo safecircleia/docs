@@ -1,0 +1,162 @@
+---
+title: FAQ & Troubleshooting
+icon: CircleQuestionMark
+description: Common questions and step-by-step fixes for pairing, permissions, alerts, the AI model, accounts and more.
+---
+
+For app-specific fixes, the [child app troubleshooting page](/en/docs/platform/android/troubleshooting) goes into more detail. For what SafeCircle can't do yet, see [Known limitations](/en/docs/support/known-limitations).
+
+## How it works
+
+<Accordions>
+  <Accordion title="What does the child app read?">
+    It uses Android's **Accessibility Service** to read the **text visible on screen** in five apps: WhatsApp, Instagram, Telegram, Snapchat and TikTok. It does not read notifications, contacts, photos, location or any other app. The analysis happens on the child's phone, and the message text is never sent to SafeCircle. See [How the child app works](/en/docs/platform/android/how-it-works) and [AI privacy](/en/docs/ai/privacy).
+  </Accordion>
+
+  <Accordion title="Do I need to download an AI model?">
+    No. The child app starts in **Basic** mode, which scans for keywords and needs no download. It is less accurate than an AI model, so expect missed risks and false alarms.
+
+    For better detection you can switch to an on-device AI model in the child app under **Settings › Advanced › AI Model tier**. The download is about 600 MB for the INT4 model and about 1.2 GB for the INT8 model, so use Wi-Fi. See [Basic mode and the AI model](/en/docs/platform/android/how-it-works#basic-mode-and-the-ai-model).
+  </Accordion>
+
+  <Accordion title="What do I see in an alert?">
+    The risk level (**medium** or **high**), the child, the source app, the time, the categories, a confidence score and an **AI Reasoning** note. For now that note is a short summary of the detected categories, for example *Detected: grooming*. It never contains message text or quotes from the conversation. See [Understanding alerts](/en/docs/platform/dashboard/alerts) and [Risk categories](/en/docs/ai/risk-categories).
+  </Accordion>
+
+  <Accordion title="How accurate is it?">
+    It is an assistive signal, not a verdict. It can flag harmless chats and miss real ones, and accuracy on real children's conversations has not been measured. It targets English and Spanish; other languages should be assumed unsupported. See [AI limitations](/en/docs/ai/limitations).
+  </Accordion>
+
+  <Accordion title="Which phones and apps are supported?">
+    The child app needs **Android 11 or later** and monitors WhatsApp, Instagram, Telegram, Snapchat and TikTok. There is no iOS app, so an iPhone or iPad can't be paired or monitored. The dashboard works in any browser, and the parent app is Android only. See [Supported apps](/en/docs/platform/android/supported-apps) and [iOS](/en/docs/platform/ios/overview).
+  </Accordion>
+
+  <Accordion title="Can my child see the alerts?">
+    No. The child app has a status screen and a settings screen, but no alert list or message history. Alerts go only to the parent account. Talk with your child about what is monitored and why before you set it up.
+  </Accordion>
+
+  <Accordion title="Is SafeCircle Search part of monitoring?">
+    No. SafeCircle Search is a separate private search site and is not connected to the dashboard or the apps yet. Searches made there are not logged and don't appear in alerts. See [SafeCircle Search](/en/docs/platform/search/overview).
+  </Accordion>
+</Accordions>
+
+## Pairing and permissions
+
+<Accordions>
+  <Accordion title="Pairing failed — 'Invalid code' or 'Pairing failed'">
+    <Steps>
+      <Step>
+        **Check the code** — confirm it is exactly 6 digits with no spaces, entered exactly as shown on the dashboard. You can also scan the **QR code** instead. The **Hold phones together** (NFC) option in the child app isn't active yet.
+      </Step>
+      <Step>
+        **Check expiry** — codes are valid for **5 minutes** and work once. Watch the countdown on the dashboard. If it expired, generate a new one from the child's profile.
+      </Step>
+      <Step>
+        **Check connectivity** — make sure the child's device has an active internet connection.
+      </Step>
+      <Step>
+        **Clear the app cache** — if the problem persists, force-stop the SafeCircle Child app on the child's device, then go to **Settings → Apps → SafeCircle Child → Storage → Clear cache**, and try pairing again.
+      </Step>
+    </Steps>
+
+    <Callout>
+      Generating a new pairing code automatically invalidates any previous unused codes.
+    </Callout>
+  </Accordion>
+
+  <Accordion title="The app isn't in Google Play">
+    During the beta the app is only visible to accounts in the **SafeCircle Testers** Google group that have opted in to the testing track, on a phone running Android 11 or later. See [Join the beta](/en/docs/platform/private-beta/join#troubleshooting).
+  </Accordion>
+
+  <Accordion title="The status says PERMISSION MISSING">
+    The Accessibility Service is off. Open the child app, tap the status, then **Open Settings**, find **SafeCircle Protection** and turn it on. Android can turn this permission off after a reinstall or an update. See [Permissions](/en/docs/platform/android/permissions).
+  </Accordion>
+
+  <Accordion title="I reinstalled the app and it asks me to set up again">
+    This is expected. A reinstalled app has to be paired again with a new code, and the Accessibility Service has to be enabled again. Revoke the old device in the dashboard if it still appears.
+  </Accordion>
+</Accordions>
+
+## Alerts and notifications
+
+<Accordions>
+  <Accordion title="Not receiving alerts">
+    Work through this checklist:
+
+    - The child app's status screen shows **MONITORING ACTIVE**. If it says **PERMISSION MISSING**, enable the Accessibility Service.
+    - The conversation is in one of the [supported apps](/en/docs/platform/android/supported-apps) and was on screen. Each app is analysed at most once every 5 minutes, and only medium and high risks create alerts.
+    - The child's phone had an internet connection when the alert was sent. Alerts are not resent later.
+    - The child app has not been stopped by battery saver. Set **Settings → Apps → SafeCircle Child → Battery** to **Unrestricted**. The exact path varies by phone maker.
+    - In **Basic** mode detection is less accurate and misses more. Consider switching to an AI model.
+    - You are looking in the right place: live alerts show in the dashboard while it is open (check **Show alert toasts** in **Settings › Interface › Notifications**), and push notifications need the [parent app](/en/docs/platform/parent-app/notifications).
+    - The device status on the dashboard is only an estimate based on its last check-in, so **Offline** does not always mean protection is off. See the next question.
+  </Accordion>
+
+  <Accordion title="The dashboard says the device is Offline or Idle">
+    Status is based on the device's last check-in and can lag behind what the phone is actually doing. A device may show **Offline** while the child app is still protecting it. Check the status screen in the child app: **MONITORING ACTIVE** means protection is running. If it is not, see the checklist above. See [Children and devices](/en/docs/platform/dashboard/children-devices#devices).
+  </Accordion>
+
+  <Accordion title="Does Telegram send me alerts?">
+    No. The Telegram bot (**@safecirclehq_bot**) only shows your children and recent alerts when you open its menu. It does not push alerts. Alerts reach you through the dashboard while it is open and through push notifications in the [parent app](/en/docs/platform/parent-app/notifications). See [Notifications](/en/docs/platform/dashboard/notifications).
+  </Accordion>
+
+  <Accordion title="I get alerts in the dashboard but not on my phone">
+    The dashboard doesn't send browser push notifications. Install the [parent app](/en/docs/platform/parent-app/setup) and allow notifications. If it is installed, follow the [parent app notification troubleshooting](/en/docs/platform/parent-app/notifications#troubleshooting).
+  </Accordion>
+
+  <Accordion title="An alert seems wrong">
+    Alerts can be false positives, and the note only summarises categories. Ask your child what happened before you open the details with them. See [Risk categories](/en/docs/ai/risk-categories#reading-false-positives). You can report problems in the dashboard under **More › Report a bug**.
+  </Accordion>
+</Accordions>
+
+## Accounts and devices
+
+<Accordions>
+  <Accordion title="How to reset your password">
+    <Steps>
+      <Step>Go to **app.safecircle.tech** and click **Forgot password?**</Step>
+      <Step>Enter your email address and click **Send reset link**.</Step>
+      <Step>Open the email from `no-reply@auth.safecircle.tech` and click **Reset password**.</Step>
+      <Step>Enter your new password.</Step>
+    </Steps>
+
+    The reset link expires after **1 hour**. If it expires, repeat the process.
+  </Accordion>
+
+  <Accordion title="How to remove a device">
+    1. In the parent dashboard, open **Children** and select the child.
+    2. On the device you want to remove, click **Revoke**.
+    3. Click **Disconnect** to confirm.
+
+    The device loses access immediately and the alerts it created are removed with it. This can't be undone. To use the phone again, pair it with a new code from the dashboard. To stop monitoring for good, also uninstall the child app.
+  </Accordion>
+
+  <Accordion title="How to delete a child">
+    Select the child in **Children**, click **Delete child**, enter your password and click **Delete permanently**. This removes the child's profile, alerts and devices and can't be undone. See [Children and devices](/en/docs/platform/dashboard/children-devices#delete-a-child).
+  </Accordion>
+
+  <Accordion title="How to delete your account">
+    <Callout type="warn">
+      Account deletion is permanent. All child profiles, alerts, and data will be erased and cannot be recovered.
+    </Callout>
+
+    1. Open **Settings › Profile**.
+    2. In the **Danger zone**, click **Delete account**, enter your password and click **Permanently delete account**.
+
+    The parent app has the same option under **Settings › Danger zone**.
+  </Accordion>
+
+  <Accordion title="The invite code doesn't work, or I'm stuck on Access pending">
+    See the troubleshooting list in [Join the beta](/en/docs/platform/private-beta/join#troubleshooting). Approval is done by the SafeCircle team.
+  </Accordion>
+</Accordions>
+
+## Contact support
+
+<Cards>
+  <Card title="Email" href="mailto:support@safecircle.tech" description="support@safecircle.tech — include your account email and a description of the issue." />
+  <Card title="In the dashboard" href="https://app.safecircle.tech" description="Use **More › Report a bug** or **Request a feature** inside the dashboard." />
+  <Card title="In the child app" href="/en/docs/platform/android/troubleshooting#report-a-problem" description="Settings › Report a bug." />
+</Cards>
+
+For device problems, include the Android version and phone model in your message.

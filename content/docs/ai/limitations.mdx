@@ -1,0 +1,61 @@
+---
+title: Limitations
+icon: TriangleAlert
+description: Accuracy caveats, coverage gaps and known weaknesses of SafeCircle's AI, based on what the repositories and reports show.
+---
+
+SafeCircle's AI is an assistive signal. This page lists what it cannot do and where it is known to be weak, so you can set expectations with your family.
+
+<Callout type="warn" title="Not a substitute for talking to your child">
+  The model can miss serious conversations and can flag harmless ones. Do not rely on it as the only safeguard.
+</Callout>
+
+## Coverage
+
+- **Android only, five apps.** The child app reads text from WhatsApp, Instagram, Telegram, Snapchat and TikTok. Other apps, websites and games are not read.
+- **Text on screen only.** Images, voice messages, video, and anything an app does not expose to Android's Accessibility API are not analysed.
+- **A sample, not a full read.** Each app is analysed at most once every 5 minutes, using the last 10 visible text snippets. A short risky exchange between checks can be missed.
+- **Basic by default.** A fresh install uses the keyword scan until you choose an AI model tier. A model tier analyses nothing until its download has finished and the model has loaded.
+- **Failures are silent.** If the model fails to load, crashes or returns an unreadable answer, the app treats it as "no risk" and sends nothing.
+
+## Accuracy
+
+- **Trained and tested on AI-generated text.** The training data is synthetic. Every number we have comes from AI-written test chats. **Accuracy on real children's conversations has not been measured.**
+- **Strong on familiar text, weaker on new text.** On held-out data from the training generator, category scores are near-perfect. On chats written by two other AI models, the current Horizon Mobile build caught about 63 to 68% of risky chats with the right category and flagged about 20% of harmless ones. Recall for `threats` and `grooming` fell the most. See [Horizon models](/en/docs/ai/horizon).
+- **False positives are expected.** Banter between friends, role-play and game talk can look like risk. This is why medium alerts are labelled as worth a look, not as findings.
+- **Severity is the hardest part.** In the internal evaluation, distinguishing `high` from `critical` was the weakest area. The child app asks for three levels (`low`, `medium`, `high`) and treats anything else as `low`.
+- **Confidence is not a probability.** It is not calibrated. See [Risk categories](/en/docs/ai/risk-categories#confidence).
+- **Phone accuracy is unmeasured.** The on-device builds were measured for speed and memory on real phones, but classification accuracy was measured on servers.
+- **The keyword scan is crude.** It uses fixed words and phrases, so it misses rephrasing and some spellings and can fire on innocent text.
+
+## Languages
+
+- The training data targets **English and Spanish** (about 60% and 40%).
+- There are no published per-language accuracy figures for Horizon.
+- Other languages are not part of the training data and should be assumed unsupported.
+- In the cross-generator tests, Spanish conversations were a weak spot for the Vigil research model in earlier rounds, and the gap narrowed after training on more varied data.
+
+## What an alert does not tell you
+
+- It does not quote or summarise the conversation. The note on an alert is a short summary of the categories found.
+- It does not say who the other person is, or whether they are an adult.
+- It cannot tell you whether something is a one-off or a pattern. Look at the [Timeline](/en/docs/platform/dashboard/analytics-timeline) for repeated alerts.
+
+## Known gaps in the research
+
+- No human-written test set exists yet.
+- Neither Horizon nor the Vigil research model reaches the team's 2% false-alarm target on text it has not seen.
+- Real-phone battery and heat impact has not been measured.
+- Earlier recorded grooming-recall figures for Horizon could not be reproduced in a later benchmark.
+
+## What helps
+
+- Treat alerts as conversation starters. Ask about what happened with curiosity.
+- Keep the child app and the model up to date. Updates are checked once a day.
+- If alerts are missing or seem wrong, work through the [FAQ and troubleshooting](/en/docs/support/faq).
+
+<Cards>
+  <Card title="Risk categories" href="/en/docs/ai/risk-categories" description="Risk levels, confidence and false positives." />
+  <Card title="Horizon models" href="/en/docs/ai/horizon" description="Evaluation methods and results." />
+  <Card title="Understanding alerts" href="/en/docs/platform/dashboard/alerts" description="What an alert shows and what to do next." />
+</Cards>

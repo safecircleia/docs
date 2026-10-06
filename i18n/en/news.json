@@ -1,0 +1,19 @@
+{
+  "masthead_the": "The",
+  "masthead_brand": "SafeCircle",
+  "masthead_times": "Times",
+  "prev": "Prev",
+  "next": "Next",
+  "prev_tip": "Older release",
+  "next_tip": "Newer release",
+  "close": "Close",
+  "major": "Major release",
+  "minor": "Minor release",
+  "patch": "Patch release",
+  "earlier": "Earlier release",
+  "version_fallback": "Version {{version}}",
+  "empty": "No release notes yet.",
+  "teaser_note": "This is a preview. Reload to see the full release notes.",
+  "teaser_reload": "Reload now",
+  "load_failed": "Couldn't load the release notes"
+}

@@ -1,0 +1,227 @@
+---
+title: API reference
+icon: Plug
+description: The REST routes and tRPC procedures SafeCircle's own apps call, with auth requirements, inputs, outputs and rate limits.
+---
+
+<Callout type="warn" title="First-party API">
+  This is the API SafeCircle's apps use. It is unversioned and can change without notice, and third-party access is not offered yet. Admin-only procedures (invitations and user approval) exist but are intentionally not documented here.
+</Callout>
+
+**Base URL:** `https://api.safecircle.tech`
+
+## Calling conventions
+
+Data lives under `/trpc`. Authentication and a few utility routes are plain REST.
+
+### tRPC wire format
+
+The backend runs tRPC without a data transformer, so inputs and outputs are plain JSON. Dates come back as ISO 8601 strings. You can call a procedure in single or batch form.
+
+<Tabs items={["Query (GET)", "Mutation (POST)", "Batch"]}>
+  <Tab value="Query (GET)">
+    Put the input, URL-encoded JSON, in the `input` query parameter. The result is in `result.data`.
+
+    ```bash
+    curl "https://api.safecircle.tech/trpc/alerts.list?input=%7B%22childId%22%3A%22CHILD_UUID%22%2C%22limit%22%3A20%7D" \
+      -H "Authorization: Bearer SESSION_TOKEN"
+    ```
+
+    ```json
+    { "result": { "data": [ { "id": "…", "riskLevel": "high" } ] } }
+    ```
+  </Tab>
+  <Tab value="Mutation (POST)">
+    Send the input as the JSON body.
+
+    ```bash
+    curl -X POST "https://api.safecircle.tech/trpc/alerts.markRead" \
+      -H "Authorization: Bearer SESSION_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{"alertId":"ALERT_UUID"}'
+    ```
+
+    ```json
+    { "result": { "data": { "ok": true } } }
+    ```
+  </Tab>
+  <Tab value="Batch">
+    Add `?batch=1`. Inputs are keyed by position, and the response is an array in the same order. The Android apps use this form.
+
+    ```bash
+    curl -X POST "https://api.safecircle.tech/trpc/alerts.create?batch=1" \
+      -H "x-device-token: DEVICE_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{"0":{"riskLevel":"high","categories":["grooming"],"confidence":0.91,"reasoning":"…","appSource":"com.example.chat"}}'
+    ```
+
+    ```json
+    [ { "result": { "data": { "id": "…" } } } ]
+    ```
+  </Tab>
+</Tabs>
+
+The dashboard calls queries with `GET` and the `input` parameter, and mutations with a plain `POST`. Its helper also accepts a `json` wrapper in responses, which the backend does not currently emit.
+
+### Errors
+
+tRPC errors use the standard envelope with an HTTP status and a message.
+
+| Code | Status | Typical cause |
+|---|---|---|
+| `UNAUTHORIZED` | 401 | No valid session or device token |
+| `FORBIDDEN` | 403 | Account not yet approved, or the resource belongs to someone else |
+| `NOT_FOUND` | 404 | Unknown ID, or an ID you do not own |
+| `BAD_REQUEST` | 400 | Failed validation, or an invalid or expired pairing code |
+| `TOO_MANY_REQUESTS` | 429 | You hit a rate limit (this one comes from the Worker, not tRPC) |
+
+### Auth levels
+
+| Level | How you authenticate | Notes |
+|---|---|---|
+| **Public** | Nothing | Only `devices.pair` and `search.familyRules` |
+| **Session** | Better Auth session, as a cookie or `Authorization: Bearer` | Any signed-in user. Used by `users.approvalStatus` |
+| **Parent** | Session, and the account is **approved** | Almost every data procedure |
+| **Device** | `x-device-token` header from pairing | Child app only |
+
+See [Authentication](/en/docs/developers/authentication) for how each credential is obtained.
+
+## tRPC procedures
+
+All procedures below are called as `/trpc/<router>.<procedure>`. Parent procedures only return data for children that belong to the signed-in parent.
+
+### children
+
+| Procedure | Type | Auth | Input | Output |
+|---|---|---|---|---|
+| `children.list` | query | Parent | none | Children, oldest first, each with `devices` (`id`, `deviceName`, `lastSeen`, `pairedAt`) and `alerts` (IDs of unread alerts) |
+| `children.create` | mutation | Parent | `name`: 1–50 characters, letters, numbers, spaces, hyphens and apostrophes | The new child |
+
+### devices
+
+| Procedure | Type | Auth | Input | Output |
+|---|---|---|---|---|
+| `devices.createPairingToken` | mutation | Parent | `childId` (UUID) | `token` (6 digits), `expiresAt` (5 minutes). Invalidates earlier unused codes for that child |
+| `devices.pair` | mutation | Public | `pairingToken`, `deviceName` (1–100 characters) | `deviceToken`, `deviceId`, `childId`. The code is single-use |
+| `devices.list` | query | Parent | `childId` | Devices of that child |
+| `devices.revoke` | mutation | Parent | `deviceId` | `{ ok: true }`. The device token stops working immediately |
+| `devices.registerFcmToken` | mutation | Parent | `token`, `platform` (`android` or `ios`, default `android`) | `{ ok: true }`. Re-registering an existing token moves it to the current account |
+
+### alerts
+
+| Procedure | Type | Auth | Input | Output |
+|---|---|---|---|---|
+| `alerts.create` | mutation | Device | `riskLevel` (`medium` or `high`), `categories` (at least one string), `confidence` (0–1), `reasoning`, `appSource` | `{ id }`. Triggers push delivery |
+| `alerts.list` | query | Parent | `childId`, `limit` (1–100, default 50) | Alerts, newest first |
+| `alerts.get` | query | Parent | `alertId` | One alert |
+| `alerts.markRead` | mutation | Parent | `alertId` | `{ ok: true }` |
+
+An alert has `id`, `deviceId`, `childId`, `riskLevel`, `categories`, `confidence`, `reasoning`, `appSource`, `readAt` (null while unread) and `createdAt`.
+
+### analytics
+
+All three accept an optional `childId`. Without it they aggregate across all your children.
+
+| Procedure | Input | Output |
+|---|---|---|
+| `analytics.alertsByDay` | `days` (1–365, default 30) | `[ { date, count } ]` |
+| `analytics.alertsByCategory` | none | `[ { category, count } ]`, highest first |
+| `analytics.alertsByRiskLevel` | none | `{ high, medium }` |
+
+### activity
+
+| Procedure | Input | Output |
+|---|---|---|
+| `activity.list` | `cursor` (ISO timestamp, optional), `limit` (1–50, default 20) | `{ items, nextCursor }`. Items are alerts and device pairings, newest first. Pass `nextCursor` as `cursor` for the next page |
+
+An item has `id`, `type` (`alert` or `device_paired`), `childId`, `childName`, `description`, `createdAt` and a small `meta` object.
+
+### notifications
+
+| Procedure | Type | Input | Output |
+|---|---|---|---|
+| `notifications.get` | query | none | `highRisk`, `mediumRisk`, `quietStart`, `quietEnd`. Defaults to both on and no quiet hours |
+| `notifications.update` | mutation | `childId` (optional, null for the global setting), `highRisk`, `mediumRisk`, `quietStart`, `quietEnd` (`HH:mm`) | The saved values |
+
+<Callout type="info">
+  `notifications.update` saves the whole record. A field you omit goes back to its default (`true` for the toggles, empty for quiet hours), so always send all of them. Quiet hours use the UTC clock and apply to medium alerts only.
+</Callout>
+
+### users
+
+| Procedure | Type | Auth | Output |
+|---|---|---|---|
+| `users.approvalStatus` | query | Session | `{ approved }`. Lets the apps show a "pending approval" screen |
+
+### search
+
+| Procedure | Type | Auth | Input | Output |
+|---|---|---|---|---|
+| `search.getSettings` | query | Parent | none | `{ prefs, siteRules }` |
+| `search.saveSettings` | mutation | Parent | `prefs` and `siteRules` (up to 500 rules, each a `domain` and an `action` of `block`, `lower` or `raise`) | `{ ok: true }` |
+| `search.familyLink` | mutation | Device | none | `{ url }`, a signed link that locks safe search on the child's device |
+| `search.familyRules` | query | Public | `token` | `{ siteRules }`, or `null` if the token is invalid or the device was unpaired |
+
+See [SafeCircle Search](/en/docs/developers/search) for what the family link does.
+
+## REST routes
+
+| Method and path | Auth | Purpose |
+|---|---|---|
+| `GET /` | None | Liveness probe, returns `OK` |
+| `GET /health` | None | `{ status, version, service }` |
+| `* /api/auth/*` | Varies | Better Auth: sign-in, sign-up, sessions, 2-step verification, passkeys. See [Authentication](/en/docs/developers/authentication) |
+| `POST /api/feedback` | Session or `x-device-token` | Send a bug report or feature request |
+| `POST /api/model-feedback` | None | Rating of an AI Playground result |
+| `POST /api/telemetry/event` | None | One anonymous product event. Returns `204` |
+| `GET, PUT, DELETE /api/media/{users or children}/:id/{avatar or banner}` | Session | Profile photo and banner |
+| `POST /api/telegram/generate-link-code`, `GET /api/telegram/status`, `POST /api/telegram/unlink-self` | Session | Telegram linking from the dashboard |
+
+Other `/api/telegram/*` routes are called by the bot with a private key, and `GET /api/telemetry/metrics` is protected by a secret. Neither is available to third parties.
+
+### Feedback
+
+`POST /api/feedback` with a JSON body:
+
+```json
+{
+  "type": "bug",
+  "title": "Short summary",
+  "description": "What happened",
+  "context": { "source": "dashboard", "screen": "alerts", "version": "0.3.2", "os": "optional" }
+}
+```
+
+`type` is `bug` or `feature`. `source` is `dashboard`, `parent-app`, `child-app` or `playground`. The title is 2–200 characters and the description up to 5000. A child app can authenticate with its device token, and the report is filed on behalf of the paired parent. The response is `201` with `{ "postUrl": "…" }`.
+
+### Profile images
+
+- `GET` returns the image. It is private to the owner, and admins can read.
+- `PUT` takes the raw image bytes with a `Content-Length`. The limit is **1 MB**. The type is detected from the file contents, and only JPEG, PNG and WebP are accepted (`415` otherwise).
+- `DELETE` removes it and returns `204`.
+- Writes are limited to 20 per minute per IP.
+
+### Telemetry event
+
+`POST /api/telemetry/event` with `{ "name": "page_view", "route": "/alerts", "props": {} }`. `name` is 1–64 characters. At most 10 `props` are kept, and any property whose key looks like an ID, email, user, token, name, IP or phone is dropped. See [Observability](/en/docs/developers/observability).
+
+## Rate limits
+
+Limits are per client IP, counted per Worker instance, and enforced with `429 Too Many Requests` and a `Retry-After` header.
+
+| Scope | Limit |
+|---|---|
+| All routes | 100 requests per minute |
+| `/api/auth/*` (except `get-session`) | 30 requests per minute |
+| `GET /api/auth/get-session` | Counted in the global 100 per minute |
+| Image uploads and deletes | 20 per minute |
+| SafeCircle Search (separate service) | 30 per minute anonymous, 120 per minute signed in |
+
+Treat these as abuse protection, not as a quota you can plan around. Cache session lookups and batch your tRPC calls.
+
+## Related
+
+<Cards>
+  <Card title="Authentication" href="/en/docs/developers/authentication" description="Get and use sessions, bearer tokens and device tokens." />
+  <Card title="Data and privacy" href="/en/docs/developers/data-and-privacy" description="What each call stores." />
+</Cards>

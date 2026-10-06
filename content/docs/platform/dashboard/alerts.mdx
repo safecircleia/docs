@@ -1,0 +1,73 @@
+---
+title: Understanding alerts
+icon: ShieldAlert
+description: Risk levels, what an alert shows, how to filter and mark alerts as read, and what to do next.
+---
+
+An alert is created when the child app detects a risk signal above its threshold. Only `medium` and `high` risk levels create an alert — weaker signals are discarded on the child's device. SafeCircle never sends the message text.
+
+## Risk levels
+
+<Tabs items={["High", "Medium"]}>
+  <Tab value="High">
+    A strong risk signal. Shown with a **red** badge. Worth a conversation the same day.
+  </Tab>
+  <Tab value="Medium">
+    A moderate risk signal. Shown with an **orange** badge. Worth a look — it may be a false positive depending on context.
+  </Tab>
+</Tabs>
+
+## What an alert shows
+
+Open an alert from the list to see its details.
+
+| Field | Description |
+|---|---|
+| **Risk level** | High or medium, plus a **Read** / **Unread** badge |
+| **Child** | Which child's device it came from |
+| **Source app** | The app where the signal was detected |
+| **Confidence** | How sure the model is, from 0 to 100% |
+| **Detected** | When it was detected |
+| **Categories** | One or more risk labels from the model |
+| **AI Reasoning** | A short note on why it was flagged. For now this is a plain summary of the detected categories (for example, *Detected: grooming*). It never quotes the conversation |
+
+## Finding alerts
+
+The **Alerts** page has four tabs:
+
+- **All** — every alert, newest first.
+- **Unread** — only alerts you haven't opened yet, with a count.
+- **High** and **Medium** — filter by risk level.
+
+If you have more than one child, a **Filter by child** menu appears. Pick **All children** to see everyone again.
+
+A summary panel shows **Total alerts**, **Unread**, **High risk**, **Medium risk** and **Top app** for the current selection.
+
+You can also open an alert directly from the bell in the top bar, which lists the latest five alerts.
+
+## Marking alerts as read
+
+Opening an alert marks it as read. You can also:
+
+- Click **Mark as read** in the alert's details.
+- Click **Mark all read** above the list to clear everything unread in the current view.
+- Use **Mark all read** in the bell menu.
+
+Read alerts stay in the **All** tab and in the [Timeline](/en/docs/platform/dashboard/analytics-timeline#timeline). Nothing is deleted.
+
+## What to do next
+
+The Alerts page includes a short guide, **What to do next**:
+
+- Start with curiosity, not punishment. Ask what happened before talking about the app.
+- High risk alerts are worth a conversation the same day.
+- Confidence is a rough indicator, not a probability. Even a lower score can be worth a look.
+
+## Related
+
+<Cards>
+  <Card title="Risk categories" href="/en/docs/ai/risk-categories" description="What each category, risk level and the reasoning note mean." />
+  <Card title="Notifications" href="/en/docs/platform/dashboard/notifications" description="Get alerts as they arrive, in the dashboard or the parent app." />
+  <Card title="Analytics and Timeline" href="/en/docs/platform/dashboard/analytics-timeline" description="See patterns across days, categories and apps." />
+  <Card title="FAQ and troubleshooting" href="/en/docs/support/faq" description="Not receiving alerts? Work through the checklist." />
+</Cards>

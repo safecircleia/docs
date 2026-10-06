@@ -1,0 +1,40 @@
+---
+title: Canopy OS
+icon: Monitor
+description: Canopy OS es una distribución Linux experimental que se está construyendo con la protección de SafeCircle incluida. Qué es y en qué punto está.
+---
+
+**Canopy OS** es una distribución Linux que SafeCircle está construyendo para que la protección de SafeCircle forme parte del propio sistema, en lugar de ser una app que se añade.
+
+<Callout type="warn" title="Experimental — no está lista para familias">
+  Canopy OS está en una fase muy temprana, de canal de compilación. El trabajo más reciente de su repositorio es de **mayo de 2026**. Las imágenes construyen un escritorio basado en Fedora con una marca de edición y ajustes provisionales, pero los componentes de SafeCircle que darían la protección **todavía no están instalados**. No confíes en ella para proteger o supervisar a nadie, y no la uses para sustituir la [app del menor para Android](/es/docs/platform/android/setup).
+</Callout>
+
+## Qué pretende ser
+
+- **Basada en Fedora 44** con `bootc`: todo el sistema es una imagen que se actualiza como un conjunto, así que es inmutable.
+- **Escritorio GNOME solo con Wayland**, sin el servidor X11.
+- **SELinux en modo enforcing.**
+- **Tres ediciones** para necesidades distintas: [Familiar, Institucional y Personal](/es/docs/platform/canopy-os/editions).
+- **SafeCircle integrado**, previsto como servicios y apps del sistema: el demonio de detección de riesgos Horizon, un filtro de red, el panel, un asistente de primer arranque, el navegador Orbit y un tema Canopy.
+
+## En qué punto está
+
+| Área | Estado |
+|---|---|
+| Imagen base (Fedora bootc, GNOME, Wayland, SELinux) | Se construye |
+| Imágenes de edición e ISO de instalación | Existe el canal de compilación (GitHub Actions) |
+| Horizon, filtro de red, panel, asistente, navegador Orbit, tema | Solo marcadores de empaquetado; todavía no instalados en las imágenes |
+| Descargas públicas | Ninguna a la que podamos apuntar |
+| Instalador y experiencia de actualización | Sin documentar, porque no está lista |
+
+Nada de Canopy OS forma parte hoy de la beta privada y no hay soporte para ella. Si te interesa el proyecto o quieres seguir su progreso, escribe a **support@safecircle.tech**.
+
+## ¿Es para mí?
+
+- **Padres y madres** — usa la [app del menor para Android](/es/docs/platform/android/setup) y el [panel](/es/docs/platform/dashboard/setup). Canopy OS no cambia lo que puedes supervisar hoy.
+- **Desarrolladores y curiosos** — quienes trabajan en el proyecto construyen las imágenes en local con Podman. Consulta la [visión general para desarrolladores](/es/docs/developers/overview).
+
+<Cards>
+  <Card title="Ediciones" href="/es/docs/platform/canopy-os/editions" description="Familiar, Institucional y Personal: para qué sirve cada una." />
+</Cards>

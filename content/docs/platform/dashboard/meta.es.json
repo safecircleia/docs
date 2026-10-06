@@ -1,0 +1,17 @@
+{
+  "title": "Panel",
+  "description": "Configuración del panel para padres, alertas, dispositivos, notificaciones y ajustes.",
+  "icon": "LayoutDashboard",
+  "defaultOpen": true,
+  "pages": [
+    "setup",
+    "overview",
+    "alerts",
+    "analytics-timeline",
+    "children-devices",
+    "notifications",
+    "account-security",
+    "appearance",
+    "updates"
+  ]
+}

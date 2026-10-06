@@ -1,0 +1,16 @@
+{
+  "title": "AI",
+  "description": "How SafeCircle's on-device AI detects risk, what it analyses, and how well it works.",
+  "icon": "Brain",
+  "root": true,
+  "pages": [
+    "overview",
+    "risk-categories",
+    "privacy",
+    "on-device",
+    "horizon",
+    "vigil",
+    "ai-playground",
+    "limitations"
+  ]
+}

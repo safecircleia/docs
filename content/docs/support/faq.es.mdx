@@ -1,0 +1,162 @@
+---
+title: Preguntas frecuentes y solución de problemas
+icon: CircleQuestionMark
+description: Preguntas comunes y pasos para resolver problemas de vinculación, permisos, alertas, el modelo de IA, cuentas y más.
+---
+
+Para arreglos específicos de la app, la [página de solución de problemas de la app del menor](/es/docs/platform/android/troubleshooting) entra en más detalle. Para lo que SafeCircle todavía no puede hacer, consulta [Limitaciones conocidas](/es/docs/support/known-limitations).
+
+## Cómo funciona
+
+<Accordions>
+  <Accordion title="¿Qué lee la app del menor?">
+    Usa el **Servicio de accesibilidad** de Android para leer el **texto visible en pantalla** en cinco apps: WhatsApp, Instagram, Telegram, Snapchat y TikTok. No lee notificaciones, contactos, fotos, ubicación ni ninguna otra app. El análisis se hace en el teléfono del menor y el texto de los mensajes nunca se envía a SafeCircle. Consulta [Cómo funciona la app del menor](/es/docs/platform/android/how-it-works) y [la privacidad de la IA](/es/docs/ai/privacy).
+  </Accordion>
+
+  <Accordion title="¿Tengo que descargar un modelo de IA?">
+    No. La app del menor empieza en modo **Básico**, que busca palabras clave y no necesita ninguna descarga. Es menos precisa que un modelo de IA, así que pueden pasar riesgos por alto y haber falsas alarmas.
+
+    Para una detección mejor puedes cambiar a un modelo de IA en el dispositivo desde la app del menor, en **Settings › Advanced › AI Model tier**. La descarga es de unos 600 MB para el modelo INT4 y de unos 1,2 GB para el INT8, así que usa Wi-Fi. Consulta [Modo básico y modelo de IA](/es/docs/platform/android/how-it-works#modo-básico-y-modelo-de-ia).
+  </Accordion>
+
+  <Accordion title="¿Qué veo en una alerta?">
+    El nivel de riesgo (**medio** o **alto**), el hijo, la app de origen, la hora, las categorías, una puntuación de confianza y una nota de **Razonamiento IA**. Por ahora esa nota es un breve resumen de las categorías detectadas, por ejemplo *Detected: grooming*. Nunca contiene texto de mensajes ni citas de la conversación. Consulta [Entender las alertas](/es/docs/platform/dashboard/alerts) y [Categorías de riesgo](/es/docs/ai/risk-categories).
+  </Accordion>
+
+  <Accordion title="¿Qué precisión tiene?">
+    Es una señal de apoyo, no un veredicto. Puede marcar chats inofensivos y pasar por alto otros reales, y no se ha medido su precisión en conversaciones reales de menores. Está pensada para inglés y español; conviene dar por hecho que otros idiomas no son compatibles. Consulta [Limitaciones de la IA](/es/docs/ai/limitations).
+  </Accordion>
+
+  <Accordion title="¿Qué teléfonos y apps son compatibles?">
+    La app del menor necesita **Android 11 o posterior** y supervisa WhatsApp, Instagram, Telegram, Snapchat y TikTok. No hay app para iOS, así que un iPhone o un iPad no se puede vincular ni supervisar. El panel funciona en cualquier navegador y la app para padres es solo para Android. Consulta [Apps compatibles](/es/docs/platform/android/supported-apps) e [iOS](/es/docs/platform/ios/overview).
+  </Accordion>
+
+  <Accordion title="¿Puede mi hijo ver las alertas?">
+    No. La app del menor tiene una pantalla de estado y otra de ajustes, pero ninguna lista de alertas ni historial de mensajes. Las alertas van solo a la cuenta del padre o la madre. Habla con tu hijo sobre qué se supervisa y por qué antes de configurarlo.
+  </Accordion>
+
+  <Accordion title="¿SafeCircle Search forma parte de la supervisión?">
+    No. SafeCircle Search es un sitio de búsqueda privado y aparte, y todavía no está conectado al panel ni a las apps. Las búsquedas que se hacen allí no se registran y no aparecen en las alertas. Consulta [SafeCircle Search](/es/docs/platform/search/overview).
+  </Accordion>
+</Accordions>
+
+## Vinculación y permisos
+
+<Accordions>
+  <Accordion title="Vinculación fallida — 'Código inválido' o 'Vinculación fallida'">
+    <Steps>
+      <Step>
+        **Comprueba el código** — confirma que son exactamente 6 dígitos sin espacios, introducidos tal como aparecen en el panel. También puedes escanear el **código QR**. La opción **Hold phones together** (NFC) de la app del menor todavía no está activa.
+      </Step>
+      <Step>
+        **Comprueba la caducidad** — los códigos son válidos durante **5 minutos** y se usan una sola vez. Observa la cuenta atrás en el panel. Si caducó, genera uno nuevo desde el perfil del hijo.
+      </Step>
+      <Step>
+        **Comprueba la conectividad** — asegúrate de que el dispositivo del menor tiene conexión a internet activa.
+      </Step>
+      <Step>
+        **Borra la caché de la app** — si el problema persiste, fuerza el cierre de la app SafeCircle Child en el dispositivo del menor, ve a **Ajustes → Aplicaciones → SafeCircle Child → Almacenamiento → Borrar caché** y vuelve a intentar la vinculación.
+      </Step>
+    </Steps>
+
+    <Callout>
+      Al generar un nuevo código de vinculación se invalidan automáticamente todos los códigos no utilizados anteriores.
+    </Callout>
+  </Accordion>
+
+  <Accordion title="La app no aparece en Google Play">
+    Durante la beta, la app solo es visible para las cuentas del grupo de Google **SafeCircle Testers** que se han apuntado al canal de pruebas, en un teléfono con Android 11 o posterior. Consulta [Únete a la beta](/es/docs/platform/private-beta/join#solución-de-problemas).
+  </Accordion>
+
+  <Accordion title="El estado muestra PERMISSION MISSING">
+    El Servicio de accesibilidad está desactivado. Abre la app del menor, toca el estado y luego **Open Settings**, busca **SafeCircle Protection** y actívalo. Android puede desactivar este permiso tras reinstalar o actualizar. Consulta [Permisos](/es/docs/platform/android/permissions).
+  </Accordion>
+
+  <Accordion title="Reinstalé la app y me pide configurarla de nuevo">
+    Es lo esperado. Una app reinstalada hay que vincularla de nuevo con un código nuevo y hay que volver a activar el Servicio de accesibilidad. Revoca el dispositivo antiguo en el panel si sigue apareciendo.
+  </Accordion>
+</Accordions>
+
+## Alertas y notificaciones
+
+<Accordions>
+  <Accordion title="No recibo alertas">
+    Comprueba esta lista:
+
+    - La pantalla de estado de la app del menor muestra **MONITORING ACTIVE**. Si dice **PERMISSION MISSING**, activa el Servicio de accesibilidad.
+    - La conversación está en una de las [apps compatibles](/es/docs/platform/android/supported-apps) y estaba en pantalla. Cada app se analiza como máximo una vez cada 5 minutos y solo los riesgos medios y altos generan alertas.
+    - El teléfono del menor tenía conexión a internet cuando se envió la alerta. Las alertas no se reenvían más tarde.
+    - El ahorro de batería no ha detenido la app del menor. Establece **Ajustes → Aplicaciones → SafeCircle Child → Batería** en **Sin restricciones**. La ruta exacta varía según el fabricante.
+    - En modo **Básico** la detección es menos precisa y se le escapan más cosas. Valora cambiar a un modelo de IA.
+    - Estás mirando en el sitio correcto: las alertas en directo aparecen en el panel mientras está abierto (comprueba **Mostrar avisos de alertas** en **Ajustes › Interfaz › Notificaciones**), y las notificaciones push requieren la [app para padres](/es/docs/platform/parent-app/notifications).
+    - El estado del dispositivo en el panel es solo una estimación basada en su última conexión, así que **Sin conexión** no siempre significa que la protección esté apagada. Consulta la pregunta siguiente.
+  </Accordion>
+
+  <Accordion title="El panel dice que el dispositivo está Sin conexión o En espera">
+    El estado se basa en la última conexión del dispositivo y puede ir con retraso respecto a lo que hace realmente el teléfono. Un dispositivo puede aparecer **Sin conexión** mientras la app del menor sigue protegiéndolo. Mira la pantalla de estado de la app del menor: **MONITORING ACTIVE** significa que la protección funciona. Si no es así, revisa la lista anterior. Consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices#dispositivos).
+  </Accordion>
+
+  <Accordion title="¿Telegram me envía alertas?">
+    No. El bot de Telegram (**@safecirclehq_bot**) solo muestra tus hijos y las alertas recientes cuando abres su menú. No envía alertas. Las alertas te llegan por el panel mientras está abierto y por las notificaciones push de la [app para padres](/es/docs/platform/parent-app/notifications). Consulta [Notificaciones](/es/docs/platform/dashboard/notifications).
+  </Accordion>
+
+  <Accordion title="Veo alertas en el panel pero no en el teléfono">
+    El panel no envía notificaciones push del navegador. Instala la [app para padres](/es/docs/platform/parent-app/setup) y permite las notificaciones. Si ya la tienes instalada, sigue la [solución de problemas de notificaciones de la app para padres](/es/docs/platform/parent-app/notifications#solución-de-problemas).
+  </Accordion>
+
+  <Accordion title="Una alerta parece incorrecta">
+    Las alertas pueden ser falsos positivos y la nota solo resume categorías. Pregunta a tu hijo qué pasó antes de abrir los detalles con él. Consulta [Categorías de riesgo](/es/docs/ai/risk-categories#cómo-interpretar-los-falsos-positivos). Puedes informar de problemas en el panel, en **Más › Informar de un error**.
+  </Accordion>
+</Accordions>
+
+## Cuentas y dispositivos
+
+<Accordions>
+  <Accordion title="Cómo restablecer la contraseña">
+    <Steps>
+      <Step>Ve a **app.safecircle.tech** y haz clic en **¿Olvidaste tu contraseña?**</Step>
+      <Step>Introduce tu dirección de correo y haz clic en **Enviar enlace de recuperación**.</Step>
+      <Step>Abre el correo de `no-reply@auth.safecircle.tech` y haz clic en **Restablecer contraseña**.</Step>
+      <Step>Introduce tu nueva contraseña.</Step>
+    </Steps>
+
+    El enlace de restablecimiento expira en **1 hora**. Si expira, repite el proceso.
+  </Accordion>
+
+  <Accordion title="Cómo eliminar un dispositivo">
+    1. En el panel, abre **Hijos** y selecciona al hijo.
+    2. En el dispositivo que quieres eliminar, haz clic en **Revocar**.
+    3. Haz clic en **Desconectar** para confirmar.
+
+    El dispositivo pierde el acceso de inmediato y las alertas que creó se eliminan con él. No se puede deshacer. Para volver a usar el teléfono, vincúlalo con un código nuevo desde el panel. Para dejar de supervisarlo definitivamente, desinstala también la app del menor.
+  </Accordion>
+
+  <Accordion title="Cómo eliminar un hijo">
+    Selecciona al hijo en **Hijos**, haz clic en **Eliminar perfil**, escribe tu contraseña y haz clic en **Eliminar permanentemente**. Se eliminan el perfil, las alertas y los dispositivos del hijo, y no se puede deshacer. Consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices#eliminar-un-hijo).
+  </Accordion>
+
+  <Accordion title="Cómo eliminar tu cuenta">
+    <Callout type="warn">
+      La eliminación de la cuenta es permanente. Todos los perfiles de hijos, alertas y datos serán borrados y no podrán recuperarse.
+    </Callout>
+
+    1. Abre **Ajustes › Perfil**.
+    2. En la **Zona de peligro**, haz clic en **Eliminar cuenta**, escribe tu contraseña y haz clic en **Eliminar cuenta definitivamente**.
+
+    La app para padres tiene la misma opción en **Settings › Danger zone**.
+  </Accordion>
+
+  <Accordion title="El código de invitación no funciona o me quedé en Acceso pendiente">
+    Consulta la lista de solución de problemas de [Únete a la beta](/es/docs/platform/private-beta/join#solución-de-problemas). La aprobación la hace el equipo de SafeCircle.
+  </Accordion>
+</Accordions>
+
+## Contactar con soporte
+
+<Cards>
+  <Card title="Correo electrónico" href="mailto:support@safecircle.tech" description="support@safecircle.tech — incluye tu correo de cuenta y una descripción del problema." />
+  <Card title="En el panel" href="https://app.safecircle.tech" description="Usa **Más › Informar de un error** o **Solicitar una función** dentro del panel." />
+  <Card title="En la app del menor" href="/es/docs/platform/android/troubleshooting#reportar-un-problema" description="Settings › Report a bug." />
+</Cards>
+
+Para problemas con el dispositivo, incluye la versión de Android y el modelo del teléfono en tu mensaje.

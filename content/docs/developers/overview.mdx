@@ -1,0 +1,63 @@
+---
+title: Developer overview
+icon: Blocks
+description: How the SafeCircle platform fits together — apps, backend, bot, search and AI — and what is open to integrators today.
+---
+
+SafeCircle is a set of small services that share one backend. This section explains how they connect, which parts of the API you can read about, and how data moves from a child's phone to a parent's screen.
+
+<Callout type="warn" title="No public developer program yet">
+  SafeCircle is in private beta. The API described here is the one SafeCircle's own apps use. It is **not versioned, not covered by a stability guarantee, and there are no public API keys**. Procedures and fields can change between releases. If you want to build on it, write to **support@safecircle.tech** first.
+</Callout>
+
+## Platform map
+
+```text
+ Child's phone                               Parent
+ ┌───────────────────┐                       ┌───────────────────────┐
+ │ Child app         │                       │ Dashboard (web)       │
+ │ (Android)         │                       │ Parent app (Android)  │
+ │ on-device AI model│                       └──────────┬────────────┘
+ └─────────┬─────────┘                                  │ session cookie
+           │ x-device-token                             │ or bearer token
+           ▼                                            ▼
+        ┌───────────────────────────────────────────────────────┐
+        │ Backend  (Hono + tRPC on Cloudflare Workers)          │
+        │ api.safecircle.tech                                   │
+        └───┬──────────────┬──────────────┬──────────────┬──────┘
+            │              │              │              │
+            ▼              ▼              ▼              ▼
+      PostgreSQL      D1 (metrics)   R2 (images,     Push (FCM)
+      (Hyperdrive)                   feedback)
+            ▲
+            │ bot API key            signed family link
+   ┌────────┴─────────┐              ┌───────────────────────┐
+   │ Telegram bot     │              │ Search                │
+   │ @safecirclehq_bot│              │ search.safecircle.tech│
+   └──────────────────┘              └───────────────────────┘
+```
+
+| Component | What it does | Talks to |
+|---|---|---|
+| **Child app** (Android) | Watches visible text with an Accessibility Service and classifies it **on the device**. Sends an alert only when risk is detected. | Backend, with a device token |
+| **Parent dashboard** (web) | Alerts, analytics, children, devices, settings. | Backend, with a session cookie |
+| **Parent app** (Android) | Mobile alerts, push notifications, pairing. | Backend, with a session bearer token |
+| **Backend** | Auth, data, alerts, push, media, telemetry. | PostgreSQL, D1, R2, FCM |
+| **Telegram bot** | Links a Telegram account and shows account, children and alerts on demand. | Backend, with a bot key |
+| **Search** | Privacy-first metasearch, with optional family safe-search lock. | Backend (settings and family links) |
+| **AI model** | Classifies conversations on the child's device. | Runs inside the child app |
+
+## What to read next
+
+<Cards>
+  <Card title="Backend architecture" href="/en/docs/developers/backend" description="Stack, deployment shape and an alert's journey end to end." />
+  <Card title="API reference" href="/en/docs/developers/api" description="REST routes and tRPC procedures, with inputs and outputs." />
+  <Card title="Authentication" href="/en/docs/developers/authentication" description="Sessions, passkeys, 2-step verification, invite codes, approval and device tokens." />
+  <Card title="Data and privacy" href="/en/docs/developers/data-and-privacy" description="What is stored, what never leaves the device, and how deletion works." />
+  <Card title="Telegram bot" href="/en/docs/developers/telegram-bot" description="Linking flow and what the bot can do." />
+  <Card title="Observability" href="/en/docs/developers/observability" description="Metrics, the Grafana stack and the analytics opt-out." />
+  <Card title="SafeCircle Search" href="/en/docs/developers/search" description="Privacy rules, family lock and running it yourself." />
+  <Card title="Repositories" href="/en/docs/developers/repositories" description="Every repo, its stack and its licence." />
+</Cards>
+
+For how the AI model reaches its decisions, see the [AI overview](/en/docs/ai/overview). For setting up the apps as a parent, start with [Set up the dashboard](/en/docs/platform/dashboard/setup).

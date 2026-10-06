@@ -1,0 +1,17 @@
+{
+  "title": "Dashboard",
+  "description": "Parent dashboard setup, alerts, devices, notifications and settings.",
+  "icon": "LayoutDashboard",
+  "defaultOpen": true,
+  "pages": [
+    "setup",
+    "overview",
+    "alerts",
+    "analytics-timeline",
+    "children-devices",
+    "notifications",
+    "account-security",
+    "appearance",
+    "updates"
+  ]
+}

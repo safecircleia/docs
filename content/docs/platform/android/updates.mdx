@@ -1,0 +1,43 @@
+---
+title: Updates
+icon: RefreshCw
+description: How the Android child app and its AI model are updated.
+---
+
+There are two kinds of update: the **app** itself and the **AI model** it uses.
+
+## App updates
+
+During the private beta the app is delivered through Google Play's internal testing track, so updates arrive like any other Play update. Keep automatic updates on, or open the SafeCircle page in Google Play on the child's phone and tap **Update**. See [Join the beta](/en/docs/platform/private-beta/join#updating-beta-builds).
+
+After an update, check that the status screen still shows **MONITORING ACTIVE**.
+
+## AI model updates
+
+Model updates only apply if you [switched to an AI model](/en/docs/platform/android/how-it-works#switch-to-an-ai-model). In **Basic** mode there is no model to update.
+
+The app checks for a newer model about once a day while the phone has a connection, and also when you open the app if more than a day has passed since the last check. When one is available:
+
+- The phone shows a **SafeCircle update available** notification: *A new AI model is ready to download.*
+- The status screen shows **Model update available** with **Download the latest safety model**.
+
+<Steps>
+  <Step>
+    ### Tap Update
+    Tap **Update** on the banner. An **AI Model Update** sheet opens.
+  </Step>
+  <Step>
+    ### Download
+    Tap **Download now** and keep the app open. The sheet shows the progress and says **Please keep the app open.**
+  </Step>
+  <Step>
+    ### Done
+    When the sheet says **Model updated successfully.**, the new model is already in use. You can dismiss the sheet.
+  </Step>
+</Steps>
+
+The downloaded file is checked against a checksum before it replaces the old model, so a damaged or incomplete download is rejected. Monitoring keeps working with the existing model while you download.
+
+<Callout type="info">
+  If you dismiss the banner, it comes back the next time you open the app.
+</Callout>

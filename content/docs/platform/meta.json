@@ -1,0 +1,16 @@
+{
+  "title": "Platform",
+  "description": "Getting started, dashboard, and child app guides.",
+  "icon": "Layers",
+  "root": true,
+  "pages": [
+    "index",
+    "private-beta",
+    "dashboard",
+    "android",
+    "parent-app",
+    "search",
+    "ios",
+    "canopy-os"
+  ]
+}

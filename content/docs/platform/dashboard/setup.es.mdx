@@ -1,0 +1,80 @@
+---
+title: Configurar el panel de control
+icon: LayoutDashboard
+description: Inicia sesión, añade a tu primer hijo y genera el código de vinculación de su dispositivo.
+---
+
+El panel de control para padres está en **app.safecircle.tech**. Funciona en el navegador, así que no hay nada que instalar.
+
+<Callout>
+  Necesitas una cuenta aprobada para entrar. Si todavía no tienes una, empieza por [Únete a la beta](/es/docs/platform/private-beta/join).
+</Callout>
+
+## Iniciar sesión
+
+Ve a **app.safecircle.tech** e inicia sesión con tu correo y contraseña, o con Google, Discord o Twitter / X si creaste la cuenta con alguno de ellos.
+
+- **Verificación en dos pasos** — si la activaste, introduce el código de 6 dígitos de tu app de autenticación. Si la perdiste, usa **¿No tienes acceso a la app? Usa un código de respaldo**.
+- **Llave de acceso** — haz clic en **Iniciar sesión con una llave de acceso** para usar biometría o una llave de hardware en lugar de la contraseña.
+- **¿Olvidaste tu contraseña?** — haz clic en **¿Olvidaste tu contraseña?**, introduce tu correo y haz clic en **Enviar enlace de recuperación**.
+
+Si tu cuenta aún está pendiente de aprobación, verás la pantalla **Acceso pendiente** en lugar del panel. Consulta [Únete a la beta](/es/docs/platform/private-beta/join#espera-la-aprobación).
+
+## Primeros pasos guiados
+
+La primera vez que inicias sesión sin ningún hijo en tu cuenta, el panel abre una configuración en dos pasos.
+
+<Steps>
+  <Step>
+    ### Añade a tu primer hijo
+    Escribe el nombre del menor (por ejemplo, *Alex*) y haz clic en **Continuar**. Haz clic en **Omitir por ahora** si prefieres hacerlo más tarde desde la página **Hijos**.
+
+    <Callout>
+      Puedes añadir tantos hijos como necesites. Cada uno tiene sus propias alertas, dispositivos y foto.
+    </Callout>
+  </Step>
+  <Step>
+    ### Vincula su dispositivo
+    El paso 2 muestra el código de vinculación y una guía numerada:
+
+    1. Instala la app SafeCircle para el menor en su teléfono. Consulta [Configurar la app del menor](/es/docs/platform/android/setup).
+    2. Abre la app y sigue el paso de vinculación.
+    3. Escanea el **código QR** o escribe el **código de 6 dígitos** que aparece bajo **CÓDIGO DE VINCULACIÓN**. Usa **Copiar** para copiarlo.
+
+    Una cuenta atrás indica cuánto tiempo es válido el código. Haz clic en **Hecho** cuando el dispositivo esté vinculado. Si el código caduca, haz clic en **Intentar de nuevo** para obtener otro.
+  </Step>
+</Steps>
+
+<Callout type="warn">
+  Los códigos de vinculación son válidos durante **5 minutos** y se pueden usar una sola vez. Al generar un código nuevo se invalida cualquier código anterior sin usar.
+</Callout>
+
+Si la vinculación falla, comprueba que ambos dispositivos tienen conexión, que el código no ha caducado y que la app del menor está actualizada. La pantalla de configuración incluye una nota **¿Qué pasa si la vinculación falla?** y las [preguntas frecuentes](/es/docs/support/faq) tienen una lista de comprobación completa.
+
+## Añadir otro hijo o dispositivo más adelante
+
+Ve a **Hijos** en la barra lateral.
+
+- **+ Añadir hijo** crea un perfil nuevo y genera un código de vinculación al instante.
+- **Nuevo código de vinculación** (o **Añadir dispositivo** si el hijo aún no tiene ninguno) genera un código para otro dispositivo.
+
+Consulta [Hijos y dispositivos](/es/docs/platform/dashboard/children-devices) para ver todo lo demás que puedes hacer ahí.
+
+## Páginas del panel
+
+| Página | Para qué sirve |
+|---|---|
+| **Resumen** | Resumen de los últimos 7 días, alertas recientes y acciones rápidas |
+| **Historial** | Registro cronológico de alertas y vinculaciones de dispositivos |
+| **Alertas** | El listado de alertas, con filtros y detalle |
+| **Estadísticas** | Gráficos y desgloses de las alertas de los últimos 30 días |
+| **Hijos** | Perfiles de los menores y sus dispositivos |
+| **Ajustes** | Tu cuenta, aspecto, seguridad y actualizaciones |
+
+## Siguientes pasos
+
+<Cards>
+  <Card title="Configurar la app del menor" href="/es/docs/platform/android/setup" description="Instala, vincula y concede permisos en el teléfono Android del menor." />
+  <Card title="Un recorrido por el Resumen" href="/es/docs/platform/dashboard/overview" description="Qué te cuenta cada parte de la página de inicio." />
+  <Card title="Entender las alertas" href="/es/docs/platform/dashboard/alerts" description="Cómo leer una alerta y qué hacer después." />
+</Cards>
