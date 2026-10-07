@@ -16,6 +16,7 @@
 @import "../components/seasonal/seasonal.css";
 @import "../components/settings/page/settings-account.css";
 @import "../styles/docs.css";
+@import "../styles/docs-layout.css";
 
 /* Tailwind names for the tokens in src/styles/. Colours are full colours (oklch triplets are wrapped
    here); shadows map one token each (shadow-1 = card border + card shadow). */

@@ -41,5 +41,13 @@
   "seasonal_paused_title": "Particles paused.",
   "seasonal_paused_body": "Reduced motion is on, so seasonal particles are not shown.",
   "pager": "More pages",
-  "copy_failed": "Couldn’t copy the page"
+  "copy_failed": "Couldn’t copy the page",
+  "filter_pages": "Filter pages",
+  "filter_empty": "No pages match “{{query}}”",
+  "back_to_top": "Back to top",
+  "reading_time": "{{count}} min read",
+  "pager_keys": "Use [ and ] to move between pages",
+  "close_menu": "Close menu",
+  "breadcrumb": "Breadcrumb",
+  "docs_nav": "Documentation"
 }

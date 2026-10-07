@@ -5,20 +5,18 @@
 import { useTranslation } from 'react-i18next';
 import { HeartFilled } from '@mingcute/react/core-filled';
 import { gitConfig } from '@/lib/shared';
-import { BUILD } from '@/lib/updater';
 import { Badge } from '../ui';
 
 const SITE = 'https://safecircle.tech';
 const Dot = () => <span className="sh-footer-dot" aria-hidden="true" />;
 
-/** Brand, version and the small links under the card. */
+/** Brand and the small links under the card. */
 export function DocsFooter() {
   const { t } = useTranslation();
   return (
     <footer className="sh-footer">
       <div className="sh-footer-row">
         <span className="sh-footer-brand">SafeCircle</span>
-        <span>v{BUILD.version}</span>
         <Badge>{t('shell.footer.alpha')}</Badge>
         <Dot />
         <span>

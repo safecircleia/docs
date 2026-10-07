@@ -41,5 +41,13 @@
   "seasonal_paused_title": "Partículas en pausa.",
   "seasonal_paused_body": "El movimiento reducido está activado, así que no se muestran las partículas de temporada.",
   "pager": "Más páginas",
-  "copy_failed": "No se pudo copiar la página"
+  "copy_failed": "No se pudo copiar la página",
+  "filter_pages": "Filtrar páginas",
+  "filter_empty": "Ninguna página coincide con «{{query}}»",
+  "back_to_top": "Volver arriba",
+  "reading_time": "{{count}} min de lectura",
+  "pager_keys": "Usa [ y ] para cambiar de página",
+  "close_menu": "Cerrar menú",
+  "breadcrumb": "Ruta de navegación",
+  "docs_nav": "Documentación"
 }
