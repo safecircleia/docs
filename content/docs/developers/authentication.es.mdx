@@ -18,22 +18,11 @@ La autenticación de los padres la gestiona [Better Auth](https://www.better-aut
 
 ### Registro
 
-El registro está restringido mientras SafeCircle está en beta privada. Hay tres cosas entre una cuenta nueva y la API de datos:
+El registro está abierto a todo el mundo. Las cuentas nuevas necesitan un correo verificado, y el equipo de SafeCircle puede pausar el registro en cualquier momento.
 
-<Steps>
-  <Step>
-    ### Un código de invitación
-    Todo registro por cuenta propia necesita un código válido, enviado como `inviteCode` en el cuerpo de la petición de registro. Esto se aplica al registro con correo y al registro mediante un proveedor social. Sin un código válido la petición falla con `400` y el mensaje `A valid invite code is required to sign up`. Un código puede ser de un solo uso o de varios, y puede caducar o revocarse. Reclamar un código es atómico, así que dos personas no pueden quedarse con el último uso.
-  </Step>
-  <Step>
-    ### Verificación del correo
-    El registro con correo y contraseña requiere una dirección verificada. El enlace de verificación caduca a las **24 horas**, y la persona inicia sesión automáticamente al verificar.
-  </Step>
-  <Step>
-    ### Aprobación
-    Las cuentas nuevas empiezan sin aprobar. Hasta que un administrador las apruebe, todos los procedimientos de padre o madre devuelven `FORBIDDEN` con `Account pending approval`. `users.approvalStatus` informa del estado actual para que una app pueda mostrar una pantalla de espera. Consulta [Únete a la beta privada](/es/docs/platform/private-beta/join).
-  </Step>
-</Steps>
+- **Verificación del correo.** El registro con correo y contraseña requiere una dirección verificada. El enlace de verificación caduca a las **24 horas**, y la persona inicia sesión automáticamente al verificar.
+- **Interruptor de registro.** Mientras el registro está en pausa, el alta (con correo o social) falla con `400` y el código `SIGNUPS_DISABLED`, con la misma respuesta para correos registrados y no registrados. Los administradores lo cambian en el panel.
+- **Apps móviles.** Las apps de Android solo se saltan el captcha con una atestación válida de [Play Integrity](https://developer.android.com/google/play/integrity). El registro web usa Cloudflare Turnstile.
 
 ### Métodos de inicio de sesión
 
@@ -61,7 +50,7 @@ Rutas útiles de Better Auth:
 | Ruta | Propósito |
 |---|---|
 | `POST /api/auth/sign-in/email` | Iniciar sesión. Devuelve `{ token, user }` |
-| `POST /api/auth/sign-up/email` | Crear una cuenta. Requiere `email`, `password`, `name` e `inviteCode` |
+| `POST /api/auth/sign-up/email` | Crear una cuenta. Requiere `email`, `password` y `name` |
 | `GET /api/auth/get-session` | Sesión y usuario actuales, o `null` |
 | `POST /api/auth/sign-out` | Cerrar la sesión |
 | `GET /api/auth/list-sessions`, `POST /api/auth/revoke-session` | Ver y cerrar tus sesiones |
@@ -107,7 +96,7 @@ Un token de dispositivo puede crear alertas (`alerts.create`), pedir un enlace f
 | Código de vinculación de Telegram | Panel y bot de Telegram | 8 caracteres, válido 10 minutos, se elimina al usarse. Consulta [Bot de Telegram](/es/docs/developers/telegram-bot) |
 | Token familiar | App del menor y SafeCircle Search | Firmado con HMAC, ligado a un dispositivo, válido 365 días. Una vez desvinculado el dispositivo, las reglas de sitios del padre o madre dejan de aplicarse. Consulta [SafeCircle Search](/es/docs/developers/search) |
 | Clave del bot | Del bot de Telegram al backend | Solo de servidor a servidor |
-| Rol de administrador | Personal de SafeCircle | Da acceso a los procedimientos de invitaciones y aprobación, que no se documentan aquí |
+| Rol de administrador | Personal de SafeCircle | Da acceso a procedimientos de administración, como el interruptor de registro, que no se documentan aquí |
 
 ## Relacionado
 

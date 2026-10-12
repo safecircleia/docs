@@ -28,7 +28,7 @@ El backend los guarda tal como los recibe, tras quitar las etiquetas HTML y los 
 
 | Dato | Detalles |
 |---|---|
-| Cuenta | Nombre, correo, si el correo está verificado, rol, estado de aprobación, un hash de la contraseña para las cuentas con correo, proveedores de inicio de sesión vinculados |
+| Cuenta | Nombre, correo, si el correo está verificado, rol, un hash de la contraseña para las cuentas con correo, proveedores de inicio de sesión vinculados |
 | Sesiones | Token, caducidad, dirección IP y agente de usuario de cada inicio de sesión |
 | Seguridad | Secreto de la app de autenticación y códigos de respaldo (gestionados por Better Auth), claves públicas de las llaves de acceso |
 | Hijos | Nombre, y marcas de tiempo opcionales de la foto y el banner |
@@ -39,7 +39,6 @@ El backend los guarda tal como los recibe, tras quitar las etiquetas HTML y los 
 | Preferencias | Interruptores de alertas y horas de silencio, por padre o madre y por hijo |
 | Ajustes de búsqueda | Preferencias de búsqueda y reglas de sitios, si las sincronizas |
 | Telegram | Tu ID de Telegram y tu nivel de token, solo si vinculas el bot |
-| Invitaciones | Qué código de invitación creó cada cuenta |
 
 ### Cloudflare D1
 
@@ -58,7 +57,7 @@ El backend los guarda tal como los recibe, tras quitar las etiquetas HTML y los 
 ### Otros lugares
 
 - Los **informes de errores y las peticiones de funciones** enviados desde una app crean una incidencia en el sistema de comentarios de SafeCircle. La incidencia incluye el nombre y el correo de quien la envía, la pantalla, la versión de la app y el sistema operativo.
-- El **correo** de verificación, restablecimiento de contraseña e invitaciones se envía desde `no-reply@auth.safecircle.tech` y `no-reply@beta.safecircle.tech`.
+- El **correo** de verificación, restablecimiento de contraseña e invitaciones a organizaciones se envía desde `no-reply@auth.safecircle.tech` y `no-reply@beta.safecircle.tech`.
 - Los mensajes **push** pasan por Firebase Cloud Messaging y contienen el nombre del menor, el nivel de riesgo y las categorías, además del ID de la alerta.
 - El **bot de Telegram** mantiene su propia tabla pequeña. Consulta [Bot de Telegram](/es/docs/developers/telegram-bot).
 - **SafeCircle Search** no registra las consultas y no establece cookies para usuarios anónimos. Consulta [SafeCircle Search](/es/docs/developers/search).
