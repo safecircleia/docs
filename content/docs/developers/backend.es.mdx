@@ -17,7 +17,7 @@ El backend es un único Cloudflare Worker que sirve la autenticación, la API de
 | Base de datos | PostgreSQL, a través de Cloudflare Hyperdrive, con Drizzle ORM |
 | Validación | Zod en cada procedimiento y ruta |
 | Push | Firebase Cloud Messaging (HTTP v1) |
-| Correo | Envío de correo de Cloudflare (verificación, restablecimiento de contraseña, invitaciones) |
+| Correo | Envío de correo de Cloudflare (verificación, restablecimiento de contraseña, invitaciones a organizaciones) |
 
 ## Forma del despliegue
 
@@ -29,7 +29,7 @@ El Worker se sirve en `api.safecircle.tech` (y en `backend.safecircle.tech`). Us
 | D1 (`sc-analytics`) | Métricas de peticiones y eventos de producto anónimos |
 | R2 (`sc-media`) | Fotos y banners de perfil de padres e hijos |
 | R2 (`sc-feedback`) | Valoraciones de IA enviadas voluntariamente desde el AI Playground |
-| Correo | Envío de correos de verificación, restablecimiento e invitación |
+| Correo | Envío de correos de verificación, restablecimiento e invitación a organizaciones |
 
 CORS permite, con credenciales, los orígenes web de `safecircle.tech` y `safecircle.es` (y sus subdominios).
 
@@ -77,7 +77,8 @@ Las tablas principales, todas en PostgreSQL:
 | `alerts` | Una fila por alerta: nivel de riesgo, categorías, confianza, razonamiento, app de origen, hora de lectura |
 | `push_tokens` | Los tokens push registrados de un padre o madre |
 | `notification_preferences` | Preferencias de alertas por padre o madre y por hijo |
-| `invite_codes`, `invite_code_uses` | Invitaciones de la beta privada |
+| `app_settings` | Ajustes en tiempo de ejecución, como el interruptor de registro |
+| `integrity_nonces` | Nonces de Play Integrity ya usados, para que un token no se pueda reutilizar |
 | `search_settings` | Preferencias y reglas de sitios de SafeCircle Search sincronizadas |
 
 Hijos, dispositivos, alertas, códigos de vinculación, tokens push y preferencias están enlazados con eliminaciones en cascada. Eliminar a un padre o madre borra todo lo que posee. Consulta [Datos y privacidad](/es/docs/developers/data-and-privacy).
