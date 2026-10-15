@@ -32,22 +32,33 @@ SafeCircle is in **beta** and anyone can create an account. This page walks you 
     </Callout>
   </Step>
   <Step>
-    ### Join the Google Play beta
-    The child app is distributed through Google Play's **internal testing track**, which is only open to members of the **SafeCircle Testers** Google group.
+    ### Join the beta
+    Beta builds are distributed per platform. Pick yours.
 
-    1. Open the group page: [groups.google.com/g/safecircle-testing](https://groups.google.com/g/safecircle-testing).
-    2. Sign in with **the same Google account you use on Google Play** on the child's phone, and join the group (`safecircle-testing@googlegroups.com`).
-    3. Opt in to the testing track using the Google Play opt-in link.
+    <Tabs items={["Android", "iOS"]}>
+      <Tab value="Android">
+        Android apps are distributed through Google Play testing, which is only open to members of the **SafeCircle Testers** Google group.
 
-    Once you're signed in you can also do step 2 from the dashboard: go to **Settings › General › Updates**, switch on **Google Play beta updates** and click **Join the group** in the **Join the beta testers** dialog.
+        1. Open the group page: [groups.google.com/g/safecircle-testing](https://groups.google.com/g/safecircle-testing).
+        2. Sign in with **the same Google account you use on Google Play** on the phone, and join the group (`safecircle-testing@googlegroups.com`).
+        3. Opt in to the testing track for each app you want to test:
 
-    <Callout type="warn" title="TODO">
-      The exact Google Play opt-in link for the testing track still needs to be added to this page.
-    </Callout>
+        | App | Who uses it | Opt-in link |
+        |---|---|---|
+        | SafeCircle Parents | Parent's phone | [Become a tester](https://play.google.com/apps/testing/com.safecircle.parents) |
+        | SafeCircle Child | Child's phone | [Become a tester](https://play.google.com/apps/testing/com.safecircle.child) |
+        | SafeCircle AI Playground | Any phone, to try the AI models | [Become a tester](https://play.google.com/apps/testing/com.safecircle.aiplayground) |
 
-    <Callout>
-      The Google account matters. Google Play only shows the app to accounts that are in the group, so use the account that is signed in to the Play Store on the child's phone.
-    </Callout>
+        Once your account is approved you can also do step 2 from the dashboard: go to **Settings › General › Updates**, switch on **Google Play beta updates** and click **Join the group** in the **Join the beta testers** dialog.
+
+        <Callout>
+          The Google account matters. Google Play only shows the apps to accounts that are in the group, so use the account that is signed in to the Play Store on that phone.
+        </Callout>
+      </Tab>
+      <Tab value="iOS">
+        There is no iOS app yet, for children or for parents, so there is no iOS beta. You can still use the dashboard from any browser, including on an iPhone. See [iOS](/en/docs/platform/ios/overview).
+      </Tab>
+    </Tabs>
   </Step>
   <Step>
     ### Install the child app
