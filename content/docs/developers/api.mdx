@@ -5,7 +5,7 @@ description: The REST routes and tRPC procedures SafeCircle's own apps call, wit
 ---
 
 <Callout type="warn" title="First-party API">
-  This is the API SafeCircle's apps use. It is unversioned and can change without notice, and third-party access is not offered yet. Admin-only procedures (invitations and user approval) exist but are intentionally not documented here.
+  This is the API SafeCircle's apps use. It is unversioned and can change without notice, and third-party access is not offered yet. Admin-only procedures exist but are intentionally not documented here.
 </Callout>
 
 **Base URL:** `https://api.safecircle.tech`
@@ -70,7 +70,7 @@ tRPC errors use the standard envelope with an HTTP status and a message.
 | Code | Status | Typical cause |
 |---|---|---|
 | `UNAUTHORIZED` | 401 | No valid session or device token |
-| `FORBIDDEN` | 403 | Account not yet approved, or the resource belongs to someone else |
+| `FORBIDDEN` | 403 | The resource belongs to someone else |
 | `NOT_FOUND` | 404 | Unknown ID, or an ID you do not own |
 | `BAD_REQUEST` | 400 | Failed validation, or an invalid or expired pairing code |
 | `TOO_MANY_REQUESTS` | 429 | You hit a rate limit (this one comes from the Worker, not tRPC) |
@@ -80,8 +80,8 @@ tRPC errors use the standard envelope with an HTTP status and a message.
 | Level | How you authenticate | Notes |
 |---|---|---|
 | **Public** | Nothing | Only `devices.pair` and `search.familyRules` |
-| **Session** | Better Auth session, as a cookie or `Authorization: Bearer` | Any signed-in user. Used by `users.approvalStatus` |
-| **Parent** | Session, and the account is **approved** | Almost every data procedure |
+| **Session** | Better Auth session, as a cookie or `Authorization: Bearer` | Any signed-in user |
+| **Parent** | Session | Almost every data procedure |
 | **Device** | `x-device-token` header from pairing | Child app only |
 
 See [Authentication](/en/docs/developers/authentication) for how each credential is obtained.
@@ -151,7 +151,6 @@ An item has `id`, `type` (`alert` or `device_paired`), `childId`, `childName`, `
 
 | Procedure | Type | Auth | Output |
 |---|---|---|---|
-| `users.approvalStatus` | query | Session | `{ approved }`. Lets the apps show a "pending approval" screen |
 
 ### search
 

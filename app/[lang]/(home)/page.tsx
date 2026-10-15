@@ -8,13 +8,13 @@ import { sectionIcon } from '@/components/shell/sectionIcons';
 
 const START = {
   en: [
-    { icon: <RocketFilled />, title: 'Join the beta', body: 'Invite code, account and the Play Store track', to: '/docs/platform/private-beta/join', hue: 'new' as const },
+    { icon: <RocketFilled />, title: 'Join the beta', body: 'Create an account and join the Play Store track', to: '/docs/platform/private-beta/join', hue: 'new' as const },
     { icon: <DashboardFilled />, title: 'Set up the dashboard', body: 'Add a child and generate a pairing code', to: '/docs/platform/dashboard/setup' },
     { icon: <PhoneFilled />, title: 'Install the child app', body: 'Pair an Android device in minutes', to: '/docs/platform/android/setup' },
     { icon: <ShieldFilled />, title: 'Understand alerts', body: 'Risk levels, categories and what to do next', to: '/docs/platform/dashboard/alerts' },
   ],
   es: [
-    { icon: <RocketFilled />, title: 'Únete a la beta', body: 'Código de invitación, cuenta y Play Store', to: '/docs/platform/private-beta/join', hue: 'new' as const },
+    { icon: <RocketFilled />, title: 'Únete a la beta', body: 'Crea tu cuenta y únete al canal de Play Store', to: '/docs/platform/private-beta/join', hue: 'new' as const },
     { icon: <DashboardFilled />, title: 'Configura el panel', body: 'Añade un hijo y genera un código de vinculación', to: '/docs/platform/dashboard/setup' },
     { icon: <PhoneFilled />, title: 'Instala la app infantil', body: 'Vincula un dispositivo Android en minutos', to: '/docs/platform/android/setup' },
     { icon: <ShieldFilled />, title: 'Entiende las alertas', body: 'Niveles de riesgo, categorías y qué hacer', to: '/docs/platform/dashboard/alerts' },

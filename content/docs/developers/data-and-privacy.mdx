@@ -28,7 +28,7 @@ The backend stores these as received, after removing HTML tags and null bytes. `
 
 | Data | Details |
 |---|---|
-| Account | Name, email, whether the email is verified, role, approval state, a password hash for email accounts, linked sign-in providers |
+| Account | Name, email, whether the email is verified, role, a password hash for email accounts, linked sign-in providers |
 | Sessions | Token, expiry, IP address and user agent of each sign-in |
 | Security | Authenticator-app secret and backup codes (managed by Better Auth), passkey public keys |
 | Children | Name, and optional photo and banner timestamps |
@@ -39,7 +39,6 @@ The backend stores these as received, after removing HTML tags and null bytes. `
 | Preferences | Alert toggles and quiet hours, per parent and per child |
 | Search settings | Search preferences and site rules, if you sync them |
 | Telegram | Your Telegram ID and token tier, only if you link the bot |
-| Invitations | Which invite code created which account |
 
 ### Cloudflare D1
 
@@ -58,7 +57,7 @@ The backend stores these as received, after removing HTML tags and null bytes. `
 ### Other places
 
 - **Bug reports and feature requests** sent from an app create an issue in SafeCircle's feedback tracker. The issue includes the author's name and email, the screen, the app version and the OS.
-- **Email** for verification, password reset and invitations is sent from `no-reply@auth.safecircle.tech` and `no-reply@beta.safecircle.tech`.
+- **Email** for verification, password reset and organization invitations is sent from `no-reply@auth.safecircle.tech` and `no-reply@beta.safecircle.tech`.
 - **Push** messages go through Firebase Cloud Messaging and contain the child's name, the risk level and the categories, plus the alert ID.
 - The **Telegram bot** keeps its own small table. See [Telegram bot](/en/docs/developers/telegram-bot).
 - **SafeCircle Search** does not log queries and sets no cookies for anonymous users. See [SafeCircle Search](/en/docs/developers/search).

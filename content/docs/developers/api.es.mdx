@@ -5,7 +5,7 @@ description: Las rutas REST y los procedimientos tRPC que llaman las propias app
 ---
 
 <Callout type="warn" title="API de uso propio">
-  Esta es la API que usan las apps de SafeCircle. No tiene versiones, puede cambiar sin previo aviso y todavía no se ofrece acceso a terceros. Los procedimientos solo para administradores (invitaciones y aprobación de usuarios) existen, pero no se documentan aquí a propósito.
+  Esta es la API que usan las apps de SafeCircle. No tiene versiones, puede cambiar sin previo aviso y todavía no se ofrece acceso a terceros. Los procedimientos solo para administradores existen, pero no se documentan aquí a propósito.
 </Callout>
 
 **URL base:** `https://api.safecircle.tech`
@@ -70,7 +70,7 @@ Los errores de tRPC usan el sobre estándar con un estado HTTP y un mensaje.
 | Código | Estado | Causa habitual |
 |---|---|---|
 | `UNAUTHORIZED` | 401 | No hay una sesión o un token de dispositivo válidos |
-| `FORBIDDEN` | 403 | La cuenta aún no está aprobada, o el recurso pertenece a otra persona |
+| `FORBIDDEN` | 403 | El recurso pertenece a otra persona |
 | `NOT_FOUND` | 404 | ID desconocido, o un ID que no es tuyo |
 | `BAD_REQUEST` | 400 | Falló la validación, o el código de vinculación no es válido o ha caducado |
 | `TOO_MANY_REQUESTS` | 429 | Alcanzaste un límite de uso (lo devuelve el Worker, no tRPC) |
@@ -80,8 +80,8 @@ Los errores de tRPC usan el sobre estándar con un estado HTTP y un mensaje.
 | Nivel | Cómo te autenticas | Notas |
 |---|---|---|
 | **Público** | Nada | Solo `devices.pair` y `search.familyRules` |
-| **Sesión** | Sesión de Better Auth, como cookie o `Authorization: Bearer` | Cualquier usuario con sesión iniciada. Lo usa `users.approvalStatus` |
-| **Padre o madre** | Sesión, y la cuenta está **aprobada** | Casi todos los procedimientos de datos |
+| **Sesión** | Sesión de Better Auth, como cookie o `Authorization: Bearer` | Cualquier usuario con sesión iniciada |
+| **Padre o madre** | Sesión | Casi todos los procedimientos de datos |
 | **Dispositivo** | Cabecera `x-device-token` obtenida al vincular | Solo la app del menor |
 
 Consulta [Autenticación](/es/docs/developers/authentication) para ver cómo se obtiene cada credencial.
@@ -151,7 +151,6 @@ Un elemento tiene `id`, `type` (`alert` o `device_paired`), `childId`, `childNam
 
 | Procedimiento | Tipo | Autenticación | Salida |
 |---|---|---|---|
-| `users.approvalStatus` | consulta | Sesión | `{ approved }`. Permite a las apps mostrar una pantalla de «pendiente de aprobación» |
 
 ### search [#search]
 

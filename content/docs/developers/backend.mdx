@@ -17,7 +17,7 @@ The backend is a single Cloudflare Worker that serves authentication, the data A
 | Database | PostgreSQL, reached through Cloudflare Hyperdrive, with Drizzle ORM |
 | Validation | Zod on every procedure and route |
 | Push | Firebase Cloud Messaging (HTTP v1) |
-| Email | Cloudflare email sending (verification, password reset, invitations) |
+| Email | Cloudflare email sending (verification, password reset, organization invitations) |
 
 ## Deployment shape
 
@@ -29,7 +29,7 @@ The Worker is served on `api.safecircle.tech` (and `backend.safecircle.tech`). I
 | D1 (`sc-analytics`) | Request metrics and anonymous product events |
 | R2 (`sc-media`) | Profile photos and banners for parents and children |
 | R2 (`sc-feedback`) | Opt-in AI rating submissions from the AI Playground |
-| Email | Sending verification, reset and invitation emails |
+| Email | Sending verification, reset and organization invitation emails |
 
 Web origins on `safecircle.tech` and `safecircle.es` (and their subdomains) are allowed by CORS, with credentials.
 
@@ -77,7 +77,8 @@ The main tables, all in PostgreSQL:
 | `alerts` | One row per alert: risk level, categories, confidence, reasoning, source app, read time |
 | `push_tokens` | A parent's registered push tokens |
 | `notification_preferences` | Per-parent and per-child alert preferences |
-| `invite_codes`, `invite_code_uses` | Private-beta invitations |
+| `app_settings` | Runtime settings, such as the sign-up switch |
+| `integrity_nonces` | Spent Play Integrity nonces, so a token can't be replayed |
 | `search_settings` | Synced SafeCircle Search preferences and site rules |
 
 Children, devices, alerts, pairing codes, push tokens and preferences are linked with cascading deletes. Deleting a parent removes everything they own. See [Data and privacy](/en/docs/developers/data-and-privacy).
