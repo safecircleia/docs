@@ -1,6 +1,6 @@
 # SafeCircle Docs
 
-Documentation for [SafeCircle](https://safecircle.tech): the parent dashboard, the Android child and parent apps, the private beta and the developer API. Built with Next.js 16 and [Fumadocs](https://fumadocs.dev), in English and Spanish. The UI is ported from the dashboard (`../sc-dashboard`, the "bleh" design system).
+Documentation for [SafeCircle](https://safecircle.tech): the parent dashboard, the Android child and parent apps, the private beta and the developer API. Built with Next.js 16 and [Fumadocs](https://fumadocs.dev), in English and Spanish. The UI is ported from the SafeCircle dashboard (the "bleh" design system).
 
 ## Getting started
 
@@ -69,3 +69,11 @@ Top-level folders with `"root": true` become the tab row.
 - TypeScript is on 6.x and ESLint on 9.x: `typescript-eslint` does not support TypeScript 7 yet, and `eslint-config-next` does not support ESLint 10.
 - Seasonal effects follow the calendar (Halloween, winter, ...). Turn them off in Appearance › Seasonal.
 - Old URLs under `/docs/getting-started/*` and `/docs/using-safecircle/*` redirect to the new pages (`next.config.mjs`).
+
+## Security
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md).
+
+## License
+
+[MIT](LICENSE)
