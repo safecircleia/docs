@@ -42,6 +42,11 @@ export function DocsTabs({ sections, activeKey, settingsActive }: DocsTabsProps)
 const SHEET_MAX_WIDTH = 460;
 const SHEET_MARGIN = 12;
 
+/** Only called once the popout is mounted (client-side, after a user action). */
+function sheetWidth(): number {
+  return typeof window === 'undefined' ? SHEET_MAX_WIDTH : Math.min(SHEET_MAX_WIDTH, window.innerWidth - SHEET_MARGIN);
+}
+
 function SearchControl() {
   const { t } = useTranslation();
   const { mounted, btnRef, popoutProps, triggerProps, close } = usePopout();
@@ -52,7 +57,7 @@ function SearchControl() {
         <span className="sh-mctl-label">{t('shell.search.label')}</span>
       </button>
       {mounted && (
-        <Popout {...popoutProps} width={Math.min(SHEET_MAX_WIDTH, window.innerWidth - SHEET_MARGIN)} align="center" className="sh-sheet" role="dialog" label={t('docs.search_placeholder')}>
+        <Popout {...popoutProps} width={sheetWidth()} align="center" className="sh-sheet" role="dialog" label={t('docs.search_placeholder')}>
           <DocsSearch autoFocus inline shortcut={false} onNavigate={close} />
         </Popout>
       )}

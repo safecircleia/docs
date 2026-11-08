@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 
 /** bleh's mobile breakpoint: below this the masthead becomes a bottom bar. */
 export const MOBILE_BREAKPOINT = 980;
 
+function subscribe(onChange: () => void): () => void {
+  window.addEventListener('resize', onChange);
+  return () => window.removeEventListener('resize', onChange);
+}
+
+/** Server and hydration render as desktop (false); the client value takes over right after. */
 export function useMobile(breakpoint = MOBILE_BREAKPOINT): boolean {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint);
-  useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth <= breakpoint);
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, [breakpoint]);
-  return isMobile;
+  return useSyncExternalStore(
+    subscribe,
+    () => window.innerWidth <= breakpoint,
+    () => false
+  );
 }
