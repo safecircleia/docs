@@ -78,7 +78,7 @@ export function Tooltip({ content, sub, placement = 'top', disabled, className, 
   return (
     <>
       {trigger}
-      {mounted && createPortal(
+      {mounted && typeof document !== 'undefined' && createPortal(
         <div
           ref={tipRef}
           id={id}

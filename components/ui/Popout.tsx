@@ -57,7 +57,7 @@ export function Popout({ rect, menuRef, width = 230, open = true, onClose, align
     target?.focus({ preventScroll: true });
   }, [open, hasRect]);
 
-  if (!rect) return null;
+  if (!rect || typeof document === 'undefined') return null;
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     const items = [...e.currentTarget.querySelectorAll<HTMLElement>(ITEMS)];

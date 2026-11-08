@@ -75,6 +75,7 @@ export function Modal({
   }, [close]);
 
   const state = open ? 'open' : 'closing';
+  if (typeof document === 'undefined') return null;
   return createPortal(
     <div className="ui-modal-backdrop" data-state={state} onClick={close}>
       <div
