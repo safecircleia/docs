@@ -4,7 +4,11 @@ import { withRegionalCache } from '@opennextjs/cloudflare/overrides/incremental-
 
 // Every docs page is prerendered at build time, so serve those from the regional Cache API
 // and intercept before the Next server is loaded (the server bundle is the main CPU cost).
-export default defineCloudflareConfig({
-  incrementalCache: withRegionalCache(r2IncrementalCache, { mode: 'long-lived' }),
-  enableCacheInterception: true,
-});
+export default {
+  ...defineCloudflareConfig({
+    incrementalCache: withRegionalCache(r2IncrementalCache, { mode: 'long-lived' }),
+    enableCacheInterception: true,
+  }),
+  // `build` runs OpenNext itself, so point it at the plain Next build to avoid recursion.
+  buildCommand: 'bun run build:next',
+};
