@@ -190,7 +190,7 @@ export const REGISTRY: { [K in SettingKey]: SettingDef<SettingValue<K>> } = {
     tags: ['season', 'halloween', 'christmas', 'holiday', 'events', 'automatic'],
   },
   seasonal_particles: {
-    key: 'seasonal_particles', default: 'all', type: 'radio', tab: 'seasonal', section: 'particles',
+    key: 'seasonal_particles', default: 'none', type: 'radio', tab: 'seasonal', section: 'particles',
     titleKey: k('seasonal_particles', 'title'), bodyKey: k('seasonal_particles', 'body'), options: opts('seasonal_particles', ['all', 'less', 'none']),
     incompatible: { seasonal: [false] }, incompatibleReasonKey: 'prefs.reason.seasonal_off',
     tags: ['snow', 'particles', 'winter', 'effects'],
